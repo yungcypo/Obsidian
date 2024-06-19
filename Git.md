@@ -52,7 +52,7 @@ Removes changes in \<file>
 
 ## git clone \<URL> \<local_directory>
 Clones repository from GitHub to your machine
-> Note: private repositories will cause problems because they are private. Follow [this tutorial](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) to fix problems  
+> Note: this may cause problems because. See [[#Generate SSH key]] or follow [this tutorial](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) to fix problems  
 
 ## git push
 Pushes commit to the server  
@@ -114,5 +114,17 @@ git remote add origin https://github.com/yungcypo/MinecraftServer.git
 git branch -M master
 git push -u origin master
 ```
+
+# Generate SSH Key
+To avoid typing your password or token every time you push to a Git repository, you can set up an SSH key
+1. Generate new SSH Key 
+	- `ssh-keygen -t rsa -b 4096 -C cypooriginal@gmail.com`
+2. Add the Key to GitHub account
+	- Copy public key *(usually located at `~/.ssh/id_rsa.pub`)*
+	- On [GitHub](https://github.com) go to *Account Settings > SSH and GPG keys*
+	- Click *New SSH key* and paste here the public key
+3. Change git remote URL from *HTTPS* to *SSH*
+	- `git remote set-url origin git@github.com:yungcypo/repo.git`
+
 
 #git #github
