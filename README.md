@@ -1,2 +1,2 @@
 # Obsidian
-All my notes to various subjects, in Obsidian
+My notes to various subjects, in Obsidian
