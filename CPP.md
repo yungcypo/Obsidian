@@ -169,4 +169,96 @@ void processArray(int nuberOfItems, int arr[])
 void process3D(int numberPerRow, int arr[][10][10])
 ```
 
+# Strings
+## C-strings
+Taken from C language  
+Avoid when possible  
+
+Array of characters, last character is null  
+You must leave a space for null character  
+```c++
+char name[6] = "Peter";
+```
+`=` works only in declaration  
+`==` doesn't work
+`< > <= >= !=` doesn't work
+
+### Functions
+You need to `#include <cstring>` or include one of following: 
+
+| Operation      | Library                                  |
+| -------------- | ---------------------------------------- |
+| Copy           | \<strncpy>                               |
+| Concatenation  | \<strncat>                               |
+| Comparison     | \<strncmp>                               |
+| Finding length | \<strnlen>                               |
+| Searching      | \<strchr>  <br>\<strrchr>  <br>\<strstr> |
+Find more on [cplusplus.com](https://cplusplus.com/reference/cstring/)
+
+### \<cctype>
+Useful library for checking and manipulating strings
+
+| Function             |
+| -------------------- |
+| int isalnum(int ch)  |
+| int isalpha(int ch)  |
+| int isblank(int ch)  |
+| int iscntrl(int ch)  |
+| int isdigit(int ch)  |
+| int isgraph(int ch)  |
+| int islower(int ch)  |
+| int isprint(int ch)  |
+| int ispunct(int ch)  |
+| int isspace(int ch)  |
+| int isupper(int ch)  |
+| int isxdigit(int ch) |
+| int tolower(int ch)  |
+| int toupper(int ch)  |
+
+## String class 
+From C++ library 
+Less problems than C-strings  
+
+`#include <string>`
+
+`=` works  
+`==` works
+`[]` works
+
+```c++
+string name = "Ann";
+
+if (name == "Ann"){...}
+if (name[0] <= 'M'){...}
+major = preferredMajor;
+
+cout << name.length() << endl;
+cout << name.size() << endl;
+```
+
+You can read whole input line like this:
+```c++
+// only one word input 
+cout << "enter a word: ";
+cin >> word;
+
+// whole line input
+cout << "enter a phrase: ";
+getline(cin, phrase);
+```
+
+## File Parameters
+Here is how to read file parameters/arguments when 
+```c++
+#include <iostream>
+
+int main(int argc, char* argv[]) {
+	for (int i = 0; i < argc; i++)
+	{
+		std::cout << argv[i] << std::endl;
+	}
+
+	return 0;
+}
+```
 
