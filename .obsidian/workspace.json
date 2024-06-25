@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Git.md",
+                "file": "CPP.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Git.md",
+                "file": "CPP.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Git.md",
+                "file": "CPP.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Git.md"
+                "file": "CPP.md"
               }
             }
           }
@@ -148,8 +148,11 @@
   },
   "active": "4688dcf1aa0b416a",
   "lastOpenFiles": [
-    "Git.md",
     "README.md",
+    "CPP.md",
+    "Git.md",
+    "Useful Things In Markdown.md",
+    "Useful Settings in Obsidian.md",
     "Git.pdf"
   ]
 }
