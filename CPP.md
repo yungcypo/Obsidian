@@ -471,4 +471,129 @@ delete ptr1;
 delete ptr2; // we got error here
 ```
 
+# Classes
+Bit more complex than in Java  
+It is split into two parts
+- Class declaration
+	- Typically in `.h` file
+	- Function prototypes 
+	- Ends with semicolon (`;`)
+- Class implementation
+	- Typically in `.cpp` file
+	- This is where the function is really written
+	- Method name is preceded by `className::` 
+		- `::` is scope operator in C++, instead of `.` in Java
+		- `Enemy.name` in Java is the same as `Enemy::name` in C++
+If the method is simple (one line), you can write it directly at declaration in `.h` file  
+
+By default, things are **private**  
+
+## Classes terminology
+Comparison with Java  
+
+| Java             | C++              |
+| ---------------- | ---------------- |
+| *parts of class* | Members          |
+| Instances        | Data members     |
+| Methods          | Member functions |
+
+## Class example
+*date.h*
+```c++
+#include <string>
+
+class Date {
+	private:
+		int day;
+		int month;
+		int year;
+	
+	public: 
+		Date();
+		// Date(): Date(1, 1, 1970) {}  // using the second constructor
+		Date(int theDay, int theMonth, int theYear): day(theDay), month(theMonth), year(theYear) {}
+		
+		int getDay() const {return day;}
+		std::string getShortDate() const;
+		int getMonth() const {return month;}
+		
+		void setDay(int day) {this->day = day;}
+};
+```
+**`.h` file ends with `;` !!!**
+
+*date.cpp*
+```c++
+#include "date.h"
+
+Date::Date() {
+	day = 1;
+	month = 1;
+	year = 1970;
+}
+
+std::string Date::getShortDate() const {
+	return std::to_string(day) + ". " + std::to_string(month) + ". " + std::to_string(year);
+}
+```
+
+*daterunner.cpp*
+```c++
+#include <iostream>
+#include "date.h"
+
+int main() {
+	// Static objects
+	Date defaultDate;
+	Date schoolStart(1, 9, 2024);
+	
+	std::cout << defaultDate.getShortDate() << std::endl;
+	std::cout << schoolStart.getShortDate() << std::endl;
+	defaultDate.setDay(31);
+	std::cout << defaultDate.getShortDate() << std::endl;
+	
+	// Dynamic objects
+	Date* birthday = new Date(4, 6, 2003);
+	std::cout << birthday->getShortDate() << std::endl;
+	birthday->setDay(13);
+	std::cout << birthday->getShortDate() << std::endl;
+	
+	return 0;
+}
+```
+
+- `Date defaultDate`
+	- Actually declaring the date (statically)
+	- If we did `Date defaultDate()`, C++ will think, that we are making function returning Date
+- `Date scholStart(1, 9, 2024)`
+	- Calling the other constructor with parameters/arguments
+- `defaultDate.getShortDate()`
+	- Calling `getShortDate()` method from `Date` class
+- `Date* birthday = new Date(4, 6, 2003)`
+	- Declaring the date dynamically
+	- We have to use `->` instead of `.`
+
+## Compiling multiple files
+`g++ date.cpp daterunner.cpp`  
+`g++ date.cpp daterunner.cpp -o daterunner`
+
+## `const` on Methods
+`std::string getName() const {return name;}`  
+Making returned value constant, making it **unable to change**  
+Basically **every getter** should have `const`  
+
+## Inline functions
+Similar to macros *(?)* but safer  
+More efficient on short functions  
+Less efficient on long functions
+
+## `->`
+*"just like `.` but for pointers"*  
+
+When I reference part of an object that I have a pointer to, I use this **arrow operator**
+`somePointer->getMajor();`  
+
+The dot operator (`.`) has higher precedence that the dereference operator, so `*somePointer.getMajor();` produces an error  
+We can use it like this: `(*somePointer).getMajor();`  
+
 
