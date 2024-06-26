@@ -115,6 +115,14 @@ git branch -M master
 git push -u origin master
 ```
 
+## Moving `main` to `master`
+```
+git branch -m main master
+git fetch origin
+git branch -u origin/master master
+git remote set-head origin -a
+```
+
 # Generate SSH Key
 To avoid typing your password or token every time you push to a Git repository, you can set up an SSH key
 1. Generate new SSH Key 
