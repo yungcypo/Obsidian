@@ -147,9 +147,8 @@ int score[10];
 double price[NUM_ITEMS];
 
 char vowels[] = {'a', 'e', 'i', 'o', 'u'};
-int values[10] = {1, 2, 3, 4}  // other numbers will be zero
+int values[10] = {1, 2, 3, 4};
 ```  
-
 
 **C++ has no way to check the size of array**  
 To loop through array, you have to provide a number of elements  
@@ -353,3 +352,108 @@ arr[1] == *(arr + 1)
 arr[2] == *(arr + 2)
 ...
 ```
+
+# Dynamic Memory Management
+Usage of pointers  
+
+## `new` 
+`new` keyword allocates space for a data in the heap  
+Returns a pointer to that item  
+Can be used for any type (not just classes)  
+
+```c++
+int* myPtr = new int;
+string* myStringPtr = new string("hello");
+```
+
+## Dynamic Arrays
+Dynamic Arrays get automatically initialized and allocated, unlike static arrays  
+Dynamic Arrays are resizable  
+```c++
+string* names = new string[24];
+int* score = new int[10]{4, 5, 10, 12};
+```
+
+```c++
+// Dynamic array
+int* score = new int[10];
+for (int i = 0; i < 10; i++)
+{
+	std::cout << score[i] << " ";
+}
+// Output: 4 10 21 7 0 0 0 0 0 0
+
+std::cout << std::endl;
+
+// Static array
+int score2[10];
+for (int i = 0; i < 10; i++)
+{
+	std::cout << score2[i] << " ";
+}
+// Output: 1651076199 779647075 1600677166 1819242352 -1205882080 32766 -970284800 32524 -968353456 32524 %
+```
+
+### Managing Dynamic Arrays
+Things you need to store:
+- Pointer to the first element
+- Capacity of the array
+- If the array is not full, you need the number of items
+
+### Cleaning up
+Unlike Java, C++ doesn't have Garbage Collector, so we have to manually free the memory  
+We don't need to worry about statically-allocated variables  
+
+For dynamically-allocated variables, we need to use `delete`  
+```c++
+delete myPtr;
+delete [] myArray;
+```
+
+`delete` doesn't change the value of pointer  
+`delete` doesn't change the value of the target of pointer  
+`delete` only **tells the system, that the memory is no longer in use**, so that it **can be re-allocated**
+
+### Memory leak
+Imagine we have code like this: 
+```c++
+int *ptr = new int;
+*ptr = 5;
+ptr = new int;
+*ptr = 10;
+```
+
+What happens here?  
+1. Allocate space for new int
+2. Set the value to 5
+3. Allocate *another* space for new int
+4. Set the value to 10
+
+Now we have **no way to access** the value 5, this is called **memory leak**  
+Program will allocate more and more memory, making it slower and eventually crashing  
+
+### Dangling Pointers
+Pointers to memory, that has already been freed  
+Pointer that points to deleted memory  
+Using **delete** to Dangling Pointer will generally **crash the program**  
+
+```c++
+int *ptr;
+ptr = new int;
+
+delete ptr;
+delete ptr; // we got error here
+```
+
+If we had 2 pointers, pointing to the same address, we will get error as well
+```c++
+int *ptr1, *ptr2;
+ptr1 = new int;
+ptr2 = ptr1;
+
+std::cout << ptr1 << std::endl << ptr2 << std::endl;  // we can see the same address here
+
+delete ptr1;
+delete ptr2; // we got error here
+```
+
