@@ -262,3 +262,94 @@ int main(int argc, char* argv[]) {
 }
 ```
 
+# Pointers
+Value of pointer is memory address  
+```c++
+int *i;
+char *str;
+Student *studentPointer;
+
+int *p, *q
+```
+
+#### Address Operator `&`
+Tells you address of pointer
+```c++
+int i, *ptr;
+ptr = &i;
+```
+
+```c++
+#include <iostream>
+
+int main() {
+	int i = 10;
+	int *ptr = &i;
+	  
+	std::cout << i << std::endl;    // 10
+	std::cout << ptr << std::endl;  // 0x7fff836c7c0c
+	
+	return 0;
+}
+```
+
+```c++
+std::cout << i << std::endl;    // 10
+std::cout << ptr << std::enld;  // 0x7fff836c7c0c
+std::cout << *ptr << std::endl; // 10
+```
+
+```c++
+int i = 10;
+int *ptr = &i;
+
+std::cout << i << std::endl;     // 10
+std::cout << ptr << std::endl;   // 0x7ffd7b964e8c
+std::cout << *ptr << std::endl;  // 10
+
+*ptr = 5;
+std::cout << i << std::endl;     // 5
+std::cout << ptr << std::endl;   // 0x7ffd7b964e8c
+std::cout << *ptr << std::endl;  // 5
+```
+
+```c++
+std::cout << ptr << std::endl;   // 0x7ffc0f9e8e0c - value of ptr
+std::cout << *ptr << std::endl;  // 5 - dereferencing ptr = value of i
+std::cout << &ptr << std::endl;  // 0x7ffc0f9e8e10 - 'pointer of pointer' = where is 'ptr' stored in memory
+```
+
+## Arrays and pointers
+Array is just a pointer to the first value  
+```c++
+#include <iostream>
+
+int main() {
+	int myArray[10];
+	int *myPointer = myArray;
+	
+	std::cout << myPointer << std::endl;   // 0x7ffc6194bf0
+	std::cout << &myArray[0] << std::endl; // 0x7ffc6194bf0
+	
+	return 0;
+}
+```
+
+And other values of array are just next places in memory
+```c++
+std::cout << &myArray[0] << std::endl; // 0x7ffc6194bf00
+std::cout << &myArray[1] << std::endl; // 0x7ffc6194bf04
+std::cout << &myArray[2] << std::endl; // 0x7ffc6194bf08
+```
+
+### Pointer Arithmetic
+```c++
+arr[i] == *(arr + i)
+```
+Therefore...
+```c++
+arr[0] == *arr
+arr[1] == *(arr + 1)
+arr[2] == *(arr + 2)
+...
+```
