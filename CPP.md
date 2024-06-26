@@ -394,17 +394,31 @@ for (int i = 0; i < 10; i++)
 // Output: 1651076199 779647075 1600677166 1819242352 -1205882080 32766 -970284800 32524 -968353456 32524 %
 ```
 
-### Managing Dynamic Arrays
+#### Managing Dynamic Arrays
 Things you need to store:
 - Pointer to the first element
 - Capacity of the array
 - If the array is not full, you need the number of items
 
-### Cleaning up
-Unlike Java, C++ doesn't have Garbage Collector, so we have to manually free the memory  
-We don't need to worry about statically-allocated variables  
+#### Growing Dynamic Array
+```c++
+if (itemsInArray == capacity) {
+	capacity *= 2;
+	int* temp = new int[capacity];
+	
+	for (int i = 0; i < itemsInArray; i++) {
+		temp[i] = originalArray[i];
+	}
+	delete [] originalArray;
+	originalArray = temp;
+}
+```
 
-For dynamically-allocated variables, we need to use `delete`  
+## Cleaning up
+Unlike Java, C++ doesn't have Garbage Collector, so we have to manually free the memory  
+We don't need to worry about statically-allocated variables, only dynamic needs to be freed  
+
+For dynamically-allocated variables, we need to use `delete`   
 ```c++
 delete myPtr;
 delete [] myArray;
@@ -414,7 +428,7 @@ delete [] myArray;
 `delete` doesn't change the value of the target of pointer  
 `delete` only **tells the system, that the memory is no longer in use**, so that it **can be re-allocated**
 
-### Memory leak
+## Memory leak
 Imagine we have code like this: 
 ```c++
 int *ptr = new int;
@@ -432,7 +446,7 @@ What happens here?
 Now we have **no way to access** the value 5, this is called **memory leak**  
 Program will allocate more and more memory, making it slower and eventually crashing  
 
-### Dangling Pointers
+## Dangling Pointers
 Pointers to memory, that has already been freed  
 Pointer that points to deleted memory  
 Using **delete** to Dangling Pointer will generally **crash the program**  
@@ -456,4 +470,5 @@ std::cout << ptr1 << std::endl << ptr2 << std::endl;  // we can see the same add
 delete ptr1;
 delete ptr2; // we got error here
 ```
+
 
