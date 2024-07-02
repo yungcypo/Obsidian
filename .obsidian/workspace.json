@@ -8,7 +8,7 @@
         "type": "tabs",
         "children": [
           {
-            "id": "4688dcf1aa0b416a",
+            "id": "b46fdfad57f670ee",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -69,7 +69,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "f71ef895f3b37fe7",
@@ -134,7 +135,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -146,9 +148,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "4688dcf1aa0b416a",
+  "active": "b46fdfad57f670ee",
   "lastOpenFiles": [
+    "Minecraft Server.md",
     "Git.md",
+    "Untitled",
     "README.md",
     "Git.pdf"
   ]
