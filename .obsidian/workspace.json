@@ -8,7 +8,7 @@
         "type": "tabs",
         "children": [
           {
-            "id": "b243481cb0eab96a",
+            "id": "4688dcf1aa0b416a",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -134,8 +134,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -147,16 +146,15 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "b243481cb0eab96a",
+  "active": "4688dcf1aa0b416a",
   "lastOpenFiles": [
-    "Git.md",
+    "CPP.md",
     "ZSH.md",
     "Minecraft Server.md",
-    "CPP.md",
+    "README.md",
+    "Git.md",
     "Useful Things In Markdown.md",
     "Useful Settings in Obsidian.md",
-    "Untitled",
-    "README.md",
     "Git.pdf"
   ]
 }

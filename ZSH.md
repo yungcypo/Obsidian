@@ -69,12 +69,20 @@ To reconfigure p10k, type `p10k configure`
 
 ### Keybinds
 
-| Command                                                                             |
-| ----------------------------------------------------------------------------------- |
-| *not complete command* `bindkey` `history-search-backward` `history-search-forward` |
+| Command                                                                                 |
+| --------------------------------------------------------------------------------------- |
+| *!!! not complete command* `bindkey` `history-search-backward` `history-search-forward` |
+| `bindkey -e`                                                                            |
+| ```bindkey '^[[1;5C' emacs-forward-word```                                              |
+| ```bindkey '^[[1;5D' emacs-backward-word```                                             |
 
 ### Aliases
 
 | Command                   |
 | ------------------------- |
 | `alias ls='ls -l --color` |
+### Disable underline
+
+| Command                                                                                                                                                |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `(( ${+ZSH_HIGHLIGHT_STYLES} )) \|\| typeset -A ZSH_HIGHLIGHT-STYLES`<br>`ZSH_HIGHLIGHT_STYLES[path]=none`<br>`ZSH_HIGHLIGHT_STYLES[path_prefix]=none` |
