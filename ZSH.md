@@ -83,6 +83,6 @@ To reconfigure p10k, type `p10k configure`
 | `alias ls='ls -l --color` |
 ### Disable underline
 
-| Command                                                                                                                                                |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `(( ${+ZSH_HIGHLIGHT_STYLES} )) \|\| typeset -A ZSH_HIGHLIGHT-STYLES`<br>`ZSH_HIGHLIGHT_STYLES[path]=none`<br>`ZSH_HIGHLIGHT_STYLES[path_prefix]=none` |
+| Command                                                                                                                                                    |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ```(( ${+ZSH_HIGHLIGHT_STYLES} )) \|\| typeset -A ZSH_HIGHLIGHT_STYLES```<br>`ZSH_HIGHLIGHT_STYLES[path]=none`<br>`ZSH_HIGHLIGHT_STYLES[path_prefix]=none` |
