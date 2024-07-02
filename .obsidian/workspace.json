@@ -8,12 +8,12 @@
         "type": "tabs",
         "children": [
           {
-            "id": "b46fdfad57f670ee",
+            "id": "b243481cb0eab96a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Minecraft Server.md",
+                "file": "ZSH.md",
                 "mode": "source",
                 "source": false
               }
@@ -69,8 +69,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "f71ef895f3b37fe7",
@@ -86,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Minecraft Server.md",
+                "file": "ZSH.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Minecraft Server.md",
+                "file": "ZSH.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Minecraft Server.md"
+                "file": "ZSH.md"
               }
             }
           }
@@ -148,13 +147,14 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "b46fdfad57f670ee",
+  "active": "b243481cb0eab96a",
   "lastOpenFiles": [
     "Git.md",
+    "ZSH.md",
+    "Minecraft Server.md",
     "CPP.md",
     "Useful Things In Markdown.md",
     "Useful Settings in Obsidian.md",
-    "Minecraft Server.md",
     "Untitled",
     "README.md",
     "Git.pdf"
