@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Git.md",
+                "file": "Minecraft Server.md",
                 "mode": "source",
                 "source": false
               }
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Git.md",
+                "file": "Minecraft Server.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Git.md",
+                "file": "Minecraft Server.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Git.md"
+                "file": "Minecraft Server.md"
               }
             }
           }
@@ -150,8 +150,11 @@
   },
   "active": "b46fdfad57f670ee",
   "lastOpenFiles": [
-    "Minecraft Server.md",
     "Git.md",
+    "CPP.md",
+    "Useful Things In Markdown.md",
+    "Useful Settings in Obsidian.md",
+    "Minecraft Server.md",
     "Untitled",
     "README.md",
     "Git.pdf"
