@@ -594,6 +594,11 @@ When I reference part of an object that I have a pointer to, I use this **arrow 
 `somePointer->getMajor();`  
 
 The dot operator (`.`) has higher precedence that the dereference operator, so `*somePointer.getMajor();` produces an error  
-We can use it like this: `(*somePointer).getMajor();`  
+We can use it like this: `(*somePointer).getMajor();`, but usually people use `somepointer->getMajor();`  
 
+## Class variables and Methods
+*(?)*  
+`static` keyword  
+Methods are basically the same as Java  
+Class variables are declared similarly, but must be defined outside the class as well. That should be done in the `.cpp` file for the class  
 
