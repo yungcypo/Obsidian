@@ -2,8 +2,10 @@
 My way of learning C++  
 ...once again...  
 
-Tutorial i'm learning from: [C++ for Java Programmers by Mary Elaine Califf](https://www.youtube.com/watch?v=ZzaPdXTrSb8&)  
+Tutorial i'm learning from: [C++ for Java Programmers by Mary Elaine Califf](https://www.youtube.com/watch?v=ZzaPdXTrSb8&)  and later [Learn C++ with me by Tech With Tim](https://www.youtube.com/watch?v=lPd13fsU-CQ&list=PLzMcBGfZo4-lmGC8VW0iu6qfMHjy7gLQ3)  
 I already *\*cough\** know *\*cough\** Java, so this tutorial will (mostly) show the differences of C++ compared to Java
+
+---
 
 # Hello World
 ```c++  
@@ -602,3 +604,46 @@ We can use it like this: `(*somePointer).getMajor();`, but usually people use `s
 Methods are basically the same as Java  
 Class variables are declared similarly, but must be defined outside the class as well. That should be done in the `.cpp` file for the class  
 
+---
+
+> Switching to another tutorial - [Learn C++ with me by Tech With Tim](https://www.youtube.com/watch?v=lPd13fsU-CQ&list=PLzMcBGfZo4-lmGC8VW0iu6qfMHjy7gLQ3)
+
+# Tuples
+Similar to array, but tuple doesn't have to only store one type
+
+## Declare tuple
+```c++
+std::tuple<int, std::string> person(21, "Peter");
+```
+
+## Access tuple value
+```c++
+std::cout << std::get<0>(person) << std::endl;
+std::cout << std::get<1>(person) << " is " << std::get<0>(person) << " years old" << std::endl;
+```
+
+## Change tuple value
+```c++
+std::get<0>(person) = 99;
+```
+
+## Swap tuples
+```c++
+tuple1.swap(tuple2);
+```
+
+## Decompose tuples / Tie tuples
+Split tuple into multiple variables
+```c++
+std::tuple<int, int> tuple1(3, 4);
+int x, y;
+
+std::tie(x, y) = tuple1;
+```
+
+## Concatenate tuples
+Combine two tuples into one
+```c++
+std::tuple tuple3 = std::tuple_cat(tuple1, tuple2); // in tutorial, here he had to declare the type, otherwise he will get error, but mine seems to be working
+auto ttuple4 = std::tuple_cat(tuple1, tuple3, tuple2);
+```
