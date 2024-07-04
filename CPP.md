@@ -857,3 +857,76 @@ int main() {
 	return 0;
 }
 ```
+
+# Vector
+Vector is a 'dynamically resizable array'  
+
+## Create a vector
+```c++
+#include <ostream>
+#include <vector>
+
+int main() {
+	std::vector<int> numbers = {1, 2, 3, 4, 5};
+	
+	return 0;
+}
+```
+
+## Accessing vector value
+```c++
+std::cout << numbers[0] << std::endl;
+std::cout << numbers.front() << std::endl;  // first
+std::cout << numbers.back() << std::endl;  //second
+```
+
+## Add a value to vector
+```c++
+v.push_back(10);
+```
+This will add value to the back of the vector  
+Newly added value will be the last one  
+
+To insert to specific place, you need the pointer to the value you want to insert before  
+Since `v.begin()` gives us pointer, we use it to add to specific location  
+```c++
+numbers.insert(numbers.begin(), 6);  // to insert at first
+numbers.insert(numbers.begin() + 1, 7);  // to insert as second
+numbers.insert(numbers.begin() + 2, 8);  // to insert as third
+```
+
+## Remove value from vector
+```c++
+numbers.pop_back();
+```
+This will remove the last value from vector  
+It will also return the value  
+
+To remove/erase value from specific place, we use something similar to inserting  
+```c++
+numbers.erase(numbers.begin());  // removes the first element
+numbers.erase(numbers.begin() + 1);  // removes second element
+numbers.erase(numbers.begin() + 2);  // removes third element
+```
+
+## Vector methods
+```c++
+v.capacity();  // number of items the vector can currently hold
+v.size();  // number of items the vector is holding  
+```
+The vector capacity is (by default) power of 2  
+If the *size()* exceeds the *capacity()*, then the *capacity()* doubles  
+
+When removing elements from vector, the **vector capacity doesn't shrink** automatically back to smaller value, even if the size is less than half of the capacity  
+You have to use the method `v.shrink_to_fit();` to shrink it manually  
+
+## Iterating through vector
+The easy way  
+```c++
+for (int i = 0; i < numbers.size(); i++)
+{
+	std::cout << numbers[i] << std::endl;
+}
+```
+
+You can also do something similar to [map iterating](#Iterate%20through%20map), but I don't see a reason for that  
