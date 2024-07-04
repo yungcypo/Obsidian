@@ -622,7 +622,7 @@ std::cout << b << std::endl;  // 2
 `int b` is just another name for `int a`  
 If you change one value, the second one changes as well  
 
-### Memory address
+## Memory address
 To view memory address of a variable, you can use this  
 ```c++
 std::cout << &a << std::endl;  // 0x7fff177cb43c
@@ -636,22 +636,90 @@ std::cout << &b << std::endl;  // 0x7ffc12a3c94c
 > Memory address might and probably will be different every time you run the program  
 
 ## Rules of references
-#### You have to initialize a reference
+### You have to initialize a reference
 Unlike variables, you have to initialize the reference when declaring it  
 ```c++
 int a = 5;
 int &b = a;
 int &c;  // you will get error here
 ```
-#### You can't reference `NULL`
+### You can't reference `NULL`
 ```c++
 int &a = NULL;  // you will get error here
 ```
 
-#### References have to be the same type
+### References have to be the same type
 ```c++
 int a = 5;
 char &b = a;  // you will get error here
+```
+
+### You can't redefine the reference
+Once you create a reference to a variable, you can't change it to reference to another variable  
+
+# Pointers `*`
+Pointer is a variable, that stores the memory address location of another variable  
+```c++
+int a = 5;
+int *b = &a;
+
+std::cout << a << std::endl;  // 5
+std::cout << b << std::endl;  // 0x7fff177cb43c
+
+// &a == b
+// a == *b
+```
+
+## Rules of pointers
+### You don't have to initialize pointer on declaration
+Unlike references, you can do this
+```c++
+int *a;
+```
+
+### You can create pointer to `NULL`
+```c++
+int *a = NULL;
+```
+
+### You can create pointer to another pointer
+```c++
+int x = 3;
+int *y = &x;
+int **z = &y;
+```
+
+### You can do pointer arithmetics
+Addition, subtraction, ...
+```c++
+std::cout << *z << std::endl;  // 0x7ffce3e172b4
+std::cout << *(z + 1) << std::endl;  // 0x7ffce3e172b0
+```
+
+### You can redefine pointer
+After initializing, you can make it to point to something else (unlike references)
+
+## Pointer arithmetics with arrays  
+Array is just pointer to it's first element   
+```c++
+int arr[] = {1, 2, 3};
+int *x = arr;
+int *y = &arr[0];
+
+std::cout << x << std::endl;  // 0x7ffeea9426fc
+std::cout << y << std::endl;  // 0x7ffeea9426fc
+
+// arr == &arr[0];
+// arr+1 == &arr[1];
+```
+
+You can loop through array two ways, each one providing the same result  
+```c++
+for (int i = 0; i < 3; i++)
+{
+	std::cout << arr[i] << std::endl;
+	std::cout << *arr + i << std::endl << std::endl;
+}
 ```
 
 # Tuples
