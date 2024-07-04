@@ -761,3 +761,99 @@ Combine two tuples into one
 std::tuple tuple3 = std::tuple_cat(tuple1, tuple2); // in tutorial, here he had to declare the type, otherwise he will get error, but mine seems to be working
 auto ttuple4 = std::tuple_cat(tuple1, tuple3, tuple2);
 ```
+
+# Maps
+Map is an associative data structure, which associates key with a value  
+
+Similarly to *arrays*, which have *number indexes* (0, 1, 2, ...), maps have 'custom' indexes of your choice  
+## Creating a map
+```c++
+#include <iostream>
+#include <map>
+
+int main() {
+	std::map<std::string, std::string> myDictionary = {
+		{"apple", "jablko"},
+		{"banana", "banan"},
+		{"orange", "pomaranc"}
+	};
+}
+```
+
+## Accessing value of a map 
+```c++
+std::cout << myDictionary["apple"] << std::endl;
+```
+If you wanted to access a value that does not exist, it will return a default value of that type (0 for int, "" for string, ...)
+
+## Inserting new value pairs to map
+```c++
+myDictionary["watermelon"] = "melon";
+myDictionary.insert(std::pair<std::string, std::string>("watermelon", "melon"));
+```
+
+## Erasing a value from map
+```c++
+myDictionary.erase("banana");
+```
+
+## Other map methods
+Clear every element of map = clear whole map  
+```c++
+myDictionary.clear();
+```
+
+Check if the map is empty  
+```c++
+myDictionary.empty{};  // checks if the map is empty - 1 when it is empty, 0 if not
+```
+
+Get the size of the map
+```c++
+myDictionary.size();
+```
+
+## Iterate through map
+```c++
+for (std::map<std::string, std::string>::iterator i = myDictionary.begin(); i != myDictionary.end(); i++)
+{
+	std::cout << (*i).first << " = " << (*i).second << std::endl;
+}
+```
+`myDictionary.begin()` gives us a iterator, which is basically a pointer  
+`map<string, string>::iterator` can be replaced with `auto`  
+
+As stated in [Chapter about Classes](#Class%20example), you should rather use `i->first` instead of `(*i).first`   
+```c++
+for (std::map<std::string, std::string>::iterator i = myDictionary.begin(); i != myDictionary.end(); i++)
+{
+	std::cout << i->first << " = " << i->second << std::endl << std::endl;
+}
+```
+
+## Example
+Make a program which counts number of occurrences of each letter of string  
+```c++
+#include <iostream>
+#include <string>
+#include <map>
+
+using namespace std;
+
+int main() {
+	string phrase = "hello my name name is peter peter peter";
+	map<char, int> count;
+	
+	for (int i = 0; i < phrase.size(); i++)
+	{
+		count[phrase[i]]++;
+	}
+	
+	for (map<char, int>::iterator i = count.begin(); i != count.end(); i++)
+	{
+		cout << i->first << " is there " << i->second << " times" << endl;
+	}
+  
+	return 0;
+}
+```
