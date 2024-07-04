@@ -608,6 +608,52 @@ Class variables are declared similarly, but must be defined outside the class as
 
 > Switching to another tutorial - [Learn C++ with me by Tech With Tim](https://www.youtube.com/watch?v=lPd13fsU-CQ&list=PLzMcBGfZo4-lmGC8VW0iu6qfMHjy7gLQ3)
 
+
+# References `&`
+Reference is basically an alias - another name for a variable  
+It allows you to access/change a variable through it's alias - through it's reference  
+```c++
+int a = 2;
+int b = a;  // copy of the value
+int b = &a;  // REFERENCE of the variable
+
+std::cout << b << std::endl;  // 2
+```
+`int b` is just another name for `int a`  
+If you change one value, the second one changes as well  
+
+### Memory address
+To view memory address of a variable, you can use this  
+```c++
+std::cout << &a << std::endl;  // 0x7fff177cb43c
+```
+
+You can see, that the memory address of variable and it's reference is the same
+```c++
+std::cout << &a << std::endl;  // 0x7ffc12a3c94c
+std::cout << &b << std::endl;  // 0x7ffc12a3c94c
+```
+> Memory address might and probably will be different every time you run the program  
+
+## Rules of references
+#### You have to initialize a reference
+Unlike variables, you have to initialize the reference when declaring it  
+```c++
+int a = 5;
+int &b = a;
+int &c;  // you will get error here
+```
+#### You can't reference `NULL`
+```c++
+int &a = NULL;  // you will get error here
+```
+
+#### References have to be the same type
+```c++
+int a = 5;
+char &b = a;  // you will get error here
+```
+
 # Tuples
 Similar to array, but tuple doesn't have to only store one type
 
