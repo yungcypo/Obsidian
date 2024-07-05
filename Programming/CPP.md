@@ -1000,3 +1000,129 @@ int main() {
 	return 0;
 }
 ```
+
+
+---
+# Various tutorials
+Now moving onto various other tutorials  
+
+# Files
+Reading and writing to files using `<fstream>`  
+It's similar to `cin` and `cout`  
+
+## Writing files (single value)
+```c++
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+int main() {
+    string food;
+    cout << "what did you eat today?: ";
+    cin >> food;
+
+    ofstream file("jedlo.txt");
+    file << food;
+    file.close();
+    
+    return 0;
+}
+```
+
+## Reading files (single value)
+This method only reads one word, just as `cin`
+```c++
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+int main() {
+    string things;
+    ifstream file("things.txt");
+    
+    file >> things;
+    cout << things << endl;
+    file.close();
+
+    return 0;
+}
+```
+
+## Writing files (multiple values)
+```c++
+#include <iostream>
+#include <string>
+#include <vector>
+#include <fstream>
+
+using namespace std;
+
+int main() {
+    vector<string> food = {"banana", "apple", "orange", "cherry"};
+    ofstream output("multioutput.txt");
+
+    for (int i = 0; i < food.size(); i++) {
+        output << food[i] << " ";
+    }
+
+    output.close();
+
+    return 0;
+}
+```
+
+## Reading files (multiple values)
+```c++
+#include <iostream>
+#include <string>
+#include <vector>
+#include <fstream>
+
+using namespace std;
+
+int main() {
+    string thing;
+    vector<string> things;
+    ifstream input("things.txt");
+
+    while (input >> thing) {
+        things.push_back(thing);
+    }
+
+    for (int i = 0; i < things.size(); i++) {
+        cout << things[i] << " ";
+    }
+
+    input.close();
+
+    return 0;
+}
+```
+
+I also figured out a way without a vector
+```c++
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+int main() {
+    string thing;
+    string result;
+    ifstream input("things.txt");
+
+    while (input >> thing) {
+        result += thing + " ";
+    }
+
+    cout << result;
+    input.close();
+
+    return 0;
+}
+```
