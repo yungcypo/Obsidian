@@ -930,3 +930,73 @@ for (int i = 0; i < numbers.size(); i++)
 ```
 
 You can also do something similar to [map iterating](#Iterate%20through%20map), but I don't see a reason for that  
+
+# Sets
+Set is a data structure which tells us it elements is present or not  
+Set is an unordered collection of unique elements  
+
+## Create a set
+```c++
+#include <iostream>
+#include <set>
+
+int main() {
+	std::set<char> s1 = {'D', 'C', 'D', 'D', 'C'};
+  
+	return 0;
+}
+```
+
+## Add to set
+Insert to set  
+```c++
+s1.insert('F');
+```
+
+## Remove from set
+Erase from set  
+```c++
+s1.erase('D');
+```
+
+## Iterate through set
+Very similar to [map iteration](#Iterate%20through%20map)
+```c++
+for (std::set<char>::iterator i = s1.begin(); i != s1.end(); i++) {
+	std::cout << *i << std::endl;
+}
+```
+
+## Check if set contains a value
+```c++
+if (s1.find('C') == s1.end()) {
+	std::cout << "element C not found" << std::endl;
+} else {
+	std::cout << "C is there" << std::endl;
+}
+```
+
+## Example
+Make all letters present in `test` into a set  
+```c++
+#include <iostream>
+#include <set>
+#include <string>
+
+using namespace std;
+
+int main() {
+	string test = "this is a test iiiiijjj test test";
+	set<char> occurence;
+
+	for (int i = 0; i < test.length(); i++) {
+		occurence.insert(test[i]);
+	}
+	
+	for (set<char>::iterator i = occurence.begin(); i != occurence.end(); i++) {
+		cout << *i << endl;
+	}
+	
+	return 0;
+}
+```
