@@ -21,20 +21,22 @@ All following commands will be written to this file
 
 ### Plugin manager - Zinit
 
-| Command                                                                                                                                                              | Description                                          |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"`<br>                                                                                            | Set the directory we want to store Zinit and plugins |
-| `if [ ! -d "$ZINIT_HOME" ]; then` <br>`    mkdir -p "$(dirname $ZINIT_HOME)`<br>`    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"`<br>`fi` | Download Zinit, if it's not there yet                |
-| `source "${ZINIT_HOME}/zinit.zsh"`                                                                                                                                   | Source/Load Zinit                                    |
+| Command                                                                                                                                                               | Description                                          |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"`<br>                                                                                             | Set the directory we want to store Zinit and plugins |
+| `if [ ! -d "$ZINIT_HOME" ]; then` <br>`    mkdir -p "$(dirname $ZINIT_HOME)"`<br>`    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"`<br>`fi` | Download Zinit, if it's not there yet                |
+| `source "${ZINIT_HOME}/zinit.zsh"`                                                                                                                                    | Source/Load Zinit                                    |
 Now open new terminal  
 You should see git cloning something the first time you log in  
 To make sure everything is working type `zinit zstatus`  
 
+> .zshrc.bak1
+
 ### Prompt - Powerlevel10k
 First, you need to install Nerd font, for example [JetBrainsMono Nerd Font](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip) using command `wget <link>`  
 Unzip downloaded file and move it to `~/.fonts`  
-Run command `fc-cache -fv` 
-> You might need to install `unzip` and `fontconfig` 
+Run command `fc-cache -fv`  
+You might need to install `unzip` and `fontconfig` 
 
 Add following to `~/.zshrc`
 
@@ -43,6 +45,8 @@ Add following to `~/.zshrc`
 | `zinit ice depth=1; zinit light romkatv/powerlevel10k` | Add Powerlevel10k |
 Open up a new terminal and follow steps to configure *Powerlevel10k*  
 To reconfigure p10k, type `p10k configure`   
+
+> .zshrc.bak2
 
 ### Syntax highlighting
 
@@ -86,3 +90,4 @@ To reconfigure p10k, type `p10k configure`
 | Command                                                                                                                                                    |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ```(( ${+ZSH_HIGHLIGHT_STYLES} )) \|\| typeset -A ZSH_HIGHLIGHT_STYLES```<br>`ZSH_HIGHLIGHT_STYLES[path]=none`<br>`ZSH_HIGHLIGHT_STYLES[path_prefix]=none` |
+> .zshrc.bak3
