@@ -107,3 +107,121 @@ void Spaceship::Draw() {
 
 In *CppInvaders* initialize new spaceship with `Spaceship spaceship;` and draw it inside while loop with `spaceship.Draw();`   
 
+# Game
+Time to organize our code a bit...  
+Also added `Game::HandleInput()` implementation  
+
+```c++
+#pragma once
+#include "spaceship.h"
+
+class Game {
+	private:
+		Spaceship spaceship;
+
+	public:
+		Game();
+		~Game();
+		void Draw();
+		void Update();
+		void HandleInput();
+};
+```
+> *game.h*
+
+```c++
+#include "game.h"
+
+Game::Game()
+{
+	Spaceship spaceship;
+}
+
+Game::~Game() {
+
+}
+
+void Game::Draw() {
+	spaceship.Draw();
+}
+
+void Game::HandleInput() {
+	if (IsKeyDown(KEY_LEFT)) {
+		spaceship.MoveLeft();
+	}
+	else if (IsKeyDown(KEY_RIGHT)) {
+		spaceship.MoveRight();
+	}
+}
+```
+> *Game.cpp*
+
+```c++
+#include <raylib.h>
+#include "game.h"
+#include "spaceship.h"
+
+int main()
+{
+    Color grey = {29, 29, 27, 255};
+
+    const int screenWidth = 750;
+    const int screenHeight = 700;
+
+    InitWindow(screenWidth, screenHeight, "CppInvaders");
+    SetTargetFPS(60);
+
+    Game game;
+
+    while (WindowShouldClose() == false) {
+        game.HandleInput();
+
+        BeginDrawing();
+        ClearBackground(grey);
+        game.Draw();
+
+        EndDrawing();
+    }
+
+    CloseWindow();
+}
+```
+> *CppInvaders.cpp*
+
+## Spaceship movement
+```c++
+#include "spaceship.h"
+
+Spaceship::Spaceship()
+{
+	image = LoadTexture("graphics/spaceship.png");
+	position.x = (GetScreenWidth() - image.width) / 2;
+	position.y = GetScreenHeight() - image.height - 50;
+}
+
+Spaceship::~Spaceship() {
+	UnloadTexture(image);
+}
+
+void Spaceship::Draw() {
+	DrawTextureV(image, position, WHITE);
+}
+
+void Spaceship::MoveLeft() {
+	position.x -= 7;
+
+	if (position.x < 0) {
+		position.x = 0;
+	}	
+}
+
+void Spaceship::MoveRight() {
+	position.x += 7;
+	if ((position.x + image.width) >= GetScreenWidth()) {
+		position.x = (GetScreenWidth() - image.width);
+	}
+}
+```
+> *Spaceship.cpp*
+
+
