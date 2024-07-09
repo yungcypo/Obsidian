@@ -225,3 +225,115 @@ void Spaceship::MoveRight() {
 > *Spaceship.cpp*
 
 
+# Laser
+Some changes might not be listed, those are usually pretty intuitive changes   
+When you see `...` in code, it means that there is some unchanged code from previous chapter  
+
+```c++
+#pragma once
+#include <raylib.h>
+
+class Laser {
+	private:
+		Vector2 position;
+		int speed;
+		bool active;
+
+	public:
+		Laser(Vector2 position, int speed);
+		void Update();
+		void Draw();
+		bool GetActive() const;
+};
+```
+> *laser.h*
+
+```c++
+#include "laser.h"
+
+Laser::Laser(Vector2 position, int speed)
+{
+	this->position = position;
+	this->speed = speed;
+	this->active = true;
+}
+
+void Laser::Draw() {
+	if (active) {
+		DrawRectangle(position.x, position.y, 4, 15, {243, 216, 63, 255});
+	}
+}
+
+void Laser::Update() {
+	position.y += speed;
+
+	if (active) {
+		if (position.y < 0 || position.y > GetScreenHeight()) {
+			active = false;
+		}
+	}
+}
+
+bool Laser::GetActive() const {
+	return active;
+}
+```
+> *Laser.cpp*
+
+```c++
+Spaceship::Spaceship()
+{
+	...
+	std::vector<Laser> lasers;
+	lastFireTime = 0.0;
+}
+
+...
+
+void Spaceship::Shoot() {
+	if (GetTime() - lastFireTime >= 0.35) {
+		lasers.push_back(Laser({position.x + image.width / 2 - 2, position.y}, -6));
+		lastFireTime = GetTime();
+	}
+}
+```
+> *Spaceship.cpp*
+
+```c++
+void Game::Update() {
+	for (auto& laser : spaceship.lasers) {
+		laser.Update();
+	}
+
+	DeleteInactiveLasers();
+}
+
+void Game::Draw() {
+	spaceship.Draw();
+
+	for (auto& laser : spaceship.lasers) {
+		laser.Draw();
+	}
+}
+
+void Game::HandleInput() {
+	...
+	if (IsKeyDown(KEY_SPACE)) {
+		spaceship.Shoot();
+	}
+}
+
+void Game::DeleteInactiveLasers() {
+	for (auto i = spaceship.lasers.begin(); i != spaceship.lasers.end();) {
+		if (!i->GetActive()) {
+			i = spaceship.lasers.erase(i);
+		}
+		else {
+			++ i;
+		}
+	}
+}
+```
+> *Game.cpp*
+
+
