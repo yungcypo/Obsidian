@@ -176,3 +176,90 @@ chmod permissions file
 ```
 
 
+# Cool programs
+Mostly useless programs  
+Most of these are just for fun  
+
+## cowsay
+Cow says whatever you told it to   
+```
+______ 
+< ahoj >
+ ------ 
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+
+```
+
+More characters can be specified with `-f`   
+Cow files are located at `/usr/share/cow`  
+
+### xcowsay
+Some kind of graphic alternative to `cowsay`
+
+### ponysay
+Alternative to `cowsay`, displays My Little Pony character
+
+### charasay
+Alternative to `cowsay`, displays various characters
+
+## btop
+Alternative to `top`, but a lot better  
+
+## neofetch
+Shows info about your system  
+
+```
+                     ./o.                  cyprich@HP-Victus 
+                   ./sssso-                ----------------- 
+                 `:osssssss+-              OS: EndeavourOS Linux x86_64 
+               `:+sssssssssso/.            Host: Victus by HP Gaming Laptop 16-s0xxx 
+             `-/ossssssssssssso/.          Kernel: 6.9.9-arch1-1 
+           `-/+sssssssssssssssso+:`        Uptime: 14 mins 
+         `-:/+sssssssssssssssssso+/.       Packages: 1008 (pacman) 
+       `.://osssssssssssssssssssso++-      Shell: zsh 5.9 
+      .://+ssssssssssssssssssssssso++:     Resolution: 1920x1080 
+    .:///ossssssssssssssssssssssssso++:    DE: GNOME 46.3.1 
+  `:////ssssssssssssssssssssssssssso+++.   WM: Mutter 
+`-////+ssssssssssssssssssssssssssso++++-   WM Theme: Adwaita 
+ `..-+oosssssssssssssssssssssssso+++++/`   Theme: Adwaita [GTK2/3] 
+   ./++++++++++++++++++++++++++++++/:.     Icons: Adwaita [GTK2/3] 
+  `:::::::::::::::::::::::::------``       Terminal: kgx 
+                                           CPU: AMD Ryzen 7 7840HS w/ Radeon 780M Graphics (16) @ 5.137GHz 
+                                           GPU: NVIDIA GeForce RTX 4060 Max-Q / Mobile 
+                                           GPU: AMD ATI 05:00.0 Phoenix1 
+                                           Memory: 2305MiB / 15265MiB 
+
+                                                                   
+                                                                   
+```
+
+### fastfetch
+Alternative to `neofetch`, shows more info  
+
+## cmatrix
+
+## figlet 
+Displays given text in this fancy-pants-ahh style  
+```
+       _           _ 
+  __ _| |__   ___ (_)
+ / _` | '_ \ / _ \| |
+| (_| | | | | (_) | |
+ \__,_|_| |_|\___// |
+                |__/ 
+
+```
+
+With `-f` you can specify 'font'  
+Fonts are located at `/usr/share/figlet/fonts`
+
+## sl
+Steam locomotive  
+
+## cbonsai
+Shows bonsai tree  
+`-l` makes it live grow
