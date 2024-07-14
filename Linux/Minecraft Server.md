@@ -11,7 +11,7 @@ Download `server.jar` from [this link](https://piston-data.mojang.com/v1/objects
 > If link doesn't work, see [this tutorial](https://www.minecraft.net/en-us/download/server) 
 
 ## Git *(optional)*
-If you have your server backed up on Github, make sure git is installed with `git --version`  
+If you have your server backed up on Github, make sure [git](Git.md) is installed with `git --version`  
 Clone your repository `git clone git@github.com/yungcypo/MinecraftServer.git`  
 Make sure you have access (SSH key) by following section *'Generate SSH key'* in [Git tutorial](Git.md)  
 
