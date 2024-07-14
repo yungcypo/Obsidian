@@ -79,6 +79,8 @@ To reconfigure p10k, type `p10k configure`
 | `bindkey -e`                                                                            |
 | ```bindkey '^[[1;5C' emacs-forward-word```                                              |
 | ```bindkey '^[[1;5D' emacs-backward-word```                                             |
+| `bindkey '^H' backward-kill-word`                                                       |
+> Note: To show keystrokes, run command `showkey -a`
 
 ### Aliases
 
