@@ -16,7 +16,7 @@ Clone your repository `git clone git@github.com/yungcypo/MinecraftServer.git`
 Make sure you have access (SSH key) by following section *'Generate SSH key'* in [Git tutorial](Git.md)  
 
 ## Running server
-`nohutp java -Xmx7G -Xms7G -jar server.jar nogui &`  
+`nohup java -Xmx7G -Xms7G -jar server.jar nogui &`  
 You can specify the amount of RAM allocated to the server  
 
 ## Connecting to the server
