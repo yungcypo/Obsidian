@@ -31,6 +31,8 @@ You can run the server with following command: `java -Xmx7G -Xms7G -jar server.j
 `screen -ls`
 ### Rejoin screen session
 `screen -r <name>` for example `screen -r minecraft`
+### Delete screen session
+`sreen -XS <name> quit` for example `screen -XS minecraft quit`
 
 ## `nohup`
 You just run this command: `nohup java -Xmx7G -Xms7G -jar server.jar nogui &`  
