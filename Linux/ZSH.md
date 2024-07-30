@@ -3,23 +3,23 @@ Configuration of ZSH
 
 `echo $SHELL` - view your current shell
 
-## Installing and Enabling ZSH
-### Install 
+# Installing and Enabling ZSH
+## Install 
 `sudo apt install zsh` - Debian-based OS
 `sudo pacman -S zsh` - Arch-based OS 
 
-### Change default shell 
+## Change default shell 
 `chsh cyprich` and enter your password  
 Enter location of ZSH, usually `/bin/zsh` *(make sure it's there before proceeding)*  
 
 **Make sure you have git installed** by typing `git --version`  
 Backup existing ZSH config by `mv ~/.zshrc ~/.zshrc.bak`  
 
-## Configure ZSH
+# Configure ZSH
 Make new config `nano ~/.zshrc`  
 All following commands will be written to this file  
 
-### Plugin manager - Zinit
+## Plugin manager - Zinit
 
 | Command                                                                                                                                                               | Description                                          |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
@@ -30,9 +30,7 @@ Now open new terminal
 You should see git cloning something the first time you log in  
 To make sure everything is working type `zinit zstatus`  
 
-> .zshrc.bak1
-
-### Prompt - Powerlevel10k
+## Prompt - Powerlevel10k
 First, you need to install Nerd font, for example [JetBrainsMono Nerd Font](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip) using command `wget <link>`  
 Unzip downloaded file and move it to `~/.fonts`  
 Run command `fc-cache -fv`  
@@ -46,13 +44,12 @@ Add following to `~/.zshrc`
 Open up a new terminal and follow steps to configure *Powerlevel10k*  
 To reconfigure p10k, type `p10k configure`   
 
-> .zshrc.bak2
+## Plugins
 
-### Syntax highlighting
-
-| Command                                         | Description                 |
-| ----------------------------------------------- | --------------------------- |
-| `zinit light zsh-users/zsh-syntax-highlighting` | Syntax highlighting plugins |
+| Command                                         | Description         |
+| ----------------------------------------------- | ------------------- |
+| `zinit light zsh-users/zsh-syntax-highlighting` | Syntax highlighting |
+| `zinit light zsh-users/zsh-autocompletion`      | Autocompletion      |
 
 ## Settings
 ### History settings
@@ -92,4 +89,8 @@ To reconfigure p10k, type `p10k configure`
 | Command                                                                                                                                                    |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ```(( ${+ZSH_HIGHLIGHT_STYLES} )) \|\| typeset -A ZSH_HIGHLIGHT_STYLES```<br>`ZSH_HIGHLIGHT_STYLES[path]=none`<br>`ZSH_HIGHLIGHT_STYLES[path_prefix]=none` |
-> .zshrc.bak3
+# Config file
+There is the whole configuration file in this folder, it's called `.zshrc.complete`   
+You can use it by renaming it to `.zshrc` and moving to Home Folder (`~`)  
+You can do so by typing command like `mv ./zshrc.complete ~/.zshrc`  
+Just make sure to back up any already existing file if needed, because it will be overwritten  
