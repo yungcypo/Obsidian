@@ -240,6 +240,8 @@ Shows info about your system
 ### fastfetch
 Alternative to `neofetch`, shows more info  
 
+### onefetch
+Similar to `neofetch`, but it's made for Git Repositories
 ## cmatrix
 
 ## figlet 
