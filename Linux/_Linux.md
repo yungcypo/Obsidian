@@ -1,3 +1,4 @@
 [Commands](Commands.md)
-[Minecraft Server](Minecraft%20Server.md)
+[Minecraft Server](MinecraftServer.md)
 [ZSH](ZSH.md)
+[Neovim](Neovim.md)
