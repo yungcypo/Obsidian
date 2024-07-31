@@ -1,5 +1,6 @@
 # HTML
-Hyper-Text Markdown Language, used for creating websites  
+Hyper-Text Markdown Language  
+Used for creating websites  
 > Note: HTML is not an programming language
 
 # Basic stuff
@@ -41,7 +42,6 @@ These tags are located inside `<head>` tag
 	- `UTF-8` is like a basic set of characters  
 - `<meta name="description" content="The best website in whole world">`
 	- Gives a description on website 
-	- It's usually shown on tab in the browser  
 	- Inside of this `meta` tag, you are telling what type of information/setting you want to define *(description)* and you are telling what the description should be *(The best website in whole world)*
 - `<meta name="author" content="Cypo">`
 	- Gives information about the author  
@@ -50,8 +50,9 @@ These tags are located inside `<head>` tag
 - `<meta name=viewport content="widt=device-width, initial-scale=1.0">`
 	- This is gonna control how your website is gonna be displayed
 	- Without this, you will see the website the same on Mobile as on PC
+- `<title>Cypo's Website</title>`
+	- Text inside `<title>` tag is shown in browser on current tab
 - There are a lot more tags that you can provide to `<head>`
-- 
 
 ## `<body>`
 Lies inside `<html>` tag
@@ -247,6 +248,8 @@ So the style could look something like this:
 <p style="color: rgb(255, 0, 0)">Hello</p>
 ```
 All of these tags will make the exact same text  
+
+> Note: A bit more on colors in [CSS tutorial](CSS.md)
 
 # Links  
 You can specify a link with `<a>` tag  
