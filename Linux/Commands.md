@@ -261,7 +261,13 @@ Fonts are located at `/usr/share/figlet/fonts`
 
 ## sl
 Steam locomotive  
+Displays a train on your screen, when you mistype `ls`
 
 ## cbonsai
 Shows bonsai tree  
 `-l` makes it live grow
+
+## pipes.sh
+Nice-looking screensaver  
+`yay -S pipes.sh`
+
