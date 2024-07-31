@@ -25,7 +25,8 @@ The h key is at the left and moves left
 The l key is at the right and moves right
 The j key looks like down arrow
 
-To **move to the start of the line**, press `0`
+To **move the cursor to the start of the line**, press `0`  
+To **move the cursor to the end of the line**, press `$`  
 
 # Exiting Neovim
 1. Press the `<Esc>` key to enter Normal mode
