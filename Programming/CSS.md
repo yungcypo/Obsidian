@@ -20,7 +20,8 @@ You have to write the style on every element you want to apply the style to (not
 	h2 {color: blue}
 </style>
 ```
-Every `<p>` tag will have red color and every `<h2>` tag will have blue color
+Every `<p>` tag will have red color and every `<h2>` tag will have blue color  
+The style should be located at the start of `<body>` tag, so the browser knows about all the styles before rendering elements  
 
 ## `.css` file
 File like `styles.css`  
