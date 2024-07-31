@@ -1,5 +1,5 @@
 # raylib
-raylib is a [C++](CPP.md) library used to make games  
+raylib is a [C++](./CPP.md) library used to make games  
 
 # Install
 Steps to start with raylib on Windows

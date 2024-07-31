@@ -1,5 +1,5 @@
 # Playit
-Setup of [playit.gg](https://playit.gg/download/linux)
+Setup of [playit.gg](https://playit.gg/download/linux) which I mainly use for [Minecraft server](./MinecraftServer.md)  
 
 ```shell
 curl -SsL https://playit-cloud.github.io/ppa/key.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/playit.gpg >/dev/null
@@ -16,3 +16,9 @@ sudo apt update
 ```shell
 sudo apt install playit
 ```
+
+```shell
+playit
+```
+
+After doing these steps successfully, you will be asked to open you browser with link specified in console and follow steps there   

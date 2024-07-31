@@ -1,6 +1,6 @@
 # CSS
 Cascading Style Sheets  
-Used to style websites ([HTML](HTML.md) files)   
+Used to style websites ([HTML](./HTML.md) files)   
 > Note: CSS is not and programming language
 
 # Basic stuff
@@ -60,7 +60,7 @@ comment */
 ```
 
 # Colors
-I already stated something of this in [HTML tutorial](HTML.md), there is something more to it  
+I already stated something of this in [HTML tutorial](./HTML.md), there is something more to it  
 
 ## Color names
 So far, we specified color with it's name, like `red` or `blue`  
@@ -227,13 +227,13 @@ ID has higher priority over Class
 ```
 This text will be red, because ID has higher priority over Class
 
-| Class                     | ID                                                |
-| ------------------------- | ------------------------------------------------- |
-| Used on multiple elements | Used only on one element                          |
-| Defined with `.` in CSS   | Defined with `#` in CSS                           |
-| More used                 | Less used                                         |
-| Lower priority\*          | Higher priority\*                                 |
-|                           | Easier to access with [JavaScript](JavaScript.md) |
+| Class                     | ID                                                  |
+| ------------------------- | --------------------------------------------------- |
+| Used on multiple elements | Used only on one element                            |
+| Defined with `.` in CSS   | Defined with `#` in CSS                             |
+| More used                 | Less used                                           |
+| Lower priority\*          | Higher priority\*                                   |
+|                           | Easier to access with [JavaScript](./JavaScript.md) |
 
 \*More about priorities in [Priorities section](#Priorities)
 
@@ -378,7 +378,7 @@ Previous code can be simplified to following...
 
 # Padding & Margin
 I think the best way to explain Padding vs. Margin is with the following image  
-![](css-padding-vs-margin.jpg)
+![](../images/css-padding-vs-margin.jpg)
 
 I will try do describe it with words...  
 - **Content** is the element you are styling, whenever it's a text, image, `div` or anything else  
@@ -569,13 +569,13 @@ There are a lot more [selectors](https://developer.mozilla.org/en-US/docs/Web/CS
 
 # CSS Flexbox  
 Flexbox is a tool to organize elements in one dimension  
-There is a lot to know about Flexbox, so I will add a [Flexbox cheatsheet]()
-![](css-flexbox-cheatsheet.png)
+There is a lot to know about Flexbox, so I will add a [Flexbox cheatsheet](../images/css-flexbox-cheatsheet.png)
+![](../images/css-flexbox-cheatsheet.png)
 
 # CSS Grid
 Grid is a tool to organize elements in two dimensions
-There is a lot to know about Grid, so I will add a [Grid cheatsheet]()
-![](css-grid-cheatsheet.png)
+There is a lot to know about Grid, so I will add a [Grid cheatsheet](../images/css-grid-cheatsheet.png)
+![](../images/css-grid-cheatsheet.png)
 
 # `animation`
 ```css

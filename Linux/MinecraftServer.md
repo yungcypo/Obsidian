@@ -12,9 +12,9 @@ Download `server.jar` from [this link](https://piston-data.mojang.com/v1/objects
 > If link doesn't work, see [this tutorial](https://www.minecraft.net/en-us/download/server) 
 
 ## Git *(optional)*
-If you have your server backed up on Github, make sure [git](Git.md) is installed with `git --version`  
+If you have your server backed up on Github, make sure [git](../Git.md) is installed with `git --version`  
 Clone your repository `git clone git@github.com/yungcypo/MinecraftServer.git`  
-Make sure you have access (SSH key) by following section *'Generate SSH key'* in [Git tutorial](Git.md)  
+Make sure you have access (SSH key) by following section *'Generate SSH key'* in [Git tutorial](../Git.md)  
 
 # Running server
 The problem with running the server is that by default if you close your terminal, the server shuts down  
@@ -53,4 +53,4 @@ It could look something like this
 You can find your Public IP Address on your router settings, or via sites like [whatsmyipaddress.com](https://whatismyipaddress.com/)  
 
 ### Playit
-If you can't open a port for some reason, check out [Playit tutorial](Playit.md)
+If you can't open a port for some reason, check out [Playit tutorial](./Playit.md)
