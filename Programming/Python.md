@@ -90,6 +90,19 @@ age = 21
 > Note: Notice how `string` had quotes (`""`), whereas `number` does not
 > In example before we had quotes around a number, just to make some things simpler... You will see [in a moment ](#Printing%20string%20and%20number%20together)  
 
+## Float
+`float` is a number with floating decimal point  
+This basically means that it's a number with decimal part  
+
+```python
+my_float = 3.14
+weight = 61.3
+```
+
+> Note: Notice how we have decimal dot `.` instead of decimal comma `,`  
+> If we wanted to have decimal comma instead, we will got an error  
+> Comma in Python is used to things like [lists](#Lists) which will be covered later in tutorial
+
 ## Boolean
 There is also a `boolean` data type, which can be either `True` or `False`  
 
@@ -99,6 +112,7 @@ is_john_female = False
 ```
 
 > Note: The first letter or `True` or `False` has to be capital  
+
 
 # Printing string and number together 
 If you already tried to print a `string` along with a `number` in one print statement, you got an error  
@@ -373,6 +387,12 @@ To print the last friend, we can use this cool feature
 print(friends[-1])  # Jim
 ```
 
+If we wanted to access element that does not exist, we will get an error  
+
+```python
+print(friends[999])  # *Error*
+```
+
 Now lets say we have a larger list 
 
 ```python
@@ -418,7 +438,7 @@ print(friends[::1])  # "Karen", "Jim", "Oscar", "Toby", "Max", "Johny", "Ezhekie
 print(friends[::])  # "Karen", "Jim", "Oscar", "Toby", "Max", "Johny", "Ezhekiel"
 ```
 
-# Change a value in list 
+## Change a value in list 
 Following code will replace the first value ("Karen") with "Peter"  
 We can see this by printing the list  
 
@@ -529,4 +549,301 @@ new_friends = friends.copy()
 print(friends)  # "Karen", "Jim", "Oscar", "Toby", "Max", "Johny", "Ezhekiel"
 print(new_friends)  # "Karen", "Jim", "Oscar", "Toby", "Max", "Johny", "Ezhekiel"
 ```
+
+
+# Tuples
+A Tuple in Python is something similar to List, but with one major difference  
+Tuple can't be changed  
+Once you define a tuple, it's elements cannot change  
+
+```python
+my_tuple = (3.14, 9, 1.23456, "Hello")
+```
+
+Notice how tuple is defined with `()` whereas list was defined with `[]`  
+
+## Accessing Tuple elements
+This works the same as in [Lists](#Accessing%20list%20elements)  
+
+```python
+print(my_tuple[0])  # 3.14
+```
+
+The value of element or the number of elements cannot be changed   
+
+# Advanced Lists and Tuples  
+In Python, you can freely combine [Lists](#Lists) and [Tuples](#Tuples) together (and even [Dictionaries](#Dictionaries), which will be covered later)  
+In chapters before, the *type of element* was either a Number, String, or Float  
+We can totally put there a Boolean also, or even a List or Tuple as a value  
+
+## 2D List
+### Creating 2D List
+Lets make a List  
+But instead of Numbers, it will be storing a Lists  
+```python
+my_matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]  
+
+# you can split it in multiple lines, to make it look more organized  
+another_matrix = [
+	[9, 8, 7],
+	[6, 5, 4],
+	[3, 2, 1]
+]
+```
+
+Cool, right?  
+We just created a "2D List"  
+In fact, this is a List of Lists of Numbers  
+
+### Accessing 2D List elements
+Remember how we accessed elements in normal List?  
+We just typed `list[index]` and we got a Number  
+But now, instead of Numbers, we have Lists there  
+So what we do? It's as simple as `list[index][index]`  
+With first index, we received a List, so we  need to access it elements with another `[index]`
+
+```python
+print(my_matrix)  # [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+print(my_matrix[0])  # [1, 2, 3]
+print(my_matrix[0][0])  # 1
+```
+
+## 3D List
+We can also create 3D, 4D and so on...
+
+```python
+my_3d_list = [
+	[
+		[1, 2, 3], [4, 5, 6]
+	],
+	[
+		[7, 8, 9], [0, 1, 2]
+	],
+	[
+		[3, 4, 5], [6, 7, 8]
+	]
+]
+
+print(my_3d_list)  # [[[1, 2, 3], [4, 5, 6]], [[7, 8, 9], [0, 1, 2]], [[3, 4, 5], [6, 7, 8]]]
+print(my_3d_list[0])  # [[1, 2, 3], [4, 5, 6]]
+print(my_3d_list[0][1])  # [4, 5, 6]
+print(my_3d_list[0][1][2])  # 6
+```
+
+3D list is technically a List of Lists of Lists of Numbers  
+You see that it can get pretty messy if I put everything in one line, that's why I prefer writing it to multiple lines, even if it's not required
+
+## Combining structures
+We can also put a Tuples inside of Lists or Lists inside of Tuples
+
+```python
+coordinates = [
+	(3, 4), (6, 2), (80, 64)
+]
+
+points = (
+	[2, 4, 6, 12],
+	[7, 5, 6, 2],
+	[4, 6, 0, 0]
+)
+```
+
+Accessing elements from those should be pretty straight forward, we already did this  
+
+```python
+print(coordinates)  # [(3, 4), (6, 2), (80, 64)]
+print(coordinates[0])  # (3, 4)
+print(coordinates[0][1])  # 4
+
+print(points)  # ([2, 4, 6, 12], [7, 5, 6, 2], [4, 6, 0, 0])
+print(points[1])  # [7, 5, 6, 2]
+print(points[1][3])  # 2
+```
+
+This way you can create any structure you need  
+Just remember that Tuples cannot be changed, so once you have a Tuple, it's there forever  
+
+# Functions
+## Basic stuff about Functions
+Lets say you have a piece of code, which you wanted to execute multiple times  
+
+```python
+my_list = []
+
+my_list.append(1)
+print(my_list)
+
+my_list.append(1)
+print(my_list)
+
+my_list.append(1)
+print(my_list)
+```
+
+Now the code gets pretty big   
+And imagine if you wanted to execute like 300 lines of code multiple times   
+...Now you changed your mind and you want to do something different   
+
+Good solution for this is a *function*  
+Let's define a function to see what I am talking about  
+Use `def function_name():` to define a function  
+
+```python
+def do_something_with_list():
+```
+
+Now we kind of made a function, but we will get error because it's empty  
+The code you want to put inside a function must be *indented* with `tab` key on your keyboard   
+
+```python
+def do_something_with_list():
+	print("Running function...")
+	my_list.append(1)
+	print("Your list just got extended")
+	print("I will print the list in the line bellow")
+	print(my_list)
+	print("Function done...")
+```
+
+When you run the code right now, it seems like nothing happened  
+Why? Because, actually, nothing happened  
+We never told the function to run - we did never **call the function**  
+We need to call the function in order to run  
+It's as easy as writing it's name along with parenthesis, like in example bellow  
+
+```python
+do_something_with_list()  
+```
+
+Now we called the function and you can see all the text we defined in the function  
+
+We can call the function multiple times, you can see how the list expands  
+
+```python
+do_something_with_list() 
+do_something_with_list() 
+do_something_with_list() 
+do_something_with_list() 
+do_something_with_list() 
+```
+
+Now we saved a lot of work huh?  
+It can be even shorter, you will see in a while  
+
+## Function parameters  
+In the previous function, we added `1` to the end of a list every time  
+What if we wanted to add a different number every time  
+
+We can add something called *parameter* to the function definition  
+I'm pretty sure you noticed those parentheses in function definition  
+The parameter name is written in between the parenthesis, like in example bellow  
+
+```python
+def do_something_with_list(number_to_add):
+	...
+```
+
+Now we just created a kind of variable, that can be used only inside the function  
+Now we can adjust the function, to add out desired number, not just `1`
+
+```python
+def do_something_with_list(number_to_add):
+	print("Running function...")
+	my_list.append(number_to_add)
+	print("Your list just got extended with " + str(number_to_add) + ". The whole list now looks like this: ")
+	print(my_list)
+	print("Function done...")
+```
+
+When calling function with parameters, we *have to* write those parameters there  
+
+```python
+do_something_with_list(1) 
+do_something_with_list(5) 
+do_something_with_list(3) 
+do_something_with_list(6) 
+do_something_with_list(7) 
+```
+
+We can add as many parameters as we want  
+
+```python
+def say_hi(name, age):
+	print("Hello " + name + ", you are " + str(age) + " years old")
+
+
+say_hi("Peter", 21)  # Hello Peter, you are 21 years old
+say_hi("Adka", 15)  # Hello Adka, you are 15 years old
+say_hi("Jarko", 10)  # Hello Jarko, you are 10 years old
+```
+
+If we had some variable in our code, we can freely pass it to function as it's parameter  
+
+```python
+my_name = "Peter"
+my_age = 21
+
+
+def say_hi(name, age):
+	print("Hello " + name + ", you are " + str(age) + " years old")
+
+
+say_hi(my_name, my_age)
+```
+
+## Return statement  
+Maybe sometimes in code, we don't want a function print anything  
+We might want the function just to do something or calculate something, so we can use the value later on  
+
+Let's say that we want to calculate the volume of a cube  
+> Note: Remember that we *don't want to print* the value right now  
+
+```python
+def cube_volume(size):
+	size * size * size
+
+
+cube_volume(5)  # *This won't print anything*
+print(cube_volume(5))  # None
+```
+
+This function takes one argument - size of a cube - and calculates it's volume  
+Calling the function will seemingly do nothing  
+In fact, the function did run, but we didn't told it what to do with the result  
+
+We can tell it to **run the function, and give us the value** by using `return`  
+
+```python
+def cube_volume(size):
+	return size * size * size
+
+
+cube_volume(5)  # *This won't print anything once again*
+print(cube_volume(5))  # 125
+```
+
+There you have it!  
+The function ran, and *returned* 125  
+You can imagine it like the `cube_volume(5)` is being replaced by 125, which is the `return` value  
+
+We can use this more...  
+
+```python
+def cube_volume(size):
+	return size * size * size
+
+
+print("The cube with size of " + str(3) + " has a volume of " + str(cube_volume(3)))  # The cube...3...volume of 27
+print("The cube with size of " + str(4) + " has a volume of " + str(cube_volume(4)))  # The cube...4...volume of 64
+print("The cube with size of " + str(2 + 5) + " has a volume of " + str(cube_volume(2 + 5)))  # The cube...7...volume of 343
+
+print("Both cubes together have the volume of " + str(cube_volume(3) + cube_volume(4)))  # ...volume of 91
+print("If we subtracted the volumes, we will get " + str(cube_volume(4) - cube_volume(3)))  # ...we will get 37
+
+```
+
+As you might see, we can use even math operations as parameters  
+
+You can also see the versatility of the function this way. If you put the `print` statement directly inside the function, you will always get the same result  
+If you wanted to print something different, you will have to create a new function  
 
