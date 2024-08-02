@@ -1,10 +1,11 @@
-# Neovim
-[Neovim](https://neovim.io/) is a highly extensible, keyboard-based and very powerful text editor  
+# Vim
+[Vim](https://www.vim.org) is a highly configurable text editor build to make creating and changing any kind of text very efficient
+This tutorial will be only covering the basics of all the basic stuff and shortcuts in Vim  
+There will be another file like [Neovim](./Neovim.md) which will be covering the configuration of Neovim  
 
 # `:Tutor`
 Typing this command, you will get 30-minute tutorial, if you are new to Vim  
-
-> I don't know why it it called a "30-minute tutorial", when it took me like 2 days, but whatever
+> I don't know why is it called a "30-minute tutorial", when it took me like 2 days, but whatever  
 
 # Moving cursor
 
@@ -30,9 +31,9 @@ The j key looks like down arrow
 To **move the cursor to the start of the line**, press `0`  
 To **move the cursor to the end of the line**, press `$`  
 
-# Exiting Neovim
+# Exiting Vim
 1. Press the `<Esc>` key to enter Normal mode
-2. Type `:q` to exit Neovim
+2. Type `:q` to exit Vim
 	 - If you type `:wq` you will save changes and exit (write, quit)
 	 - If you type `:q!` you will exit without saving changes
 
@@ -53,7 +54,7 @@ Press `A` to append text
 This will basically move cursor at the end of a line and enter insert mode  
 
 # Editing a file  
-To open a file in Neovim, type `nvim <filename>` in the console  
+To open a file in Vim, type `nvim <filename>` in the console  
 For example `nvim helloworld.py`  
 
 # Operators and Motions
@@ -136,6 +137,8 @@ To go forward to newer positions, press `<ctrl> + i`
 
 To turn off highlights after search, type the command `:noh`  
 
+To ignore case while searching, type the command `:set ic` and enable it with `:set noic`  
+
 ## Find matching parenthesis  
 If you want to find a pair to any kind of parenthesis (`(`, `[`, `{`) , just put cursor on it and press `%`  
 With `%` you can switch between opening and closing parenthesis
@@ -155,12 +158,12 @@ You will be asked before every occurrence if you want to replace it
 
 # External command
 To execute external command, type `:!` followed by `<command>`  
-With this you are able to execute any command, as if you were out of Neovim  
+With this you are able to execute any command, as if you were out of Vim  
 For example, type `:!ls` to list the contents of a directory  
 Remember to press `<enter>` to run the command  
 
 # Writing to file
-You already know that typing `:wq` will *write* to the file and *quit* Neovim  
+You already know that typing `:wq` will *write* to the file and *quit* Vim  
 What wasn't mentioned yet is that typing `:w` followed by `<filename>` allows you to save to different file  
 
 If you want to write just a part of a file, you can do so with **visual mode**  
@@ -171,7 +174,7 @@ If you want to write just a part of a file, you can do so with **visual mode**
 5. Type `w FILENAME` to write selected text to file named `FILENAME`
 
 # Retrieving   
-If you have a file, that you want to copy to file currently open in Neovim, type `:r FILENAME` where `FILENAME` is the name of the file  
+If you have a file, that you want to copy to file currently open in vim, type `:r FILENAME` where `FILENAME` is the name of the file  
 After doing so, you can see the content of the file placed under your cursor  
 
 If you want to retrieve from external command, type `:r` followed by `!<command>`  
