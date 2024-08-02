@@ -1,153 +1,212 @@
 # Neovim
-[Neovim](https://neovim.io/) is a highly extensible, keyboard-based and very powerful text editor  
-Neovim is a fork of [Vim](https://www.vim.org/)  
-If you don't know how Vim works, check [Vim tutorial](./Vim.md) first, to avoid any inconveniences and confusion  
+[Neovim](https://neovim.io/) is a powerful, highly-customizable, console-based text editor based on [Vim](https://www.vim.org/)  
+This tutorial will be only covering the basics of all the basic stuff and shortcuts in Vim   
 
-Now, I will focus on the configurations on Neovim and stuff like that  
-I will be following ["Neovim for Newbs" tutorial by "typecraft" on YouTube](https://www.youtube.com/watch?v=zHTeCSVAFNY&list=PLsz00TDipIffreIaUNk64KxTIkQaGguqn)  
+# `:Tutor`
+Typing this command, you will get 30-minute tutorial, if you are new to Vim  
+> I don't know why is it called a "30-minute tutorial", when it took me like 2 days, but whatever  
 
-# First steps
-Before starting, make sure to:  
-- Know how to use Vim
-- Have Neovim installed
-	- You can do so with your package manager, like `sudo pacman -S neovim` or `sudo apt install neovim`
+# Moving cursor
 
-# `init.lua`
-`init.lua` is a configuration file for Neovim  
-Make new file in `~/.config/nvim/init.lua`  
-If you already have this file, make sure to make a backup if you don't want to lose it  
-
-We can type the following...
-
-```lua
-vim.cmd("set tabstop=4")
-vim.cmd("set softtabstop=4")
-vim.cmd("set shiftwidth=4")
+| Key | Shortcut          |
+| --- | ----------------- |
+| k   | Move cursor up    |
+| j   | Move cursor down  |
+| l   | Move cursor right |
+| h   | Move cursor down  |
+```
+     ↑
+     k
+← h     l →
+     j
+     ↓
 ```
 
-...to set width of `<tab>` to 4 characters  
+**Hint**
+The h key is at the left and moves left
+The l key is at the right and moves right
+The j key looks like down arrow
 
-To apply changes, type the command `:source %`  
-Make sure your new file is saved   
+To **move the cursor to the start of the line**, press `0`  
+To **move the cursor to the end of the line**, press `$`  
 
-## Package manager - `lazy.nvim`
-[`lazy.nvim`](https://github.com/folke/lazy.nvim) is one of two most popular package managers for Neovim  
+# Exiting Vim
+1. Press the `<Esc>` key to enter Normal mode
+2. Type `:q` to exit Vim
+	 - If you type `:wq` you will save changes and exit (write, quit)
+	 - If you type `:q!` you will exit without saving changes
 
-> The other one is [`packer.nvim`](https://github.com/wbthomason/packer.nvim), but I will stick to `lazy` in this tutorial  
+Pressing `<Esc>` will place you in Normal mode or cancel any partially completed command
 
-### Installation 
-Go to [their website](https://lazy.folke.io/installation) and copy given script to corresponding files  
+# Text editing
+## Deletion
+Press `x` to delete the character under the cursor  
+Press `dw` to delete to the end of a word  
+Press `d$` to delete to the end of a line  
+Press `dd` to delete whole line
 
-> Note: I chose "Single File Setup"
+You basically just type `d` with following [motion](#Motions) (discussed later)
+## Insertion
+Press `i` to insert text  
+## Addition
+Press `A` to append text  
+This will basically move cursor at the end of a line and enter insert mode  
 
-```lua
--- Bootstrap lazy.nvim
--- Bootstrap lazy.nvim
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
-  if vim.v.shell_error ~= 0 then
-    vim.api.nvim_echo({
-      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-      { out, "WarningMsg" },
-      { "\nPress any key to exit..." },
-    }, true, {})
-    vim.fn.getchar()
-    os.exit(1)
-  end
-end
-vim.opt.rtp:prepend(lazypath)
+# Editing a file  
+To open a file in Vim, type `nvim <filename>` in the console  
+For example `nvim helloworld.py`  
 
--- Make sure to setup `mapleader` and `maplocalleader` before
--- loading lazy.nvim so that mappings are correct.
--- This is also a good place to setup other settings (vim.opt)
-vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
+# Operators and Motions
+Many commands that change text are made from an operator and a motion  
+Command can look like this: `<operator><motion>`, for example `dw` *(delete word)*
+For example, the delete command:   
+- Operator is `d`
+- Motions could be
+	- `w` - until the start of the next word, EXCLUDING its first character 
+	- `e` - to the end of current word, INCLUDING the last character
+	- `$` - to the end of current line, INCLUDING the last character  
 
--- Setup lazy.nvim
-require("lazy").setup({
-  spec = {
-    -- add your plugins here
-  },
-  -- Configure any other settings here. See the documentation for more details.
-  -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { "habamax" } },
-  -- automatically check for plugin updates
-  checker = { enabled = true },
-})
-```
+## Operators and Motions with Numbers
+Typing a number with and operator repeats it that many times  
+Command can look like this: `<operator><number><motion>`
+For example:
+- `d3w` *(delete 3 words)*
+- `2dd` *(delete 2 lines)* *(special case)*
 
-Now if you type the command `:Lazy`, a GUI of Lazy will pop up   
+## Motions
 
-## Color scheme  
-I will be using the [Catppuccin](https://github.com/catppuccin/nvim) color scheme  
-Go to the link, and copy Installation script from there  
-Paste it into `init.lua`, under where it says `-- add your plugins here`
+| Motion      | Meaning                                          |
+| ----------- | ------------------------------------------------ |
+| `0`         | **Start** of current **line**                    |
+| `$`         | **End** of current **line**                      |
+| `b`         | **Start** of current **word**                    |
+| `w`         | **End** of current **word** (with whitespace)    |
+| `e`         | **End** of current **word** (without whitespace) |
+| `gg`        | **Start** of the **file**                        |
+| `G`         | **End** of the **file**                          |
+| `<number>G` | **Line** with given **number**                   |
 
-```lua
--- add your plugins here
-{ "catppuccin/nvim", name = "catppuccin", priority = 1000 }
-```
 
-Also, you need to tell Catppuccin to set up, and set the color scheme in Neovim
+# Undo
+Press `u` to undo the last command  
+Press `U` to undo a whole line  
+Press `<ctrl> + <r>` to *"undo the undos"*, so basically a **Redo**
 
-```lua
-require("catppuccin").setup()
-vim.cmd.colorscheme "catppuccin"
-```
+# Put
+Type `p` to put previously deleted text after the cursor  
+Type `P` to put previously deleted text before the cursor  
 
-If you close and re-open Neovim, you should see the new color scheme installing and being used right after  
+# Replace
+Type `rx` to replace the character at the cursor with `x`  
+So basically, you type `r` and then the letter you want to replace with  
 
-## Telescope
-[`telescope.nvim`](https://github.com/nvim-telescope/telescope.nvim) is a tool for fuzzy finding files, `grep` through files and more  
-Go to the link, look for `lazy.nvim` section and paste given code to `init.lua`
+# Change 
+Change operator
+Type `ce` to change until the end of a word  
+It basically deletes whole word after cursor and enters Insert mode
 
-```lua
--- add your plugins here 
-{
-    'nvim-telescope/telescope.nvim', tag = '0.1.8',
-    dependencies = { 'nvim-lua/plenary.nvim' }
-}
-```
+For example, if you have the word `baloon` and you want to change it to `banana`  
+1. You put your cursor on the letter `a`
+2. You press `ce` 
+3. You type `nana`
+4. You press `<Esc>` to exit Insert mode
 
-> Don't forget to add comma between `catppuccin` and `telescope` plugins  
+Change operator uses the same motions as the Delete operator, the format is `c [number] <motion>`   
+This means that `w` *(word)* and `$` *(end of line)*  
 
-Also add following code to the end of a file, to actually use `telescope`  
+| Replace             | Change                                    |
+| ------------------- | ----------------------------------------- |
+| `r`                 | `c`                                       |
+| Not an operator     | Operator                                  |
+| Replaces one letter | Changes one or more *(depends on motion)* |
+| Normal mode         | Insert mode                               |
 
-```lua
-local builtin = require("telescope.builtin")
-vim.keymap.set('n', '<C-p>' builtin.find_files, {})
-```
+# Search
+Type `/` followed by phrase to search for the phrase  
+After pressing `<enter>`, you can switch between occurrences  
 
-Now after restarting Neovim, you can hit `<ctrl> p` to find files  
+Press `n` to go to the next occurrence  
+Press `N` to go to the previous occurrence  
 
-I will also set "Live grep" to `<ctrl> l` like this  
+To search for a phrase in the backward direction, use `?` instead of `/`   
+This will search the last occurrence first   
 
-```lua
-vim.keymap.set('n', '<C-l>' builtin.live_grep, {})
-```
+To go back to older positions, press `<ctrl> + o`
+To go forward to newer positions, press `<ctrl> + i`
 
-## Treesitter
-[Treesitter](https://github.com/nvim-treesitter/nvim-treesitter) is a package used for highlighting and indenting  
+To turn off highlights after search, type the command `:noh`  
 
-Add this to the list of plugins  
+To ignore case while searching, type the command `:set ic` and enable it with `:set noic`  
 
-```lua
--- add your plugins here
-{"nvim-treesitter/nvim-treesitter", build = ":TSUpdate"}
-```
+## Find matching parenthesis  
+If you want to find a pair to any kind of parenthesis (`(`, `[`, `{`) , just put cursor on it and press `%`  
+With `%` you can switch between opening and closing parenthesis
 
-I got it from [Wiki - Install - `lazy.nvim`](https://github.com/nvim-treesitter/nvim-treesitter/wiki/Installation) on their Github, it''s a part of the code here  
+# Substitute
+Type `:s/old/new` to substitute (change) `new` for `old`  
+This will substitute only the first occurrence of `old` into `new`  
+To substitute all occurrences, type `:s/old/new/g`  
 
-To load configs, add this to the end of `init.lua`
+To substitute every occurrence of a phrase between two lines, type `:#,#s/old/new/g` where `#`'s is the line range you want to change in  
+For example `:1,5s/old/new/g` will substitute all occurrences of `old` with `new` between lines `1` and `5`  
 
-```lua
-local config = require("nvim-treesitter.configs")
-config.setup({
-	ensure_installed = { "lua", "javascript", "html", "python" },
-	highlight = { enable = true },
-	indent = { enable = true },
-})
-```
+To substitute all occurrences in **whole file**, type the command `:%s/old/new/g`  
 
+To substitute all occurrences in **whole file, with confirmation**, type the command `:%s/old/new/gc`  
+You will be asked before every occurrence if you want to replace it  
+
+# External command
+To execute external command, type `:!` followed by `<command>`  
+With this you are able to execute any command, as if you were out of Vim  
+For example, type `:!ls` to list the contents of a directory  
+Remember to press `<enter>` to run the command  
+
+# Writing to file
+You already know that typing `:wq` will *write* to the file and *quit* Vim  
+What wasn't mentioned yet is that typing `:w` followed by `<filename>` allows you to save to different file  
+
+If you want to write just a part of a file, you can do so with **visual mode**  
+1. Move the cursor to the first line of text you want to save 
+2. Press `v` to enter visual mode
+3. Move the cursor to the last line of text you want to save. Notice that text will get selected   
+4. Press `:` (You will see `:'<,'>` at the bottom of your screen)  
+5. Type `w FILENAME` to write selected text to file named `FILENAME`
+
+# Retrieving   
+If you have a file, that you want to copy to file currently open in vim, type `:r FILENAME` where `FILENAME` is the name of the file  
+After doing so, you can see the content of the file placed under your cursor  
+
+If you want to retrieve from external command, type `:r` followed by `!<command>`  
+For example, typing `:r !ls` will list the contents of your directory and place it under you cursor  
+
+> Note: Don't mistake `:r` (retrieving) with `r` (removing)
+
+# Open
+Type `o` to *open* new line **below** you cursor  
+If you have a cursor on a line, and you will type `o`, it will create new line under your cursor, move you there and enter insert mode  
+
+To create a new line **above**, type `O` (capital `o`)
+
+# Append
+Press `a` to enter insert mode after the cursor  
+
+This is very similar to [pressing `i`](#Insertion), which enters the insert mode before the cursor  
+The only difference is where the characters are inserted  
+
+# Replace 2
+We already covered [replace](#Replace)  
+You pressed `rx` to *replace* the letter under cursor with `x`  
+
+If you press `R`, you will enter Replace mode where you are able to replace more than one letter  
+Press `<esc>` to exit Replace mode
+
+# Copy
+Use the `y` operator to copy text  
+`y` stands for yank
+
+Use `p` to paste text after cursor (either copied or deleted)  
+Use `P` to paste text before cursor  
+
+# Moving between windows
+To move between windows (if you have more than one), you need to press `<ctrl> w <ctrl> w`  
+Another window will open (for example) if you press `F1` for help  
