@@ -175,6 +175,10 @@ Change permissions
 chmod permissions file
 ```
 
+# System log
+```shell
+journalctl -xe
+```
 
 # Cool programs
 Mostly useless programs  
