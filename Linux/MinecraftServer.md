@@ -11,11 +11,6 @@ Command to download stuff: `wget <link>`
 Download `server.jar` from [this link](https://piston-data.mojang.com/v1/objects/450698d1863ab5180c25d7c804ef0fe6369dd1ba/server.jar)` 
 > If link doesn't work, see [this tutorial](https://www.minecraft.net/en-us/download/server) 
 
-## Git *(optional)*
-If you have your server backed up on Github, make sure [git](../Git.md) is installed with `git --version`  
-Clone your repository `git clone git@github.com/yungcypo/MinecraftServer.git`  
-Make sure you have access (SSH key) by following section *'Generate SSH key'* in [Git tutorial](../Git.md)  
-
 # Running server
 The problem with running the server is that by default if you close your terminal, the server shuts down  
 There are two ways of solving this problem  
