@@ -84,12 +84,12 @@ Makes **new branch** with given \<name>
 ### git branch -d \<name>
 Remove branch with given \<name>
 ## git checkout \<name>
-	'Switches' to \<name> branch
+		'Switches' to \<name> branch
 ### git checkout -b \<name>
 'Switches' to \<name> branch, creates it, if not present
 ## git merge \<name>
 Moves changes from \<name> to current branch   
-For example, if I hit `git checkout master` and then `git checkout new-feature`, I just got the *new-feature* to *master*
+For example, if I hit `git checkout master` and then `git merge new-feature`, I just got the *new-feature* to *master*
 
 ## Merge vs. Rebase
 
