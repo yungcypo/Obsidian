@@ -30,11 +30,57 @@ Now open new terminal
 You should see git cloning something the first time you log in  
 To make sure everything is working type `zinit zstatus`  
 
-## Prompt - Powerlevel10k
-First, you need to install Nerd font, for example [JetBrainsMono Nerd Font](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip) using command `wget <link>`  
-Unzip downloaded file and move it to `~/.fonts`  
-Run command `fc-cache -fv`  
-You might need to install `unzip` and `fontconfig` 
+## Nerd Font
+If you are going to use custom prompt (section after this one), you need to use some Nerd Font    
+Nerd Font is like a normal font, but it's packed with bunch of icons which are useful in things like this  
+My favorite is [JetBrainsMono Nerd Font](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip), but you can choose any of [available Nerd Fonts](https://www.nerdfonts.com/)  
+
+### Installation
+- Using command `wget <link>`, download your desired font    
+- Unzip downloaded file and move it to `~/.fonts`  
+- Run command `fc-cache -fv`  
+
+> Note: You might need to install `unzip` and `fontconfig` 
+
+## Prompt
+Prompt is like the visual way of seeing in your console  
+There are two big guys there: `Powerlevel10k` and `oh-my-posh`  
+You can choose one of them, or keep the default one  
+
+### oh-my-posh
+Install `oh-my-posh` with following command  
+
+| Command                                              | Description          |
+| ---------------------------------------------------- | -------------------- |
+| `curl -s https://ohmyposh.dev/install.sh \| bash -s` | Install `oh-my-posh` |
+
+Add following to `~/.zshrc`
+
+| Command                         | Description      |
+| ------------------------------- | ---------------- |
+| `eval "$(oh-my-posh init zsh)"` | Add `oh-my-posh` |
+#### Fixing path
+You might see error like `oh-my-posh: command not found`  
+This might happen because the install folder of `oh-my-posh` is `~/.local/bin` by default  
+Add following to `~/.zshrc` BEFORE any command related with `oh-my-posh`  
+`export PATH=$PATH:/home/username/.local/bin`  
+
+> Note: Change `username` with you actual username 
+> Note: If you don't know your username, type the command `whoami`
+
+#### Configuring themes
+You can download one of [available themes](https://ohmyposh.dev/docs/themes) and add following to configuration to use it   
+``eval "$(oh-my-posh init zsh --config path/to/downloaded/file)"``, so it looks something like this   
+
+| Command                                                              | Description                   |
+| -------------------------------------------------------------------- | ----------------------------- |
+| `eval "$(oh-my-posh init zsh --config ~/Downloads/atomic.omp.json)"` | Add custom `oh-my-posh` theme |
+
+To see changes, you have to re-open your terminal  
+If you have problems, check [Oh My Posh website](https://ohmyposh.dev/)
+
+
+### Powerlevel10k
 
 Add following to `~/.zshrc`
 
@@ -84,13 +130,14 @@ To reconfigure p10k, type `p10k configure`
 | Command                   |
 | ------------------------- |
 | `alias ls='ls -l --color` |
+
 ### Disable underline
 
 | Command                                                                                                                                                    |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ```(( ${+ZSH_HIGHLIGHT_STYLES} )) \|\| typeset -A ZSH_HIGHLIGHT_STYLES```<br>`ZSH_HIGHLIGHT_STYLES[path]=none`<br>`ZSH_HIGHLIGHT_STYLES[path_prefix]=none` |
+
 # Config file
-There is the whole configuration file in this folder, it's called `.zshrc.complete`   
-You can use it by renaming it to `.zshrc` and moving to Home Folder (`~`)  
-You can do so by typing command like `mv ./zshrc.complete ~/.zshrc`  
-Just make sure to back up any already existing file if needed, because it will be overwritten  
+There is the whole configuration file in this folder, it's called `.zshrc.p10k` or `.zshrc.ohmyposh`, depending on the prompt of your choice  
+Simply take this file and place it in your home directory, and rename it to `.zshrc`  
+You can simply do it with command `mv .zshrc.ohmyposh ~/.zshrc` (if you are currently in the same folder as this file)  
