@@ -1,6 +1,6 @@
 # Lua
 [Lua](https://www.lua.org/about.html) is a powerful, efficient, lightweight, embeddable scripting language  
-The reason I'm learning it is [Neovim](../Linux/Neovim.md) and it's configuration [NvChad](../Linux/NvChad.md)  
+The reason I'm learning it is Neovim and it's configuration NvChad  
 
 I will be learning from ["Learn basic Lua" by NvChad](https://nvchad.com/docs/quickstart/learn-lua/)  
 
@@ -269,7 +269,7 @@ Do note that all files in that lua folder are in path!
 # vim.tbl_deep_extend
 This is a Neovim function which is used for merging tables and their values recursively  
 Most plugins use it for merging config tables  
-
+			
 ```lua
 -- table 1
 local person = {

@@ -2,10 +2,10 @@
   "collapse-filter": true,
   "search": "-path:images  ",
   "showTags": false,
-  "showAttachments": true,
-  "hideUnresolved": true,
+  "showAttachments": false,
+  "hideUnresolved": false,
   "showOrphans": true,
-  "collapse-color-groups": true,
+  "collapse-color-groups": false,
   "colorGroups": [
     {
       "query": "path:Programming  ",
@@ -20,6 +20,13 @@
         "a": 1,
         "rgb": 14069084
       }
+    },
+    {
+      "query": "path:.",
+      "color": {
+        "a": 1,
+        "rgb": 11392604
+      }
     }
   ],
   "collapse-display": true,
@@ -28,10 +35,10 @@
   "nodeSizeMultiplier": 1,
   "lineSizeMultiplier": 1,
   "collapse-forces": true,
-  "centerStrength": 0.5,
-  "repelStrength": 14,
+  "centerStrength": 0.667648108493933,
+  "repelStrength": 14.9518201284797,
   "linkStrength": 1,
-  "linkDistance": 100,
-  "scale": 0.6413597384890743,
+  "linkDistance": 30,
+  "scale": 0.6650579213965988,
   "close": true
 }
