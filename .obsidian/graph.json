@@ -5,8 +5,15 @@
   "showAttachments": false,
   "hideUnresolved": false,
   "showOrphans": true,
-  "collapse-color-groups": false,
+  "collapse-color-groups": true,
   "colorGroups": [
+    {
+      "query": "path:Programming/WebDev  ",
+      "color": {
+        "a": 1,
+        "rgb": 11392604
+      }
+    },
     {
       "query": "path:Programming  ",
       "color": {
@@ -20,13 +27,6 @@
         "a": 1,
         "rgb": 14069084
       }
-    },
-    {
-      "query": "path:.",
-      "color": {
-        "a": 1,
-        "rgb": 11392604
-      }
     }
   ],
   "collapse-display": true,
@@ -39,6 +39,6 @@
   "repelStrength": 14.9518201284797,
   "linkStrength": 1,
   "linkDistance": 30,
-  "scale": 0.6650579213965988,
+  "scale": 0.7943626084507165,
   "close": true
 }

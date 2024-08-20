@@ -202,7 +202,7 @@ They will not be visible on your webpage
 Style is used to make your page **look** different  
 You can apply style to all elements  
 Styles is usually written in another file using CSS  
-CSS is whole another subject and will be discussed in [it's own file](./CSS.md)  
+CSS is whole another subject and will be discussed in different file  
 You can use style inside HTML file, but it's usually not a good practice to put a lot of styles in HTML
 
 For example this... 
@@ -249,7 +249,7 @@ So the style could look something like this:
 ```
 All of these tags will make the exact same text  
 
-> Note: A bit more on colors in [CSS tutorial](./CSS.md)
+> Note: A bit more on colors in CSS tutorial (separate file)
 
 # Links  
 You can specify a link with `<a>` tag  
@@ -423,7 +423,7 @@ You can also combine these two and make a cell take up as much space as you want
 These two tags are called "containers"  
 Is basically an empty box, in which you can put other elements  
 You can't see them on your page *(unless they are styled)*  
-When using [CSS](./CSS.md), you can apply some style to container to apply something to all it's children  
+When using CSS, you can apply some style to container to apply something to all it's children  
 
 **The difference** between `<span>` and `<div>` is only that `<span>` takes as *less* horizontal space as possible, while `<div>` takes as *much* horizontal space as possible *(unless they are styled)*  
 In terms of vertical space, they both take as less vertical space as possible *(unless they are styled)*  
@@ -435,7 +435,7 @@ In terms of vertical space, they both take as less vertical space as possible *(
 |                  | Inline element      | Block element       |
 
 # User Input and forms  
-To actually get and use user input, you will have to learn [JavaScript](./JavaScript.md), which is another giant subject  
+To actually get and use user input, you will have to learn JavaScript, which is another giant subject  
 For now, it's enought to understand the HTML part of it - "defining" things like input boxes and text areas  
 
 ## `<input>`
@@ -461,7 +461,7 @@ The `<input>` tag is a [single tag](#Single%20tags)
 (Almost) all of these can have following attributes:
 - `value=""` - a "default value". This is gonna be there before you start to type
 - `placeholder=""` - a text that will be shown in the input box. The difference between this and `value`, is that `value` is actually written there, `placeholder` is just displayed in the background when no value is provided  
-- `name=""` - useful when working with [JavaScript](./JavaScript.md). Also, it differs radio buttons (`type="radio"`)
+- `name=""` - useful when working with JavaScript. Also, it differs radio buttons (`type="radio"`)
 - `required` - as the name states, input with this attribute must be filled in  
 
 ### `<label>`
@@ -496,7 +496,7 @@ Write an essay...
 </textarea>
 
 ## `<form>`
-This tag is useful when working with [JavaScript](./JavaScript.md)  
+This tag is useful when working with JavaScript
 Stores input  
 *(?)*
 

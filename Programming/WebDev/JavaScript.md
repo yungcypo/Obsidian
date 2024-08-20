@@ -1,6 +1,7 @@
 # JavaScript
-JavaScript (also known as JS, *has nothing to do with Java*) is a programming language used mainly in Web Development alongside [HTML](HTML.md) and [CSS](CSS.md)  
+JavaScript (also known as JS, *has nothing to do with Java*) is a programming language used mainly in Web Development alongside HTML and CSS
 JavaScript is a huge concept, only a bit of it will be discussed here  
+Also check out [React](./React.md), which is a JavaScript library
 # Basic stuff
 This is a basic Hello World program  
 
@@ -189,10 +190,10 @@ function do_something() {
 ```
 
 ## Changing HTML with JavaScript  
-Although [React](./React.md) might be better for this, here is an example on how to change the text of `<p>` with JavaScript   
+Although [React](React.md) might be better for this, here is an example on how to change the text of `<p>` with JavaScript   
 You can also change style this way  
 
-Here, *ID's* of HTML elements comes in handy, as stated in [CSS tutorial](./CSS.md#Class%20vs.%20ID)  
+Here, *ID's* of HTML elements comes in handy, as stated in CSS tutorial
 
 ```html
 <p id="text-paragraph">Some boring text</p>
