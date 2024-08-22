@@ -142,6 +142,11 @@ To ignore case while searching, type the command `:set ic` and enable it with `:
 If you want to find a pair to any kind of parenthesis (`(`, `[`, `{`) , just put cursor on it and press `%`  
 With `%` you can switch between opening and closing parenthesis
 
+## Find across all files
+If you want to search for a string in all files of current directory, enter these two commands  
+`:args **/*`  
+`:argdo %s/old_string/new_string/gc`  
+
 # Substitute
 Type `:s/old/new` to substitute (change) `new` for `old`  
 This will substitute only the first occurrence of `old` into `new`  
