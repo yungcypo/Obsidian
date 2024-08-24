@@ -5,6 +5,8 @@ My way of learning C++
 Tutorial i'm learning from: [C++ for Java Programmers by Mary Elaine Califf](https://www.youtube.com/watch?v=ZzaPdXTrSb8&)  and later [Learn C++ with me by Tech With Tim](https://www.youtube.com/watch?v=lPd13fsU-CQ&list=PLzMcBGfZo4-lmGC8VW0iu6qfMHjy7gLQ3)  
 I already *\*cough\** know *\*cough\** Java, so this tutorial will (mostly) show the differences of C++ compared to Java
 
+> Note: I already had some [old notes](./CPP-old-1.md) and [older notes](./CPP-old-2.md) on CPP
+
 ---
 
 # Hello World
