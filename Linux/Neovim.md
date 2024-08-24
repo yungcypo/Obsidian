@@ -215,3 +215,14 @@ Use `P` to paste text before cursor
 # Moving between windows
 To move between windows (if you have more than one), you need to press `<ctrl> w <ctrl> w`  
 Another window will open (for example) if you press `F1` for help  
+
+# Macros
+I you want to done some steps multiple times, Macros are perfect for this  
+Just record some steps you want to repeat an do them `x` times with macros  
+
+To start recording, press `q` and a letter you want it to assign to (can be also `q`)  
+Now you are recording your Macro, you can use normal Vim shortcuts and do whatever you want to  
+When you are done, press `q` again to stop recording your Macro  
+
+To use macro, type `@q` (or whatever letter you assigned)  
+You can repeat your Macro 20 times with `20@q` (for example)  

@@ -154,7 +154,7 @@ This one can be used to run React app
 FROM node:20-alpine
 
 # make group and user which will only be able to run app. it's for security reasons  
-		 RUN addgroup app && adduser -S -G app app  
+RUN addgroup app && adduser -S -G app app  
 
 # switch to user "app"
 USER app
@@ -257,7 +257,10 @@ Now the command gets pretty long, doesn't it?
 We can use Docker Compose to deal with this
 
 ### Docker Compose
-Just add `compose.yaml` file next to `Dockerfle`  
+First of all, you need to install Docker Compose  
+`yay -S docker-compose` or visit [their website](https://docs.docker.com/compose/install/) and follow the steps there   
+
+To use Docker Compose, just add `compose.yaml` file next to `Dockerfle`  
 ```yaml
 services:
 	web:
@@ -462,11 +465,11 @@ Just enter your username and password from Docker Hub and you should successfull
 Now run this commands
 ```shell
 docker tag <local-image-name> <username>/<remote-image-name>
-docker push <local-image-name> <username>/<remote-image-name>
+docker push <username>/<remote-image-name>
 
 # example
 docker tag website cyprich/website
-docker push website cyprich/website
+docker push cyprich/website
 ```
 
 Now if you went to [hub.docker.com/repositories](https://hub.docker.com/repositories/cyprich) and search for your username, you will see your container  

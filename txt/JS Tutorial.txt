@@ -1,0 +1,287 @@
+writing into <script></script>
+
+you need to put ; after each line
+
+to check problems in code, open up console (f12 -> console)
+
+2 main areas to put text to:
+    Consoles
+        console.log("This is a log");
+        console.warn("This is a warning");
+        console.error("This is an error");
+
+        - user doesnt see consoles, its in background
+
+    Documents
+        document.write("<h1>Hello</h1>")
+            - user can see this like normal html
+            - reffering to actual html document
+
+        
+        <h1 id="header">Hello</h1>
+        <script>
+            document.getElementById("header").innerHTML = "Cypo"
+        </script>
+            - changes all h1 values to Cypo (i think)
+
+
+        <input type="text" id="inp"/>
+        <script>
+            document.getElementById("inp").value = "hello";
+        </script>
+        - makes input area; with script its "main value" is hello
+
+
+        console.log(document.getElementById("inp").value = "hello");
+
+
+Primitive datatypes
+    string      ""      ''
+    number      2       3.0     100000  -0.009  etc
+    boolean     true    false   *needs to be lowercase    
+    undefined   *value that is not definited yet
+    null        null    *similar to undefined, but its actually set
+
+
+Variables
+    - they are capable of storing any kind of datatype
+    <script>var x = 6;console.log(x)</script>
+        - this made variable named x, which value is 6
+        - to change value of x to other number, you can just type x = 9 (for example)
+
+    name of var:
+        - cant have any spaces ((var my number = 5) wont work)
+        - you can use _ instead of space
+        - you can only use letters and digits (not () or $ etc...)
+        - you cant start a variable with letter (5Hello wont work)
+
+    - you can sat variable to have value of another variable
+    <script>var name = "peto";var hello = 5; hello=name;console.log(hello)</script>
+        - in console we will see peto, because hello=name and name="peto"
+    
+    - changing var value after 'printing' it wont change the 'print'
+    <script>var name="peto";console.log(name);name="cypo"
+        - in console we will see peto, because it was printed before changed
+
+    - printing value before defining it will print out undefined   
+    
+
+Operators
+    Logical operators 
+    Assignment operators
+
+    <script>
+        var x = 10;
+        var y = 5;
+        var z = x + y; // + in this line is operator
+    </script>
+
+
+    more operators:
+        +
+        -
+        *
+        /
+        %  - modulus - remainder of division (10 % 4 = 2)
+
+        += - for example x += 5 will be the same as x = x + 5
+        -=
+        *=
+        /=
+        %/
+
+        ++ - increment - add 1 - y+1 wont work
+        -- - decrement - subtract 1
+
+
+    <script>
+        var x = 10;
+        var y = 5;
+        var str="hello";
+        var z = str + x;
+        console.log(z)
+    </script>
+        - this is gonna print out hello10
+        - basically number converts to string
+        - if z was str - x well get NaN => you cant do this operation
+            - same for str * x, str / x, etc...
+
+
+    <script>
+        var result = 4 * 5 / (3 + 9 - 2);
+        console.log(result);
+        var str="hi";
+        str += "hi";
+        console.log(str)
+    </script>
+        - order of operators matters (brackets firts, then exponents,...)
+        - str will be hihi, because we added hi to hi basically
+
+
+Conditions and Booleans
+    <script>
+        var x = 8;
+        var x = 9;
+        var b = x < y 
+        console.log(b)
+    </script>
+        - var b - checks if x is smaller than y
+            - if x is smaller than y, b is gonna return true
+            - if x is not smaller than y, b is gonna return false
+        - you can put here these symbols:
+            < - is smaller that
+            > - is bigger than
+            <= - is smaller or equal
+            >= - is bigger or equal
+            == - is equal to (if x and y has the same value)
+            === - is equal to value and is equal to type
+                - most time its the same
+                - if x = 11 and y = "11", its gonna return false, 
+                    because x is a number and y is a string
+                - if you dont know which one to use, use ===
+            != - not equal to, opposite of =
+            !== opposite of ===
+
+            *=< and => are actually something different 
+
+
+    <script>
+        var name = "peto";
+        var other_name = "Peto";
+        var other_name2 = "peto";
+        var x = 10;
+        var y = 9;
+
+        console.log(name == other_name); //false
+        console.log(name == other_name2 && y < x); //true, 
+            - && = and
+            - checks if both conditions are true, if 1 of them is false, its gonna return false
+        console.log(name = other_name2 || y > x);
+            - || = or 
+            - checks if at least 1 value is true, if yes, its gonna return true 
+        - you can actually combine && and ||
+        - !true is gonna give us false, it reverses the value, same the other side
+    </script>
+
+
+Functions
+    <script>
+        function add(a, b){return a + b};
+        var x = add(3,5)
+        var y = add(3,4)
+    </script>
+    - define with function, name of function; everything goes inside {}
+        - for example return, console.log(), etc...
+    - call function with name()
+    - we can call them as many times as we need
+    
+    - a, b
+        - parameters
+        - informations that function needs to run 
+    - add(2,5)
+        - makes variable a that is equal to 2 and variable b = 5
+    - return
+        - kind of runs function, in this case makes x equal to 3 + 5 = 8
+        - makes y = 3 + 4 = 7
+        - add(3,5) gets replaced with 3 + 5 and gets stored as variable x 
+        - add(3,4) gets replaced with 3 + 4 and gets stored as variable y
+    
+    - we dont actually need them to store as variable and then print
+        that variable everytime, sometimes we can use 
+        console.log(add(3,5)) when we dont need variable
+
+
+    <h1 id="header">Hello</h1>
+    <button onclick="red()">Red</button>  //when clicked, calls function red()
+    <button onclick="green()">Green</button>
+    <script>
+        function red(){
+            console.log("red");
+            document.getElementById("header").innerHTML="Red";
+            document.getElementById("header").style.color="Red";
+        }
+        function green(){
+            console.log("green")
+            document.getElementById("header").innerHTML="Green";
+            document.getElementById("header").style.color="Green";
+        }
+    </script>
+
+    
+If, Else, Else If
+    - conditions that are used to check something before executing code
+    
+    example1
+        <script>    
+            if(something){somethingelse}
+        </script>
+            - if something is true, somethingelse will be run
+            - if something is not true, it will be skipped and code after that will be run...
+
+    example2
+        <script>
+            if(true){console.log(something1)}
+            if(false){console.log(something2)}
+        </script>
+            - something1 will always be shown
+            - something2 will never be shown
+
+    example3    
+        <h1 id="header">Hello</h1>
+        <input type="text" id="inp"/>
+        <button onclick="pressed()">Click</button>
+        <script>
+            function pressed(){
+                var text = document.getElementById("inp").value;
+                if(text == "red"){
+                    document.getElementById("header").style.color="red";
+                }else if(text==="green"){
+                    document.getElementById("header").style.color="green";
+                }else if(text==="blue"){
+                    document.getElementById("header").style.color="blue";
+                }else{
+                    document.getElementById("header").style.color="black"
+                };
+                
+            }
+        </script>
+
+            - basically what this does...
+            - first you need to input something
+            - after input, you need to press click button
+            - after that, function pressed runs...
+                - function pressed stores the input you entered into variable text
+                - it checks if text === red
+                    - if yes, it changes color of header to red
+                    - if no, it just ignores it and goes next...
+                - can be done to as many colors as you want
+                - else if 
+                    - kind of combination between if and else
+                    - basically - if the first statement doenst happen, 
+                        it checks if text === green
+                    - if text === green - runs code
+                    - if text is not === green - goes to next code
+                    - when you have else if, you need to have if before,
+                        else if cant be first condition
+                    - you dont have to use these, but sometimes its more
+                        prectical; if you have all statements if instead of
+                        else if, all of them are gonna run; if text is red, 
+                        it makes no sense to check if its green...
+                - else
+                    - runs only if all if and else if statements arent true
+                    - when it runs, it changes color of header to black
+                    - runs when one of previous statements were false
+
+    
+Switch statements
+    a
+
+
+
+
+
+
+
+
+
+
