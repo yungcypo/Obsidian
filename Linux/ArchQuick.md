@@ -91,3 +91,11 @@ ln -sf /usr/share/zoneinfo/Europe/Bratislava /etc/localtime
 exit
 reboot now
 ```
+
+## `yay`
+```shell
+pacman -S --needed git base-devel
+git clone https://aur.archlinux.org/yay .yay
+cd .yay
+makepkg -si
+```

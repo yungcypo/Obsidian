@@ -220,3 +220,19 @@ Now, when everything is ready, you can reboot your PC and it should start
 exit  # exit chroot environment
 reboot now
 ```
+
+## `yay`
+`yay` is helper for AUR  
+It allows you to access user-made packages in Arch  
+Installation is pretty easy - install dependencies, clone the repo and make package  
+
+```shell
+pacman -S --needed git base-devel  # dependencies
+git clone https://aur.archlinux.org/yay .yay  # clone repo
+cd .yay 
+makepgk -si  # make package 
+```
+
+After this, you can use `yay`  
+Use it just as `pacman`, for example `yay -Syu` or `yay -S git` or whatever you want  
+You don't (and shouldn't) use `yay` as `root` user, neither use it with `sudo`   
