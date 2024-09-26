@@ -14,5 +14,6 @@
   "showIndentGuide": true,
   "useMarkdownLinks": true,
   "showInlineTitle": false,
-  "alwaysUpdateLinks": true
+  "alwaysUpdateLinks": true,
+  "vimMode": false
 }
