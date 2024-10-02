@@ -7,7 +7,7 @@
 
 ## Configure git
 If you want to use [GitHub](https://github.com), use your username and email from there
-`git config --global user.name "yungcypo"`
+`git config --global user.name "cyprich"`
 `git config --global user.email "cypooriginal@gmail.com`
 
 # Basic Commands
@@ -106,13 +106,13 @@ git init
 git add README.md
 git commit -m "first commit"
 git branch -M master
-git remote add origin https://github.com/yungcypo/MinecraftServer.git
+git remote add origin https://github.com/cyprich/MinecraftServer.git
 git push -u origin master
 ```
 
 Push existing repository from the command line
 ```
-git remote add origin https://github.com/yungcypo/MinecraftServer.git
+git remote add origin https://github.com/cyprich/MinecraftServer.git
 git branch -M master
 git push -u origin master
 ```
@@ -134,7 +134,7 @@ To avoid typing your password or token every time you push to a Git repository, 
 	- On [GitHub](https://github.com) go to *Account Settings > SSH and GPG keys*
 	- Click *New SSH key* and paste here the public key
 3. Change git remote URL from *HTTPS* to *SSH*
-	- `git remote set-url origin git@github.com:yungcypo/repo.git`
+	- `git remote set-url origin git@github.com:cyprich/repo.git`
 
 
 #git #github

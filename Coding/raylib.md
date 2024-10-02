@@ -33,7 +33,7 @@ Now you can use raylib in Visual Studio :)
 --- 
 
 From this point, I will focus on how to work with raylib  
-I will create [CppInvaders](https://github.com/yungcypo/CppInvaders) as example of working in raylib
+I will create [CppInvaders](https://github.com/cyprich/CppInvaders) as example of working in raylib
 
 # First steps
 Setting up a game loop and displaying blank raylib window  

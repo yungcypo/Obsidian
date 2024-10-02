@@ -262,7 +262,7 @@ You can specify `target="_blank"` to make it open on new tab
 
 You can always combine tags  
 ```html
-<a href="https://yungcypo.github.io">Click here to open <b>the coolest site ever</b></a>
+<a href="https://cyprich.github.io">Click here to open <b>the coolest site ever</b></a>
 ```
 Just remember to close them properly, as stated in [notes](#Notes) after `<i>` tag
 
