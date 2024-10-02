@@ -137,4 +137,6 @@ To avoid typing your password or token every time you push to a Git repository, 
 	- `git remote set-url origin git@github.com:cyprich/repo.git`
 
 
-#git #github
+# Change remote URL
+I changed my GitHub username, so I had to do this for every repo  
+`git remote set-url origin git@github.com:cyprich/Obsidian.git`  
