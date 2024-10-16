@@ -180,9 +180,46 @@ chmod permissions file
 journalctl -xe
 ```
 
+
+# Network
+These commands are for Ubuntu (not sure about others)
+
+## Basic commands
+```bash
+ping <ip | domain>  # ping
+traceroute <ip | domain>  # traceroute
+tracepath <ip | domain>  # traceroute
+nslookup <ip | domain>  # nslookup
+
+ip a  # show ip addresses + more
+ip r  # show default route
+```
+
+## Connect to WiFi
+```bash
+nmcli d  # list devices  
+nmcli r wifi on  # turn on wifi adapter  
+nmcli d wifi on  # list available networks  
+nmcli d wifi connect <ssid> password <password>  # connects to wifi. replace <ssid> and <password> with the actual values  
+```
+
+## Set static IP
+You need to edit `/etc/netplan/50-cloud-init.yaml` or something similar, so it looks something like this  
+```bash
+network:
+ version: 2
+ renderer: NetworkManager
+ ethernets:
+   eth0:
+     dhcp4: no
+     addresses: [172.23.207.254/20]
+     gateway4: 192.168.1.1
+     nameservers:
+         addresses: [8.8.8.8,8.8.8.4]
+```
+
 # Cool programs
-Mostly useless programs  
-Most of these are just for fun  
+Mostly useless programs, just for fun  
 
 ## cowsay
 Cow says whatever you told it to   
