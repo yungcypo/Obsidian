@@ -15,5 +15,5 @@
   "useMarkdownLinks": true,
   "showInlineTitle": false,
   "alwaysUpdateLinks": true,
-  "vimMode": false
+  "vimMode": true
 }
