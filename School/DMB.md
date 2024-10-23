@@ -2,7 +2,7 @@
 Digitalne meny a Blockchain  
 \2. rocnik, zimny semester  
 
-# w1
+# W1
 ## Bitcoin
 Je mena  
 - Globalna (cely svet), 
@@ -88,4 +88,14 @@ Aktualne vytazenych ~19.7 miliona z 21 milionov
     - Zerocoin
     - Zerocash
     - NimbleWimble
+
+# W2
+Bitcoin a kryptomeny v praxi
+
+- wallet
+- address
+- seed phrase / backup phrase
+- private / public key
+- pass phrase
+- custodial / non custodial
 
