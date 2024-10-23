@@ -243,3 +243,234 @@ int s0/0/0
 
 > Note: Same as before, NAZOV je len nazov, napr. RIPt
 
+
+
+
+# VLAN
+Virtual LAN
+
+Access (pristupove) porty - medzi switchom a koncovym zariadenim - neznacuje sa  
+Trunk porty - medzi switchom a switchom *(resp. routerom (?))*  
+
+## Trunk Protokoly
+
+| 802.1Q                                       | ISL (Inter-Switch Link)                                            |
+| -------------------------------------------- | ------------------------------------------------------------------ |
+| Open source od IEEE                          | Cisco Proprietary                                                  |
+| Pridana polozka TAG do Ethernet II. hlavicky | Znackovanie formou tunelovania = Enkapsulovany cely Ethernet ramec |
+| Velkost +4B pre TAG (0x8100, CoS, DEI, VID)  | Velkost +Hlavicka (26B) +CRC (4B) = +30B                           |
+
+### 802.1Q
+Pridava sa TAG do Ethernet hlavicky:  
+- TPID (Tag Protocol Identifier) 
+	- Velkost **16b**
+	- Hodnota `0x8100`
+- Priority
+	- Velkost **3b**
+	- Dovoluje robit prioritne ramce v rozsahu 0 az 7
+	- Niekedy sa toto prioritne znackovanie nazyva **CoS** (Class of Service)
+- CFI
+	- Canonical Format Indicator
+	- Velkost **1b**
+	- V minulosti pre Token Ring siete
+	- V sucastnosti vyuzivany pre **Discard Eligible Indicator** = v pripade nutosti zahod ramec
+- VID
+	- Vlan ID
+	- Velkost **12b** 
+	- Dovoluje vytvarat $2^{12} = 4096$ VLAN   
+
+Treba prepocitat FCS na konci Ethernetoveho ramca - zmena hlavicky  
+Potencionalny problem - *Baby Jumbo frames* - velkost sa zvacsi na 1522B
+
+#### Vyhradene VLAN
+- VLAN 0
+	- Vyjadruje, ze TAG sluzi len na prenos informacie o priorite (CoS a DEI)
+- VLAN 4095
+	- Nemalo by sa nikdy objavit
+	- Urcene pre vyrobcov na interne testovanie
+
+- VLAN 1 (nie je vyhradena)
+	- Default VLAN 
+	- Vzdy defaultne pritomna, neda sa zmazat
+	- Su tu defaultne zaradene vsetky porty
+	- Defaultne je zaroven aj Native VLAN, je dobre to zmenit
+
+#### Proces komunikacie
+Na jednom prepinaci
+1. Prepinac prijme ramec
+2. Pozre sa do smerovacej tabulky **iba na zaznamy pre danu vlan**
+3. Ramec ostane nezmeneny a posle sa na vystupne rozhranie
+
+Cez viac prepinacov
+1. Prvy prepinac
+	1. Prepinac prijme ramec
+	2. Pozre sa do smerovacej tabulky **iba na zaznamy pre danu vlan**
+	3. Prepinac vidi, ze vystupne rozhranie je oznacene ako **trunk port** *(napr. Fa0/1)*
+	4. Prepinac vlozi identifikator (TAG)
+	5. Prepne na prislusny interface
+2. Druhy prepinac
+	1. Prepinac prijme ramec
+	2. Pozre sa do smerovacej tabulky **iba na zaznamy pre danu vlan**
+	3. Odstrani TAG
+	4. Prepne ramec
+
+> Note: V pripade, ze by takato komunikacia nastala pre viac prepinacov (nie len 2), tak *Druhy prepinac* **neodstranuje TAG**, iba ramec prepne dalej na dalsi prepinac  
+
+#### Nativna VLAN
+Napr. v pripade ze cez trunk port pride ramec bez znacky  
+Cisco pouziva pojem *Native VLAN*, iny vyrobcovia aj *Untagged VLAN* alebo *Primary VLAN*  
+Definuje sa pre kazdy port zvlast *(?)*  
+
+- Ak ma byt frame odoslany do nativnej vlan, tak znacku nedostane, resp. ak ju ma tak odstrani
+- Ak pride frame bez znacky, bude zaradeny do nativnej vlan
+
+Best practice:  
+- Nativna VLAN bude iba jedna *(pre dvojicu portov MUSI byt, medzi troma smerovacmi sa da zmenit na inu, ale preco by to niekto robil)*  
+- Zmenime, aby VLAN 1 (default VLAN) nebola nativna
+
+## VLAN vo vacsich sietach
+Ak mame `xy` prepinacov s `xyz` VLAN, tak konfiguracia moze byt narocna/zdlhava  
+
+Riesenim mozu byt viacere protokoly:  
+- VTP *(VLAN Trunking Protocol)* - Cisco
+- MVRP *(Multiple VLAN Registration Protocol)* - IEEE - predchodca GVRP
+- SNMP *(Simple Network Management Protocol)*
+
+**Iba sirenie VLAN databazy!**  
+
+Protokoly spravia jeden smerovac ako server, ktory to bude posielat viac klientom   
+Zarucuju identicky zoznam VLAN na prepinacoch v sieti  
+Existuju este aj transparentne smerovace - rozosielaju VLAN databazu, ale neovplyvnuju ju svojou databazou - mozu mat inu konfiguraciu  
+
+## Typy VLAN
+Pre Cisco smerovace  
+
+Range:
+- 0 - 1005
+	- *Normal range*  
+	- Podporovane vsade  
+	- Prenasane pomocou VTP, ak je pouzity
+	- Su vzdy ulozene vo `flash:vlan.dat` - uchovane aj pri reboot aj pri zmazani `running-config`
+	- Mozu byt ulozene aj v `running-config`
+- 1006 - 4096
+	- *Extended range*
+	- Podporovane na novsich prepinacoch
+	- Prenasane pomocou VTPv3 - len velmi nove prepinace
+	- Su ulozene v `running-config`
+	- Iba pri VTPv3 mozu byt aj vo `flash:vlan.dat`
+
+Typy
+- Default VLAN *(1)*
+- Native VLAN *(napr. 100)*
+- Access VLAN, resp. Data VLAN *(napr. 10, 20, ...)*
+	- Konkretna jedna VLAN, do ktorej je zaradeny jeden access port 
+- Voice VLAN
+	- Data z/do IP telefonu
+- Management VLAN *(napr. 99)*
+
+### Management VLAN
+Pouziva za na management prepinaca  
+Defaultna VLAN 1 by sa mala zmenit na inu
+```
+interface vlan 99
+	ip add 192.168.1.2
+```
+
+
+## DTP - Dynamic Trunk Protocol
+Interface moze byt na jednom z nasledovnych rezimov
+
+```
+# DTP, preferujem trunk, ale prisposobim sa druhej strane
+switchport mode dynamic desirable 
+
+# DTP, preferujem access, ale prisposobim sa druhej strane (defaultne je toto)
+switchport mode dynamic auto   
+
+# nie DTP, napevno trunk
+switchport mode trunk   
+
+# nie DTP, napevno access
+switchport mode access    
+
+
+# v netacade bolo aj tento prikaz, ale nie som si sure ze co robi
+switchport nonegotiate
+```
+
+
+Ak su na obidvoch stranach rovnake mody tak nie je problem  
+Situacia `trunk` a `access` = chyba - limited connectivity  
+Situacia `dynamic desirable` a `dynamic auto` = trunk port (vyssia priorita)   
+
+Nejaka ta konfiguracia  
+```
+interface range fa 0/7 - 8  # kofigurujem interfaces 7 a 8
+	switchport trunk encapsulation dot1q   # pouzivam enkapsulaciu 802.1Q
+	switchport mode trunk
+
+do show interface trunk 
+do show interface f0/7 switchport 
+```
+
+## Best practice
+- Presunut nepouzivane porty do osobitnej nepouzivanej VLAN *(napr. 1000)*  
+	- Idealne tuto VLAN aj suspendovat a vypnut nepouzivane porty
+	- Tzv. *Black Hole VLAN*
+- Osobitna VLAN pre management  
+- Zmenit nativnu VLAN 
+- Pouzivat iba SSH
+- Po konfiguracii a rozbehu portov vypnut DTP + neponechavat ziadne porty v dynamickom rezime
+- Vyhnut sa akemukolvek pouzivaniu VLAN 1
+
+## Prikazy
+```
+do show vlan brief
+do show vlan [brief | id {vlan-id} | name {vlan-name} | summary]
+
+do show int vlan 20
+do show int f0/1 switchport
+
+do show dtp int f0/1
+```
+
+```
+int f0/1
+	switchport mode access
+	switchport access vlan 20
+
+int f0/2
+	switchport mode trunk
+	switchport trunk native vlan 99
+	switchport trunk allowed vlan 10,20,30,99
+
+int f0/3
+	switchport mode access
+	switchport voice vlan 150
+
+
+mls qos trust cos  # enable QoS
+```
+
+Zmena z Trunk na Access   
+```
+int f0/1
+	no switchport trunk allowed vlan
+	no switchport trunk native vlan
+	switchport mode access
+```
+
+Vytvorenie VLAN  
+Tento priklad vytvori VLAN s cislom `10` a nazvom `studenti`
+```
+vlan 10
+	name studenti
+```
+
+Zmazanie VLAN  
+Ak zmazem VLAN, v ktorej bol nejaky port, tak port **nebude priradeny nikde**  
+```
+no vlan 20
+```
+
+## VTP
