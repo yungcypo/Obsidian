@@ -218,6 +218,12 @@ network:
          addresses: [8.8.8.8,8.8.8.4]
 ```
 
+# Various
+Commands that do not deserve full section, but deserves to be there  
+
+`hostnamectl` - find info about OS and more  
+
+
 # Cool programs
 Mostly useless programs, just for fun  
 
