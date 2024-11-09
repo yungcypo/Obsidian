@@ -49,3 +49,14 @@ You can find your Public IP Address on your router settings, or via sites like [
 
 ### Playit
 If you can't open a port for some reason, check out [Playit tutorial](./Playit.md)
+
+
+# Update server
+If you want to update server to newer version, it's as simple as this  
+1. Download new `server.jar` file from [official Minecraft website](https://piston-data.mojang.com/v1/objects/45810d238246d90e811d896f87b14695b7fb6839/server.jar)  
+2. Stop the server  
+3. *(Optional, recommended)* create a backup of the server  
+4. Replace old `server.jar` with newly downloaded `server.jar`   
+5. Run the server 
+
+After running the server for the first time after update, you will see some extra info  
