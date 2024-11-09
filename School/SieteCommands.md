@@ -1,0 +1,312 @@
+# Siete - Commands
+Prikazy na konfiguraciu v Cisco IOS  
+Podrobnejsie poznamky v subore [Siete.md](./Siete.md)  
+
+# Basic config
+```
+hostname
+banner motd ""
+line console 0 
+    logg sync
+no ip domain lookup
+
+username student secret student
+username admin priv 15 secret admin
+line con 0
+    login local
+line vty 0 15
+    login local 
+    transport input ssh
+service password-encryption
+enable secret class
+
+ip domain-name b303.sk
+crypto key generate rsa
+    1024
+ip ssh version 2
+```
+
+# Staticke smerovanie
+```
+ip route {siet} {maska} {vystupna siet | vystupne rozhranie} [metrika]
+
+ip route 192.168.1.2 255.255.255.0 s0/0/0
+ip route 192.168.1.2 255.255.255.0 192.168.99.1
+ip route 192.168.1.2 255.255.255.0 g0/0 192.168.10.1
+
+ip route 0.0.0.0 0.0.0.0 192.168.1.1
+```
+
+Show Commands
+```
+do show ip route
+do show ip route static
+do show ip route 192.168.1.0
+
+do show ip int b
+
+do show cdp neighbors
+do show cdp neighbors detail
+```
+
+IPv6
+```
+ipv6 unicast-routing
+ipv6 route {siet/prefix} {vystupna siet | vystupne rozhranie} [metrika]
+
+ipv6 route ::/0 s0/0/0
+```
+
+# RIP
+```
+router rip
+    version 2
+    no auto-summary
+    network 192.168.1.0
+    network 192.168.2.0
+
+    passive-int g0/0
+    
+    passive-int default
+    no passive-int g0/0
+
+    redistribute static
+    redistribute connected
+
+    default-information originate
+
+ip route 192.168.1.0 255.255.255.0 Null0
+```
+
+Show commands
+```
+do show ip route
+do show ip route rip
+do show ip protocols
+```
+
+Manualna sumarizacia
+```
+int g0/0
+    ip summary-address rip 192.168.1.0 255.255.255.0
+```
+
+RIPng
+```
+ipv6 unicast-routing
+
+int g0/0
+    ipv6 rip CUSTOM_NAZOV enable
+    ipv6 rip CUSTOM_NAZOV default-information originate
+
+int g0/1
+    ipv6 rip CUSTOM_NAZOV enable
+
+do show ipv6 protocols
+
+```
+
+Autentifikacia 
+```
+key chain KLUCENKA
+    key 1 
+        key-string h@slisko
+
+int g0/0
+    ip rip auth mode {md5 | text}
+    ip rip auth key-chain KLUCENKA
+
+do show key chain
+do show ip proto
+```
+
+# VLAN
+```
+delete vlan.dat
+
+vlan 10
+    name studenti
+
+int g0/1
+    switchport mode access
+    switchport access vlan 10
+
+int range g0/2 - 4
+    switchport trunk encapsulation dot1q
+    switchport mode trunk
+    switchport trunk native vlan 100
+    switchport trunk allowed vlan 10,20,30
+    switchport voice vlan 150
+    switchport nonegotiate
+
+vlan 99
+    name management
+int vlan 99
+    ip add 192.168.1.2
+```
+
+Show commands
+```
+do show vlan
+do show vlan brief
+do show vlan 10
+
+do show interface trunk
+do show interface g0/0 switchport
+do show dtp int g0/1
+```
+
+Zmena `trunk` -> `access`
+```
+int g0/1
+    no switchport trunk allowed vlan
+    no switchport trunk native vlan
+    switchport mode access
+```
+
+
+DTP (dynamicke urcenie `trunk`/`access`)
+```
+int g0/1
+    switchport mode dynamic desirable  # trunk
+    switchport mode dynamic auto  # access
+```
+
+VTP (redistribucia VLAN)
+```
+vtp domain MENO_DOMENY
+tp mode {client | server | transparent}
+vtp password h@slisko
+vtp version {1 | 2}
+
+vtp prunning  # iba servery
+
+do show vtp status
+do show vtp counters
+```
+
+**Smerovanie medzi VLAN**
+Router on Stick
+```
+int g0/0.10
+    encapsulation dot1q 10
+    ip address 192.168.10.1 255.255.255.0
+
+int g0/0.20
+    encapsulation dot1q 20
+    ip address 192.168.20.1 255.255.255.0
+```
+
+Multi-layer switching
+```
+ip routing
+
+vlan 10,20,30
+    exit
+
+int vlan 10
+    ip add 192.168.10.1 255.255.255.0
+
+int vlan 20
+    ip add 192.168.20.1 255.255.255.0
+```
+
+Enable QoS
+```
+mls qos trust cos
+```
+
+# STP
+```
+spanning-tree vlan 1
+no spanning-tree vlan 1
+
+spanning-tree vlan 1 priority PRIORITY
+spanning-tree vlan 1 root primary
+spanning-tree vlan 1 root secondary
+
+int g0/1
+    spanning-tree portfast
+
+spanning-tree portfast default
+```
+
+Show commands
+```
+do show spanning-tree
+do show spanning-tree summary
+do show spanning-tree detail
+do show spanning-tree vlan 1
+do show spanning-tree active
+```
+
+RPVST
+```
+spanning-tree mode rapid-pvst
+
+spanning-tree vlan 1 priority PRIORITY
+spanning-tree vlan 1 root primary
+spanning-tree vlan 1 root secondary
+
+int g0/1
+    spanning-tree portfast
+    spanning-tree link-type point-to-point 
+```
+
+# ACL
+Standard ACL
+```
+access-list 10 remark Nejaky randomny ACL
+access-list 10 deny host 192.168.1.2 [log]
+access-list 10 permit 192.168.1.0 0.0.0.255 [log]
+access-list 10 deny any [log]
+
+ip access list standard MOJ_PRVY_ACL
+    permit host 192.168.1.2
+    deny host 192.168.1.3
+    permit 192.168.1.0 0.0.0.255
+
+    5 permit host 192.168.1.10
+    no 10
+```
+
+Extended ACL
+```
+access-list 110 {pemit | deny} {tcp | udp | ip | ...} {source wildcard_mask} [operator port] {destination wildcard_mask} [operator port]
+
+access-list 110 permit udp 192.168.1.0 0.0.0.255 any eq 69
+access-list 110 permit tcp 192.168.1.0 0.0.0.255 any eq 80
+access-list 110 permit tcp 192.168.1.0 0.0.0.255 any eq 443
+
+ip access-list extended MOJ_DRUHY_ACL
+    permit ip any any
+    ...
+```
+
+Aplikovanie ACL
+```
+int g0/0
+    ip access-group {name | number} {in | out}
+    ip access-group 10 out
+
+line vty 0 15
+    access-class 11 in
+```
+
+Show commands
+```
+do show access-list
+do show access-list 10
+do show ip access-list
+
+do show run | include access-list
+do show run | include access-list 10
+```
+
+Vymazanie ACL
+```
+int g0/0
+    no ip access-group 10
+
+no access-list 10
+```

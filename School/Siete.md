@@ -474,6 +474,112 @@ no vlan 20
 ```
 
 ## VTP
+VLAN Trunking Protocol  
+S nazvom nema nic spolocne  
+Redistribucia info o VLAN medzi smerovacmi  
+
+Cislo revizie - zvysuje sa kazdou modifikaciou databazy  
+Pouzivaju sa iba trunk porty, Native VLAN
+
+### Verzie
+- VTPv1
+- VTPv2
+- VTPv3
+
+| Feature | VTPv1 | VTPv2 | VTPv3 |
+|---|---|---|---|
+| VLAN Range | `1-1005` | `1-1005` | `1-4096` |
+| Prunning | Yes | Yes | Yes |
+| Multiple Spanning Tree Support | No | No | Yes |
+| Token Ring VLAN Suport | No | Yes | No |
+| Transparent Mode Forwarding | No | Yes | Yes |
+| Primary server role | No | No | Yes |
+| Database propagation | VLANs | VLANs | VLANs, Private VLANs, MST |
+| Enhanced Authentication | No | No | Yes |
+
+### Mody
+- Server
+    - Moze modifikovat databazu
+    - Spracovava a preposiela VTP spravy
+- Client
+    - Nemodifikuje databazu, iba sa z nej uci
+    - Spracovava a preposiela VTP spravy
+- Transparent
+    - Nie je skutocnym clenom domeny
+    - Preposiela spravy ale ignoruje ich obsah, vedie si svoju nezavislu databazu 
+    - Cislo revizie vzdy 0
+- Off
+    - Ignoruje a nepreposiela VTP spravy
+
+### VTP domena
+Cast siete, kde sa zdiela VLAN info  
+Identifikovana spolocnym menom  
+Switch moze byt iba v jednej domene  
+
+### Typy VTP sprav
+- Summary advertisements
+    - Server posiela sumarne VLAN info kazdych 5 minut alebo pri zmene databazy
+    - Klient posle po zapnuti
+    - Info o management domenach, VTP verzii, domenove meno, konf. revizne cislo, casova znacka
+- Subnet advertisements
+    - Nasledne za Summary advertisements, pri zmenach vo VLAN
+- Advertisement requests
+    - Jeden Advertisement requests per VLAN ID
+
+Spravy su posielane na multicast adresu `01-00-0C-CC-CC-CC`  
+Enkapsulovane do 802.1q formatu Ethernet LLC/SNAP ramca  
+
+### VTP Prunning
+Zabranuje sireniu broadcastu do smerov, kde nie je potrebny  
+Konfiguruje sa iba na serveroch  
+
+### VTP Prikazy
+```
+vtp domain MENO_DOMENY
+vtp mode {client | server | transparent}
+vtp password h@slisko
+vtp version {1 | 2}
+
+vtp prunning  # iba servery
+```
+
+```
+do show vtp status
+do show vtp counters
+```
+
+## Smerovanie medzi VLAN
+### Router on Stick
+
+```
+int g0/0.10
+    encapsulation dot1q 10
+    ip address 192.168.10.1 255.255.255.0
+
+int g0/0.20
+    encapsulation dot1q 20
+    ip address 192.168.20.1 255.255.255.0
+```
+
+### Multi-layer switching
+Aktivacia L3 switchingu  
+```
+ip routing
+```
+
+```
+vlan 10,20,30
+    exit
+
+int vlan 10
+    ip add 192.168.10.1 255.255.255.0
+
+int vlan 20
+    ip add 192.168.20.1 255.255.255.0
+
+int vlan 30
+    ip add 192.168.30.1 255.255.255.0
+```
 
 
 # STP
@@ -494,7 +600,7 @@ A mesh is made by folks like me,
 Then bridges find a spanning tree.
 
 *Radia Perlman*
-``` 
+```
 
 L2 protokol ktory zabranuje vzniku sluciek na L2  
  > Slucky, Broadcastove burky, nestabilita MAC/CAM tabulky, zacyklenie a zahltenie az kolaps siete  
@@ -576,13 +682,15 @@ Prepinace pri STP funguju na principe porovnavania ramcov - lepsi ramec = superi
 Porovnavaju sa v nasledovnom poradi (nizsie = lepsie)  
 
 ---
+
 1. Root Bridge ID
-	1. 1. Priority
+	1. Priority
 	2. MAC Address
 2. Root Path Cost
 3. Sender Bridge ID
 4. Sender Port ID
 5. Receiver Port ID (len vynimocne)
+
 ---
 
 Path cost - podla rychlosti linky (kabla)
@@ -897,8 +1005,8 @@ no access-list 2
 access-list 2 permit host 192.168.1.10  # kofiguracia cislovaneho
 
 # vytvorenie
-ip access-list [standard | extended] NAZOV
-	[permit | deny | remark] TESTOVACIA_PODMIENKA WILDCARD_MASK [log]
+ip access-list {standard | extended} NAZOV
+	{permit | deny | remark} TESTOVACIA_PODMIENKA WILDCARD_MASK [log]
 
 # aplikacia na interface
 int f0/0/0
