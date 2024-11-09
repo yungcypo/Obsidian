@@ -195,13 +195,24 @@ ip a  # show ip addresses + more
 ip r  # show default route
 ```
 
-## Connect to WiFi
+## WiFi
 ```bash
 nmcli d  # list devices  
 nmcli r wifi on  # turn on wifi adapter  
 nmcli d wifi on  # list available networks  
 nmcli d wifi connect <ssid> password <password>  # connects to wifi. replace <ssid> and <password> with the actual values  
+
+nmcli r wifi off  # disable wifi completely
 ```
+
+## Local DNS
+Add DNS entry for your PC
+You need to edit `/etc/hosts` file and add like something like this  
+```
+192.168.88.3   www.segedin.sk
+```
+
+> On Windows it's located in `C:\Windows\System32\drivers\etc\hosts`
 
 ## Set static IP
 You need to edit `/etc/netplan/50-cloud-init.yaml` or something similar, so it looks something like this  
