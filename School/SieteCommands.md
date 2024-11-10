@@ -26,6 +26,20 @@ crypto key generate rsa
 ip ssh version 2
 ```
 
+# Cisla portov
+
+| Port | Sluzba        | TCP alebo UPD? |
+| ---- | ------------- | -------------- |
+| 20   | FTP (data)    | TCP            |
+| 21   | FTP (control) | TCP            |
+| 22   | SSH           | TCP            |
+| 23   | Telnet        | TCP            |
+| 53   | DNS           | TCP aj UDP     |
+| 69   | TFTP          | TCP            |
+| 80   | HTTP          | TCP            |
+| 443  | HTTPS         | TCP            |
+| 520  | RIP           | UDP            |
+
 # Staticke smerovanie
 ```
 ip route {siet} {maska} {vystupna siet | vystupne rozhranie} [metrika]
