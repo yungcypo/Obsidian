@@ -31,6 +31,22 @@ line vty 0 15
 	transport input ssh
 ```
 
+
+# Cisla portov
+
+| Port | Sluzba        | TCP alebo UPD? |
+| ---- | ------------- | -------------- |
+| 20   | FTP (data)    | TCP            |
+| 21   | FTP (control) | TCP            |
+| 22   | SSH           | TCP            |
+| 23   | Telnet        | TCP            |
+| 53   | DNS           | TCP aj UDP     |
+| 69   | TFTP          | TCP            |
+| 80   | HTTP          | TCP            |
+| 443  | HTTPS         | TCP            |
+| 520  | RIP           | UDP            |
+| 1985 | HSRPv1        | UDP            |
+
 # Troubleshooting commands
 Prikazy ktore len nieco vypisuju  
 
@@ -131,13 +147,13 @@ RIP je distance-vector dynamicky smerovaci protokol
 Ako metriku pouziva hop  
 Adminstrativna vzdialenost je 120  
 
-|                   | RIPv1     | RIPv2     |
-| ----------------- | --------- | --------- |
-| Updaty cez        | Broadcast | Multicast |
-| VLSM?             | Nie       | Ano       |
-| CIDR? (classless) | Nie       | Ano       |
-| Sumarizacia       | Nie       | Ano       |
-| Autentifikacia    | Nie       | Ano       |
+|                   | RIPv1     | RIPv2                   |
+| ----------------- | --------- | ----------------------- |
+| Updaty cez        | Broadcast | Multicast (`224.0.0.9`) |
+| VLSM?             | Nie       | Ano                     |
+| CIDR? (classless) | Nie       | Ano                     |
+| Sumarizacia       | Nie       | Ano                     |
+| Autentifikacia    | Nie       | Ano                     |
 
 Updaty sa posielaju kazdych 30 sekund cez UDP port 520  
 
@@ -1044,3 +1060,206 @@ access-list 101 remark Nejaky pokus
 access-list 101 permit ip 192.168.1.0 0.0.0.255 lt 100 any ip 
 ```
 
+# Etherchannel & FHRP
+First hop redundancy, agregacia portov  
+Treba zabezpecit, ze ak jeden router padne, tak ho nahradi druhy + load balancing  
+Pokusy o riesenie cez Proxy ARP, ICMP Router Discovery Protocol (IRDP) alebo v OS Hosta - neefektivne  
+
+#### Riesenie pomocou Virtual Router
+2+ smerovace sa tvaria ako jeden  
+Tento Virtual router ma svoju vMAC a vIP (ktora je default gateway)  
+Iba jeden z realnych routerov bude nositelom vMAC a vIP - Primary/Active/Master  
+Ostatne - Secondary/Backup/Slave - kontroluju ci existuje Primary - ci odpoveda na spravy - inak si prevezmu danu vMAC a vIP  
+Z pohladu koncovej stanice sa MAC a IP nezmenila  
+
+#### Riesenia pre FHRP
+- ICMP Router Discovery Protocol (IRDP)
+	- ICMP spravy Router Advertisement + Router Solicitation
+- Hot Standby Router Protocol (HSRP)
+	- Cisco
+	- IPv4 - HSRPv1
+	- IPv6 - HSRPv2
+- Gateway Load Balancing Protocol (GLBP)
+	- Cisco
+	- Vylepsenie oproti HSRP
+- Virtual Router Redundancy Protocol (VRRP)
+	- IETF
+
+## HSRP (Hot Standby Router Protocol)
+Jeden Virtual Router  
+Posielanie paketov cez Multicast   
+- `224.0.0.2` pri `v1`
+- `224.0.0.102` pri `v3` *(?)*, resp. `FE02::66` pre IPv6
+
+Pocet grup: 256, vo `v3` az 4096, realne 16
+
+### Rozdelenie Routerov v HSRP
+- Active router
+	- V grupe vzdy iba jeden
+	- Nositel identity virtualneho routera (vMAC, vIP)
+	- Obsluhuje vsetky pakety  
+	- Bud prvy nabootovany alebo (pri preempcii) ten s najvyssou prioritou
+- Standby router 
+	- V grupe vzdy najviac jeden
+	- Zalozny pre Active router - zastupuje ho ked Active zomrie - *"druhy v poradi"*
+	- Bud druhy nabootovany alebo (pri preempcii) ten s druhou najvyssou prioritou
+- Other routers
+	- Vsetky ostatne
+	- Vedia prejst do Standby a nasledne Active
+
+Vsekty spolu tvoria Virtual Router  
+
+### HSRP stavy
+
+| State   | Definition                                                                                                                    |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Initial | Hned po zapnuti/nakonfigurovani                                                                                               |
+| Listen  | Router pozna vMAC a vIP ale nie je ani Active ani Standby  <br>Pocuva na hello spravy                                         |
+| Speak   | Periodicky posiela hello spravy  <br>Zucastnuje sa na volbach o Active/Standby  <br>Router sem nemoze vstupit pokial nema vIP |
+| Standby | Zalozny Active                                                                                                                |
+| Active  | Forwardinguje pakety  <br>Posiela hello messages                                                                              |
+### Konfiguracia HSRP
+Config. pre 2 routery a 2 VLANs
+```
+# ROUTER 1
+# grupa cislo 1
+int f0/0.1
+	encapsulation dot1q 1 
+	ip add 192.168.1.101 255.255.255.0
+	standby version 2
+	standby 1 priority 150
+	standby 1 ip 192.168.1.1
+	standby 1 preempt
+
+# grupa cislo 2	
+int f0/0.2
+	encapsulation dot1q 2 
+	ip add 192.168.2.101 255.255.255.0
+	standby version 2
+	standby 2 ip 192.168.2.1
+	standby 2 preempt
+
+router rip
+	network 10.0.0.0
+	network 192.168.1.0
+	network 192.168.2.0
+```
+
+```
+# ROUTER 2
+# grupa cislo 1
+int f0/0.1
+	encapsulation dot1q 1 
+	ip add 192.168.1.102 255.255.255.0
+	standby version 2
+	standby 1 ip 192.168.1.1
+	standby 1 preempt
+
+# grupa cislo 2	
+int f0/0.2
+	encapsulation dot1q 2 
+	ip add 192.168.2.102 255.255.255.0
+	standby version 2
+	standby 2 priority 150
+	standby 2 ip 192.168.2.1
+	standby 2 preempt
+
+router rip
+	network 10.0.0.0
+	network 192.168.1.0
+	network 192.168.2.0
+```
+
+#### Show prikazy
+```
+do show standby
+do show standby brief
+
+debug standby packets
+debug standby packets terse
+```
+
+Pri `do show standby brief` znamena pismenko `P`, ze je nastavena preempcia  
+
+## Agregacia liniek
+Link Aggregation, EtherChannel, ChannelBonding
+Zdruzovanie liniek  
+
+### EtherChannel
+Switch-Switch, Switch-Router, Switch-Server  
+Mozeme zdruzovat od 2 do 8 fyzickych portov do jedneho logickeho  
+Vsetky fyzicke rozhrania musia mat rovnaku rychlost, duplex a VLAN info (zoznam povolenych VLANs)  
+
+Load balancing moze byt zalozeny na nasledovnych kriteriach
+- `src-mac`
+- `dst-mac`
+- `src-dst-mac`
+- `src-ip`
+- `dst-ip`
+- **`src-dst-ip`** - default
+- `src-port`
+- `dst-port`
+- `src-dst-port`
+
+### Implementacie agregacie linky
+Ako pri vsetkom je mozne dynamicky a staticky
+#### Dynamicky
+- PAgP (Port Aggregation Protocol)
+	- Cisco
+	- Spravy kazdych 30 sekund
+	- Mody
+		- **Auto** - pasivny stav, odpoveda na ziadosti ale nevytvara ich
+		- **Desirable** - aktivne ziada o vytvorenie kanala posielanim PAgP paketov
+- LACP (Link Aggregation Protocol)
+	- IEEE 802.3ad
+	- Mody
+		- **Passive** - to iste ako PAgP Auto 
+		- **Active** - to iste ako PAgP Desirable, posila LACP pakety
+
+Mozne kombinacie
+- Auto + Auto = No channel
+- Auto + Desirable = Channel
+- Desirable + Desirable = Channel
+- Manualne ON + Manualne ON = Channel
+- Manualne OFF + hocico = No channel
+
+##### PAgP konfiguracia
+```
+int range f0/1 - f0/2
+	channel-group GROUP_NUMBER mode MODE
+	[channel-port {pagp | lacp}]
+
+do show ip int b
+
+int port-channel GROUP_NUMBER
+	# dalsia konfiguracia ako normalne 
+	sw mode access
+	sw access vlan 10
+	...
+
+port-channel load-balance TYPE
+do show etherchannel load-balance
+```
+
+Show prikazy
+```
+do show etherchannel
+do show etherchannel summary
+do show etherchannel port-channel
+do show etherchannel GROUP_NUMBER port-channel
+do show etherchannel detail
+do show etherchannel load-balance
+
+do show interface etherchannel
+do show interface TYPE SPEC etherchannel
+```
+
+Vymazanie etherchannel
+```
+no int port-channel 1
+int range f0/1 - f0/2
+	no channel-group 1 MODE
+	no shut
+```
+
+#### Staticky 

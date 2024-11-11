@@ -26,20 +26,6 @@ crypto key generate rsa
 ip ssh version 2
 ```
 
-# Cisla portov
-
-| Port | Sluzba        | TCP alebo UPD? |
-| ---- | ------------- | -------------- |
-| 20   | FTP (data)    | TCP            |
-| 21   | FTP (control) | TCP            |
-| 22   | SSH           | TCP            |
-| 23   | Telnet        | TCP            |
-| 53   | DNS           | TCP aj UDP     |
-| 69   | TFTP          | TCP            |
-| 80   | HTTP          | TCP            |
-| 443  | HTTPS         | TCP            |
-| 520  | RIP           | UDP            |
-
 # Staticke smerovanie
 ```
 ip route {siet} {maska} {vystupna siet | vystupne rozhranie} [metrika]
@@ -323,4 +309,71 @@ int g0/0
     no ip access-group 10
 
 no access-list 10
+```
+
+# EtherChannel & FHRP
+HSRP
+```
+int f0/0.1
+	encapsulation dot1q 1
+	ip add 192.168.1.101 255.255.255.0
+	standby version 2
+	standby 1 priority 150
+	standby 1 ip 192.168.1.1
+	standby 1 preempt
+	
+int f0/0.2
+	encapsulation dot1q 2
+	ip add 192.168.1.101 255.255.255.0
+	standby version 2
+	standby 2 ip 192.168.2.1
+	standby 2 preempt
+```
+
+HSRP show commands
+```
+do show standby
+do show standby brief
+
+debug standby packets
+debug standby packets terse
+```
+
+PAgP
+```
+int range f0/1 - f0/2
+	channel-group GROUP_NUMBER mode MODE
+	[channel-port {pagp | lacp}]
+
+int port-channel GROUP_NUMBER
+	# dalsia konfiguracia ako normalne 
+	sw mode access
+	sw access vlan 10
+	...
+
+port-channel load-balance TYPE
+do show etherchannel load-balance
+```
+
+EtherChannel show commands
+```
+do show ip int b
+
+do show etherchannel
+do show etherchannel summary
+do show etherchannel port-channel
+do show etherchannel GROUP_NUMBER port-channel
+do show etherchannel detail
+do show etherchannel load-balance
+
+do show interface etherchannel
+do show interface TYPE SPEC etherchannel
+```
+
+Vymazanie etherchannel
+```
+no int port-channel 1
+int range f0/1 - f0/2
+	no channel-group 1 MODE
+	no shut
 ```
