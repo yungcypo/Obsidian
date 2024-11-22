@@ -1,23 +1,11 @@
 # Tmux
-[Tmux](https://github.com/tmux/tmux/wiki) is a terminal thingy which let's you keep your sessions, manage windows and whatsoever :)
+[Tmux](https://github.com/tmux/tmux/wiki) is a terminal thingy which let's you keep your sessions, manage windows and whatsoever :)  
+I'm learning from [Youtube tutorial by *Dreams of Code*](https://www.youtube.com/watch?v=DzNmUNvnB04)  
+I'm not going into configuration and stuff because I already have this config done in [my dotfiles](https://github.com/cyprich/dotfiles.git) 
 
 # Install
 You will need to install `tmux` package with your package manager  
-
-The next thing you will need it something called *Tmux Plugin Manager*, which is installed via Git  
-```shell
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-```
-
-Edit the configuration, located at **`~/.tmux.conf`**  
-```shell
-set -g @plugin 'tmux-plugins/tpm'
-set -g @plugin 'tmux-plugins/tmux-sensible'
-
-run '~/.tmux/plugins/tpm/tpm'`
-```
-
-Now it should be installed  
+Configuration can be downloaded from [my dotfiles](https://github.com/cyprich/dotfiles.git) 
 Run it simply with `tmux` command  
 
 # Basic terms
@@ -64,3 +52,22 @@ Before entering any command, you have to press the `<prefix>` key, which is set 
 > Note: As said before, you have to hit `<prefix>` before any of these commands... I just didn't wrote it here because it'll be too long
 
 # Sessions
+Tmux sessions can be created by using the `tmux` command whilst not attached to another Tmux session  
+You can make names session with this command `tmux new -s name_of_the_session`  
+
+List Tmux session   
+```bash
+tmux ls  # ouside session
+<prefix> s  # inside session
+<prefix> w  # inside session + preview
+```
+
+Attach to session  
+```bash
+tmux attach  # most recent session
+tmux attach -t name_of_the_session  # specific session
+```
+
+
+
+# Better navigation
