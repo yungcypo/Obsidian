@@ -377,3 +377,53 @@ int range f0/1 - f0/2
 	no channel-group 1 MODE
 	no shut
 ```
+
+# DHCP
+DHCP server  
+```
+service dhcp  # on by default
+
+ip dhcp pool NAZOV_POOLU
+	network 192.168.1.0 255.255.255.128
+	default-router 192.168.1.1
+	dns-server 195.146.132.59
+	domain-name b303.sk
+	lease {days [hours [minutes]] | infinite}
+	?
+
+ip dhcp excluded-address 192.168.1.1 [192.168.1.10]
+```
+
+Show commands  
+```
+do show ip dhcp binding
+do show ip dhcp server statistics
+do show ip dhcp pool
+do show ip dhcp conflict
+
+do show run | section dhcp
+do show run | include no service dhcp  # ci nie je dhcp vypnute
+```
+
+DHCP client (Cisco router) (neodporuca sa)  
+```
+int g0/0
+	ip address dhcp
+
+do show ip int g0/0
+```
+
+Windows  
+```
+ipconfig /release
+ipconfig /renew
+ipconfig /all
+ipconfig /?
+```
+
+Relay Agent  
+> IP adresa servera za routerom
+```
+int g0/0
+	ip helper-address 192.168.2.1
+```

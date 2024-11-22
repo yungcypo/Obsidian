@@ -41,6 +41,8 @@ line vty 0 15
 | 22   | SSH           | TCP            |
 | 23   | Telnet        | TCP            |
 | 53   | DNS           | TCP aj UDP     |
+| 67   | DHCP (client) | UDP            |
+| 68   | DHCP (server) | UDP            |
 | 69   | TFTP          | TCP            |
 | 80   | HTTP          | TCP            |
 | 443  | HTTPS         | TCP            |
@@ -1060,6 +1062,36 @@ access-list 101 remark Nejaky pokus
 access-list 101 permit ip 192.168.1.0 0.0.0.255 lt 100 any ip 
 ```
 
+## IPv6 ACL
+Velmi podobne ako IPv4, hlavne rozdiely: 
+- Prikaz pri aplikovani - `ipv6 traffic-filter`
+- Nepouziva wildcard mask, ale prefix length
+- Niektore podmienky navyse
+	- `permit icmp any any nd-na`
+	- `permit icmp any any nd-ns`
+- Iba pomenovane ACL's
+
+```
+ipv6 access-list NAZOV_ACL
+	{deny | permit} PROTOCOL {SOURCE_IPV6_ADD/PREFIX_LENGTH | any | host SOURCE_IPV6_ADD} [OPERATOR [PORT_NUMBER]] {DEST_IPV6_ADD/PREFIX_LENGTH | any | host DEST_IPV6_ADD} [OPERATOR [PORT_NUMBER]]
+
+int s0/0/0
+	ipv6 traffic-filter NAZOV_ACL in
+```
+
+```
+ipv6 access-list PRIKLAD1
+	deny ipv6 2001:db8:cafe:30::/64 any
+	deny tcp any 2001:db8:cafe:11::/64 eq ftp
+	deny tcp any 2001:db8:cafe:11::/64 eq ftp-data
+	permit ipv6 any any
+
+int s0/0/0
+	ipv6 traffic-filter PRIKLAD1 in
+```
+
+
+
 # Etherchannel & FHRP
 First hop redundancy, agregacia portov  
 Treba zabezpecit, ze ak jeden router padne, tak ho nahradi druhy + load balancing  
@@ -1263,3 +1295,224 @@ int range f0/1 - f0/2
 ```
 
 #### Staticky 
+
+# DHCP
+Historicky  
+1. RARP - Reverse Address Resolution Protocol
+	- Klient iba ziska adresu, treba nakonfigurovat RARP table  
+2. BOOTP - BOOTstrap Protocol
+	- Obmedzeny pocet parametrov oproti DHCP, 2-fazovy konfig. proces
+	- Klient nerobi rebind/renew konfig. so serverom, okrem restartu
+3. DHCP - Dynamic Host configuration Protocol
+	- Stanici pridelena adresa len kym komunikuje, pri novom prihlaseni nova
+	- Siroka mnozina konfig. parametrov, 1-fazovy konfig
+	- Nepotrebuje restart, rebind/renew sa deje automaticky po casovom intervale
+
+## DHCP Komponenty
+- DHCP klient
+	- Ziada o konfig. parametre DHCP server cez L2 broadcast
+- DHCP server
+	- Moze byt dedikovany server alebo smerovac
+	- Spravuje IP adresnu mnozinu a ine konfig. parametre
+	- Prideluje ich na poziadanie DHCP klientom
+- Relay Agent - umoznuje prechod DHCP ziadosti cez L3 zariadenia - iba v pripadoch ked je to potrebne
+
+## Alokacia IP adresy cez DHCP
+- Dynamicka alokacia
+	- Prideli IP adresu hostovi na specifikovane casove obdobie (lease - limited)  
+	- Potom nastava uvolnenie adresy alebo obnovenie "prenajmu"
+- Automaticka alokacia
+	- Prideli permanentnu staticku IP adresu (lease - unlimited)
+- Manualna alokacia
+	- Vyzaduje konfig. servera
+	- Prideli vzdy rovnaku IP adresu stanici (na zaklade MAC), ktoru klient nevracia  
+
+## DHCP spravy
+DORA Process - **D**iscover, **O**ffer, **R**equest, **A**cknowledgement
+1. DHCP Discover (L2 broadcast)
+2. DHCP Offer (L2 Unicast)
+3. DHCP Request (L2 Broadcast)
+4. DHCP ACK (L2 Unicast)
+
+Obsah sprav
+- CIADR - Client IP address
+- Mask
+- GIADR - Gatway IP address
+- CHADR - Client Hardware address (MAC)
+
+## Konfiguracia DHCP servera na Cisco router
+- Spustenie sluzby a pomenovanie konfiguracie (na jednom smerovaci moze byt viac rozsahov)
+- Nastavenie parametrov sluzby
+	- IP rozsah
+	- Default gateway address
+	- DNS server address
+	- Ine parametre - celkovo ich moze byt az okolo 50
+
+```
+ip dhcp pool MOJ_DHCP
+	network 192.168.1.0 255.255.255.128
+	default-router 192.168.1.1
+	dns-server 195.146.132.59
+	?
+
+ip dhpc excluded-address 192.168.1.1 192.168.1.16
+
+do show ip dhcp binding
+do show ip dhcp server statistics
+do show ip dhcp pool
+do show ip dhcp conflict
+do show run | begin dhcp
+do show run | include no service dhcp  # ci nie je vypnute dhcp
+
+do clear ip dhcp binding *
+
+do debug ip dhcp server events
+```
+
+Z pohladu klienta (Cisco router) (neoporuca sa)  
+```
+int g0/0
+	ip add dhcp
+
+do show ip int g0/0
+```
+
+Windows  
+```
+ipconfig /?
+ipconfig /release
+ipconfig /renew
+```
+
+## Relay agent
+DHCP sa siri broadcastom  
+Co aj je DHCP server inde v sieti, az za smerovacom?  
+Treba spravit Relay Agenta, ktory zabali L2 broadcast na L3 unicast a posle paket na server  
+
+Na default gateway rozhrani sa da tento prikaz  
+```
+int g0/0
+	ip helper-address IP_ADRESA_DHCP_SERVERA
+```
+
+Cez toto sa prenasaju aj ine sluzby (vsetko UDP)
+- Port 37: Time
+- Port 49: TACACS
+- Port 53: DNS
+- Port 67: DHCP/BOOTP server
+- Port 68: DHCP/BOOTP client
+- Port 69: TFTP
+- Port 137: NetBIOS name service
+- Port 138: NetBIOS datagram service
+
+`ip forward-protocol`
+
+---
+
+Pouzitie ACL, ked je debug moc obsiahly  
+```
+access-list 100 permit ip host 0.0.0.0 host 255.255.255.255
+debug ip packet detail 100
+```
+
+## DHCPv6
+### IPv6 opakovanie
+Global Unicast - Dynamicka konfiguracia IPv6 adresy    
+- SLAAC - Stateless address autoconfiguration
+	- RA: Poskytnem ti vsetko co potrebujes (Prefix, Mask, DNS)
+- SLAAC + DHCPv6 (stateless)
+	- RA: Poskytnem ti nieco (Prefix, Mask), ale o ostatne poziadaj DHCPv6 server 
+- DHCPv6 (stateful)
+	- RA: Neviem ti pomoct, poziadaj DHCPv6
+
+- Host posle ziadost o svoje adresne info vsetkym routerom
+	- ICMPv6 - **Router Solicitation (RS)** spravu na `IPv6 all-routers multicast` (IPv6 nepouziva broadcast)
+- Router posiela kazdych 200 sekund (alebo ako odpoved na otazku hosta) **Router Advertisement (RA)** spravy
+	- Tiez cez ICMPv6 - ciel `IPv6 all-nodes multicast`
+	- Moze ponuknut jednu z 3 moznosti (SLAAC, ...)
+
+---
+
+- SLAAC
+	- Host posle spravu `ICMPv6 type 133` (RS) 
+		- Source IP - `::`
+		- Dest. IP - IPv6 all-routers multicast = `ff02::2` 
+	- Router nasledne posle `RA option 1`
+		- Network Prefix, Prefix Length, DNS addresses, Default Gateway
+		- Moze poslat Lifetime, ...
+		- Source IP - Router Link-Local address
+		- Dest IP - IPv6 all-nodes multicast = `ff02::1`
+	- Host si urci Interface ID (poslednych 64 bitov IPv6 adresy) a nasledne ho prilepi k Prefixu od routera
+		- Ma na to 2 moznosti
+			- Modified EUI-64 - z MAC adresy (`prva polovica + FFFE + druha polovica`) - Cisco zariadenia
+			- Nahodne 64 bit cislo - Windows
+		- Vysledok je 128 bit IPv6 adresa
+	- Duplicate Address Detection (DAD) 
+		- *"Nema uz niekto takuto adresu?"*
+		- Dest IP - IPv6 solicited-node multicast 
+			- `ff02::1:ff:X/104`, kde `X` = spodnych 24 bitov IP adresy, ktoru si idem nastavovat  
+- SLAAC + DHCPv6
+	-  Prvy krok rovnaky
+	- Router posle `RA option 2`
+		- Network Prefix, Prefix Length, Default Gateway
+		- DNS treba poziadat DHCPv6 server  
+	- Treti krok rovnaky
+- DHCPv6
+	- Prvy krok rovnaky
+	- Router posle `RA option 3`
+		- Odkaze hosta na DHCPv6 server
+
+### Konfiguracia DHCPv6
+- `M` bit 
+	- "Managed address configuration" flag 
+	- Povie klientovi, aby poziadal DHCPv6 server o info
+- `O` bit 
+	- "Other configuration" flag 
+	- povie klientovi, aby poziadal DHCPv6 server o informacie okrem Prefixu a Gateway (DNS, ...)
+
+|         |                  |
+| ------- | ---------------- |
+| MO = 00 | SLAAC            |
+| MO = 01 | stateless DHCPv6 |
+| MO = 10 | statefull DHCPv6 |
+#### Stateless server
+MO = 01
+```
+ipv6 unicast routing
+ipv6 dhcp pool NAZOV_DHCPV6
+	dns-server 2001:db8:cafe:aaaa::5
+	domain-name example.com
+
+int g0/0
+	ipv6 add 2001:db8:cafe:1::1/64
+	ipv6 dhcp server NAZOV_DHCPV6
+	ipv6 nd other-config-flag
+```
+
+#### Stateless klient
+```
+int g0/0
+	ipv6 enable
+	ipv6 address autoconfig
+```
+
+#### Statefull server
+MO = 10
+```
+ipv6 unicast-routing
+ipv6 dhcp pool NAZOV
+	address prefix 2001:db8:cafe:1::/64 lifetime infinite infinite
+	dns-server 2001:db8:cafe:aaaa::5
+	domain-name example.com
+
+ing g0/0
+	ipv6 address 2001:db8:cafe:1::1/64
+	ipv6 dhcp server NAZOV
+	ipv6 nd managed-config-flag
+```
+
+#### Statefull Relay Agent
+```
+int g0/0
+	ipv6 dhcp relay destination DHCP_SERVER_IP_ADD
+```
