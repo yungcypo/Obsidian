@@ -427,3 +427,77 @@ Relay Agent
 int g0/0
 	ip helper-address 192.168.2.1
 ```
+
+# NAT
+Konfiguracia  
+```
+int g0/0
+    ip nat inside  # vnutorne, privatne adresy
+
+int g0/1
+    ip nat outside  # vonkajsie, verejne adresy
+```
+
+Pri pouziti VLAN sa pouzivaju subinterfaces (logicke rozhranie)  
+```
+int g0/0.10
+    ip nat inside
+int g0/0.20
+    ip nat inside
+```
+
+Show prikazy
+```
+do show ip nat translations
+do show ip nat statistics
+
+do show run | include nat
+do debug ip nat
+```
+
+Staticky NAT preklad  
+```
+ip nat inside source static INSIDE_LOCAL_ADD INSIDE_GLOBAL_ADD  
+ip nat inside source static 192.168.1.20 200.1.1.1  
+```
+
+Dynamicky NAT preklad  
+```
+ip nat pool MENO_POOLU FIRST_IP LAST_IP netmask MASKA
+ip nat pool MOJ_ROZSAH 211.2.2.8 211.2.2.10 netmask 255.255.255.252
+
+access-list CISLO_ACL_LISTU permit SOURCE WILDCARD_MASK
+access-list 1 permit 10.1.1.0 0.0.0.255
+
+ip nat inside source list CISLO_ACL_LISTU pool MENO_POOLU
+ip nat inside source list 1 pool MOJ_ROZSAH
+```
+
+Vymazanie NAT tabulky
+```
+clear ip nat translations *
+```
+
+PAT
+```
+access-list CISLO_ACL_LISTU permit SOURCE WILDCARD_MASK
+ip nat inside source list CISLO_ACL_LISTU interface s0/0 overload
+
+access-list 1 permit 10.1.1.0 0.0.0.255
+access-list 1 permit 20.1.1.0 0.0.0.255
+ip nat inside source list 1 interface s0/0 overload
+```
+
+Pretazenie adresneho rozsahu (`n:m`)
+```
+access-list CISLO_ACL_LISTU permit SOURCE WILDCARD_MASK
+ip nat pool MENO_POOLU FIRST_IP LAST_IP netmask MASKA
+
+ip nat inside source list CISLO_ACL_LISTU pool MENO_POOLU overload
+```
+
+Port Forwarding 
+```
+ip nat inside source static tcp 192.168.10.254 80 209.165.200.255 8080
+```
+

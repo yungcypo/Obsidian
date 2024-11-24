@@ -1516,3 +1516,165 @@ ing g0/0
 int g0/0
 	ipv6 dhcp relay destination DHCP_SERVER_IP_ADD
 ```
+
+# NAT
+Network Address Translation  
+(okrem ineho) preklada privatne IP adresy na verejne a naopak  
+
+Privatne adresne priestory: 
+
+|Class|Address range|First|Last|
+|-|-|-|-|
+|A|`10.0.0.0/8`|`10.0.0.0`|`10.255.255.255`|
+|B|`172.16.0.0/12`|`172.16.0.0`|`172.31.255.255`|
+|C|`192.168.0.0/16`|`192.168.0.0`|`192.168.255.255`|
+
+## Pojmy
+Border Gatway Router
+- NAT zariadenie
+- Pracuje typicky na hranici stub siete
+    - Stub siet ma iba jeden vstup/vystup do/z nej
+
+Inside Network
+- Vnutorna privatna siet (firma)
+- Pri komunikacii mimo je objektom NAT-ovania
+- Pri vnutornej komunikacii sa neNAT-uje
+
+Outside Network
+- Vonkajsia siet
+
+---
+
+- Inside Local Address
+    - Pridelena vo vnutri siete
+    - Podla RFC 1918 typicky privatna
+- Inside Global Address
+    - Platna verejna IP adresa od ISP
+    - Na tuto adresu bude prekladana `Inside Local Address`
+- Outside Global Address
+    - Platna verejna IP adresa koncoveho zariadenia
+    - Tuto adresu vidi odosielatel z vnutornej siete
+- Outside Local Address
+    - Lokalna adresa pridelena zariadeniu vo vonkajsej sieti
+    - Ak ciel nepouziva NAT, tak je zhodna s `Outside Global Address`
+
+## Sposoby NAT mapovania
+### Staticke mapovanie
+`1:1` tzv "one-to-one mapping"  
+Preklada jednu privatnu na jednu verejnu adresu  
+Potrebne ak treba zabezpecit pristup na stanicu (HTTP server) z internetu, a stanica je za NAT  
+
+|Inside local address|Inside global address|
+|-|-|
+|`192.168.1.10`|`209.165.200.226`|
+|`192.168.1.11`|`209.165.200.227`|
+|`192.168.1.12`|`209.165.200.228`|
+
+### Dynamicke mapovanie
+`n:n`
+NAT ma pristupny rozsah verejnych adries - IP address pool  
+NAT riadi preklad pridelovanim neobsadenych verejnych IP adries z poolu  
+
+|Inside local address|Inside global address|
+|-|-|
+|`192.168.1.10`|`209.165.200.226`|
+|*\*Available\**|`209.165.200.227`|
+|*\*Available\**|`209.165.200.228`|
+|*\*Available\**|`209.165.200.229`|
+|*\*Available\**|`209.165.200.230`|
+
+### PAT (Protocol Address Translation)
+`n:m`, kde `1 <= m < n`  
+Tzv. NAT overloading  
+
+Napr. ak mam pridelenu iba jednu verejnu IP  
+PAT mapuje viacere adresy na jednu verejnu a rozlisuje ich pomocou cisla portu (L4) (16 bit)
+
+Napr. ak mam pridelenych iba niekolko verejnych IP adries, a tento pocet je mensi ako pocet zariadeni  
+Taktiez sa odlisuju portom  
+
+Pouzivaju sa dynamicke (privatne) porty: `49152` - `65535`  
+
+|Inside Local|Inside Global|Outside Global|Outside Local|
+|-|-|-|-|
+|`192.168.1.10:1555`|`209.165.200.226:1555`|`231.165.201.1:80`|`231.165.201.1:80`|
+|`12.168.1.10:2345`|`209.165.200.226:2345`|`231.165.208.129:80`|`231.165.208.129:80`|
+
+## Konfiguracia NAT
+```
+int g0/0
+    ip nat inside  # vnutorne, privatne adresy
+
+int g0/1
+    ip nat outside  # vonkajsie, verejne adresy
+```
+
+Pri pouziti VLAN sa pouzivaju subinterfaces (logicke rozhranie)  
+
+```
+int g0/0.10
+    ip nat inside
+int g0/0.20
+    ip nat inside
+```
+
+Staticky NAT preklad  
+```
+ip nat inside source static INSIDE_LOCAL_ADD INSIDE_GLOBAL_ADD  
+ip nat inside source static 192.168.1.20 200.1.1.1  
+```
+
+Dynamicky NAT preklad  
+```
+ip nat pool MENO_POOLU FIRST_IP LAST_IP netmask MASKA
+ip nat pool MOJ_ROZSAH 211.2.2.8 211.2.2.10 netmask 255.255.255.252
+
+access-list CISLO_ACL_LISTU permit SOURCE WILDCARD_MASK
+access-list 1 permit 10.1.1.0 0.0.0.255
+
+ip nat inside source list CISLO_ACL_LISTU pool MENO_POOLU
+ip nat inside source list 1 pool MOJ_ROZSAH
+```
+
+Show prikazy
+```
+do show ip nat translations
+do show ip nat statistics
+
+do show run | include nat
+do debug ip nat
+```
+
+Vymazanie NAT tabulky
+```
+clear ip nat translations *
+```
+
+## Konfiguracia PAT (PNAT)
+```
+access-list CISLO_ACL_LISTU permit SOURCE WILDCARD_MASK
+ip nat inside source list CISLO_ACL_LISTU interface s0/0 overload
+
+access-list 1 permit 10.1.1.0 0.0.0.255
+access-list 1 permit 20.1.1.0 0.0.0.255
+ip nat inside source list 1 interface s0/0 overload
+```
+
+Pretazenie adresneho rozsahu (`n:m`)
+```
+access-list CISLO_ACL_LISTU permit SOURCE WILDCARD_MASK
+ip nat pool MENO_POOLU FIRST_IP LAST_IP netmask MASKA
+
+ip nat inside source list CISLO_ACL_LISTU pool MENO_POOLU overload
+```
+
+## Port Forwarding 
+...je to vlastne staticky NAT preklad ktory specifikuje aj cislo portu  
+```
+ip nat inside source static tcp 192.168.10.254 80 209.165.200.255 8080
+```
+
+## NAT64
+Preklada IPv6 adresy na IPv4 adresy  
+Ak nejaka cast pouziva vyhradne IPv6 a druha nepouziva IPv6  
+
