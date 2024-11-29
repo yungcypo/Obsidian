@@ -229,6 +229,16 @@ network:
          addresses: [8.8.8.8,8.8.8.4]
 ```
 
+# Grub
+Rebuild grub or something?  
+Not really what it actually does  
+When Grub does not behave as it supposed to, try this :)  
+```
+sudo grub-install --terget=x86_64-efi --efi-directory=/boot/efi --bootloader-id=EndeavourOS
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+```
+
+
 # Various
 Commands that do not deserve full section, but deserves to be there  
 
