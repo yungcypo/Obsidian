@@ -1678,3 +1678,161 @@ ip nat inside source static tcp 192.168.10.254 80 209.165.200.255 8080
 Preklada IPv6 adresy na IPv4 adresy  
 Ak nejaka cast pouziva vyhradne IPv6 a druha nepouziva IPv6  
 
+# Security
+
+AAA = Authentication, Autorization, Accounting
+- Local AAA 
+- Server-based AAA
+
+
+Moznosti serverovej autentifikacie a autorizacie 
+- RADIUS (Remote Authentication Dial-In User Service)
+    - UDP porty IANA 1812 (auth) / 1813 (account) 
+    - UDP porty Cisco 1645 (auth) / 1646 (account)
+    - Sifrovana len cast spravy s heslom
+    - Kombinuje autentifikaciu a autorizaciu
+    - Ponuka robustne account funkcie
+    - Podporuje remote access riesenia (dot1x)
+- TACACS (Terminal Access Controller Access Control System+)
+    - Robustne (heavy riesenie)
+    - Zabezpecuje cele pripojenie sifrovanim 
+    - TCP port 49
+    - Separuje autentifikaciu a autorizaciu 
+    - Umoznuje kombinovat rozne metody
+
+```
+aaa new-model
+username lastresort password h@slisko
+radius server SERVER-R
+    add ipv4 192.168.1.100 auth-port 1812 acct-port 1813
+    key RADIUS-heslisk0
+
+tacacs server SERVER-T
+    add ipv4 192.168.1.101
+    single-connection
+    key TACACS-hesl1sko
+
+aaa auth login MY_AUTH_RAD+TAC group radius group tacacs+ local-case 
+
+line vty 0 15
+    login auth MY_AUTH_RAD+TAC
+```
+
+## L2 utoky
+
+| Nazov utoku | Popis | Mitigation |
+| --- | --- | --- | 
+| MAC Address Flooding | Ramce s roznymi neplatnymi MAC adresami zaplavia Switch. Vycerpa sa miesto v CAM tabulke. Novy pouzivatel sa nemoze dostat do tabulky. Zaznam validneho pouzivatela nie je v tabulke - ramce su floodnute | Port security. MAC address VLAN | 
+| VLAN Hopping | Zmena VLAN ID v enkapsulovanom pakete (doble tagging). Utocnik moze posielat/prijimat pakety z roznych VLAN a obist tak L3 security | Sprisnit konfiguraciu trunkov *(?)* a nonegotiate state nepouzitych portov. Dat nepouzite porty do spolocnej VLAN |
+| Attacks betweed devices on common VLAN | Jednotlive zariadenia na spolocnej VLAN mozu potrebovat ochranu pred sebou. Obzvlast na IPS segmentoch, ktore podporuju zariadenia roznych zakaznikov | Implementacia private VLANs (PLVAN) |
+| DHCP starvation + DHCP spoofing | Utocnik moze vycerpat adresny priestor dostupny pre DHCP server na nejaky cas. Taktiez sa moze vydavat za DHCP server v man-in-the-middle utokoch | DHCP snooping |
+| MAC spoofing | Utocnik spoofuje (vydava sa za) MAC adresu alebo validneho hosta ktory je momentalne v CAM tabulke. Switch potom switchuje ramce urcene validnemu hostovi na utocnika | DHCP snooping. Port security |
+| ARP spoofing | Utocnik vytvara APR odpovede urcene validnym hostom. Nasledne sa MAC adresa utocnika stane destination address v ramci vygenerovanom validnym hostom | Dynamic ARP inspection (DAI), DHCP snooping, Port security |
+| STP Compromises | Utocnik sa vydava za root bridge. Ak je uspesny, moze vidiet viac ramcov | Proaktivne konfigurovat primarny a backup root devices. Enable root, BPDU guard or filter |
+| CDP manipulation | Data v CDP ramcoch su plain-text a neautentifikovane. Mozu byt odchytene a moze byt prezradena topologia siete | Vypnut CDP na vsetkych portoch kde nie je zamerne pouzivane |
+| SSH and Telnet attacks  | Telnet pakety su plain text. SSHv1 ma problemy s bezpecnostou | Pouzivat SSHv2. Pouzivat telnet spolu s VTY ACL |
+
+Ochrana voci MAC flooding - Port security
+- Umoznuje na porte 
+    - Obmedzit pocet zariadeni ktore mozu byt pripojene k jednemu rozhraniu prepinaca (default 1)
+    - Definovat zoznam bezpecnych MAC adries 
+    - Definovat co sa stane ak dojde k poruseniu niektoreho z bezpecnostnych pravidiel 
+
+Ktore MAC adresy su bezpecne
+- Static secure MAC
+    - Manualne nakonfigurovana 
+    - V konfiguracii aj v CAM tabulke 
+    - Po restarte sa nacita z ulozenej konfiguracie
+- Dynamic secure MAC (default)
+    - Dynamicky z CAM tabulky 
+    - Len v CAM tabulke
+- Sticky route
+    - Hybrid medzi static a dynamic
+    - Ziskava sa dynamicky ale uklada sa do config
+
+Pri prekroceni poctu max MAC adries - violation modes 
+
+| Violation Mode | Forwards traffic | Sends Syslog Message | Increase violation counter | Shuts down port | 
+| --- | --- | --- | --- | --- |
+| Protect | No | No | No | No |
+| Restrict | No | Yes | Yes | No |
+| Shutdown (default) | No | Yes | Yes | Yes |
+
+```
+int f0/2
+    switchport mode access
+    # nepovinne ale odporucane prikazyDy
+    switchport port-security maximum 5
+    switchport port-security mac-address aaaa.bbbb.cccc
+    switchport port-security violation restrict
+    switchport port-security aging time 10 type absolute
+    switchport port-security 
+
+do show port-security
+do show port-security int f0/2
+do show port-security address
+```
+
+## Ostatne
+DHCP snooping
+```
+ip dhcp snooping
+ip dhcp snooping vlan 1,10,20,100-110
+
+int f0/2
+    ip dhcp snooping trust
+    ip dhcp snooping limit rate 10
+
+ip dhcp snooping information option
+
+do show ip dhcp snooping
+do show ip dhcp snooping binding
+```
+
+Config Dynamic APR Inspection (DAI)
+```
+ip dhcp snooping
+ip dhcp snooping vlan 1,10,20,100-110
+ip arp inspection vlan 10
+
+int g0/1
+    ip dhcp snooping trust
+    ip arp inspection trust
+
+ip arp inspection validate { [src-mac] [dst-mac] [ip [allow-zeros]] }
+```
+
+Config a overenie portfast 
+```
+spanning-tree portfast default
+int f0/1 - 10
+    spanning-tree portfast
+
+int f0/20
+    spanning-tree portfast disable
+
+do show spanning-tree int f0/1 portfast
+do show run | begin span
+do show span summary
+```
+
+Config BPDU guard 
+```
+span portfast bpduguard default
+ 
+int f0/2
+    span bpduguard enable
+
+do show int status err-disabled
+```
+
+## Utoky
+Linux commands
+```shell
+macof -i eth0
+macof -i eth0 2>/dev/null
+
+yesinia
+```
+
+
