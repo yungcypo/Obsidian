@@ -47,7 +47,11 @@ line vty 0 15
 | 80   | HTTP          | TCP            |
 | 443  | HTTPS         | TCP            |
 | 520  | RIP           | UDP            |
+| 1812 | RADIUS auth | UDP |
+| 1813 | RADIUS accounting | UDP |
 | 1985 | HSRPv1        | UDP            |
+| 5246 | CAPWAP (source) | UDP          | 
+| 5247 | CAPWAP (destination) | UDP     |
 
 # Troubleshooting commands
 Prikazy ktore len nieco vypisuju  
@@ -1835,4 +1839,422 @@ macof -i eth0 2>/dev/null
 yesinia
 ```
 
+# WLAN
+Wireless LAN  
+
+||PAN|LAN|MAN|WAN|
+|---|---|---|---|---|
+|Standards|Bluetooth  <br>`802.15.3`|`802.11`|`802.11`  <br>`802.16`  <br>`802.20`|GSM  <br>CDMA  <br>Satellite|
+|Speed|<1 Mbps|11 - 54 Mbps|10 - 100+ Mbps|0.1 - 2 Mbps|
+|Range|6 - 9 m|90 m|Mesto|Narodne/Medzinarodne|
+|Applications|Peer-to-Peer  <br>Device-to-Device|Enterprise Networks|Last Mile Access|Mobile Data Devices|
+|Frequency range|2.4 GHz|2.4 GHz  <br>% GHz||Licencovane|
+
+## Zakladne pojmy
+### Kodovanie
+Prevod prenasanych dat do symbolov  
+Zmena z jednej formy na druhu pomocou algoritmu  
+Vhodnejsie na prenos, rychlejsie, detekcia chyb, samosynchronizacia, znizenie objemu (kompresia) a pod.  
+
+### Sirka Pasma (band)
+Skupina frekvencii vyuzita za nejakym ucelom  
+
+- AM radiove vysielanie je 550 - 1720 MHz
+- WiFi (pre 2.4 GHZ) je od 2.412 do 2.484 GHz
+- WiFi (pre 5 GHZ) je od 5.150 do 5.825 GHz
+
+### Nosny signal (Carrier signal)
+Signal urcitej rekvencie, vhodnej na prenost  
+Sam o sebe nema informacnu hodnotu  
+Informacia sa pridava modulaciou  
+
+### Modulacia
+Zmena istej charakteristiky prenasaneho signalu, ktorou bude vyjadreny prenasany symbol pocas prenosu  
+
+- Amplitudova modulacia 
+- Fazova modulacia 
+- Frekvencna modulacia 
+
+### Kanal (Channel)  
+Prijimac aj vysielac ocakavaju nosny signal, ale s malymi zmenami (kvoli modulacii) = kanal  
+
+### Frekvencna schema
+Sposob, aky vysielac obsadzuje rozsah frekvencii v danom kanali  
+
+
+## Radiofrekvencny signal
+- Vplyv prostredia
+    - Odraz (reflection)
+    - Lom (refraction)
+    - Absorbcia (absorbtion)
+    - Rozptyl (scattering)
+    - Ohyb (diffraction)
+
+## Manazment kanalov
+|*Notice this*|Identifier|Center frequency|Frequency range \[MHz\]|Americas|Europe, Middle East, Asia|Japan|
+|---|---|---|---|---|---|---|
+|->|**1**|**2412**|**2401 - 2423**|x|x|x|
+||2|2417|2406 - 2428|x|x|x|
+||3|2422|2411 - 2433|x|x|x|
+||4|2427|2416 - 2438|x|x|x|
+||5|2432|2421 - 2443|x|x|x|
+|->|**6**|**2437**|**2426 - 2448**|x|x|x|
+||...||||||
+|->|**11**|**2462**|**2451 - 2473**|x|x|x|
+||12|2467|2456 - 2478||x|x|
+||13|2472|2461 - 2483||x|x|
+||14|2477|2466 - 2488|||x|
+
+> Step = 5MHz, Range = 22MHz
+
+Kanaly 1, 6 a 11 sa neprekryvaju  
+|Identifier|Center frequency|Frequency range \[MHz\]|
+|---|---|---|
+|1|2412|2401 - 2423|
+|6|2437|2426 - 2448|
+|11|2462|2451 - 2473|
+
+Pouzitie ktorychkolvek inych kanalov sposobuje interferenciu  
+Na jednom uzemi preto mozu byt pouzite max 3 APs
+
+### Pri 5GHz
+Kanalov je 24  
+> Step = 20 MHz
+
+Neprekryvajuce sa kanaly: 36, 48, 60
+
+### Channel Reuse
+![](../images/siete_channel_reuse.png)
+
+Oblast je pokryta tak, aby sa jednotlive kanaly neinterferovali *(is that even a word?)*  
+
+### Channel bonding
+Kombinacia dvoch 20 MHz kanalov do jedneho 40 MHz kanala  
+
+## Modulacne techniky 
+Ak je dopyt po konkretnom bezdrotovom kanali prilis vysoky, moze dojst k jeho nadmernemu nasyteniu (oversaturation), co by znizilo kvalitu komunikacie  
+
+- Direct Sequence Spread Spectrum (DSSS)  
+    - Rozprestrenie spektra priamou postupnostou
+    - Pouzivane na zariadeniach `802.11b`
+    - Uzitocne data, ktore sa prenasaju sa kombinuju s prudom pseudonahodnych kodov 
+        - Pseudonahodne kody su tzv. **chips** (8 alebo 11 chips na 1 bit)
+        - Pomocou nich sa do dat prida sum, ktory sposobi rozprestrenie frekvencneho pasma (zvysenie odolnosti)
+        - Je potrebna synchronizacia
+- Frequency Hopping Spread Spectrum (FHSS)
+    - Rozprestrenie spektra frekvencnymi skokmi 
+    - Rychle prepinanie nosneho signalu medzi mnohymi frekvencnymi kanalmi
+    - Vysielac a prijimac musia byt synchronizovane
+    - Pouziva sa v povodnom standarde `802.11`
+    - Vysielac a prijimac prechadzaju medzi frekvenciami v danom kanali podla istej pseudonahonej postupnosti
+        - Sekvencia obsahuje az 78 frekvencii, medzi ktorymi moze skakat
+        - Vysielac medzi nimi rychlo skace (hopping)
+        - Lepsie rozprestretie, vyuzitie kanala
+    - V kazdom casovom momente sa vyuziva len jedna konkretna frekvencia
+    - Ak prenos ramca zlyha, prenesia sa znovu na inej frekvencii  
+- Orthogonal Frequency Division Multiplexing (OFDM) 
+    - Multiplex s ortogonalnym frekvencnym delenim
+    - Podmnozina multiplexovania
+    - Rodina modulacnych technik, ktore vyuzivaju rozdelenie kanala na tzv. subkanaly 
+    - Prenos kanalmi moze bezat simultanne 
+    - Komplexna technika pouzivana vo vysokorychlostnych prenosoch 
+    - `802.11a/g/n/ac`
+    - ![OFDM](../images/siete_ofdm.png)
+
+## Standardy IEEE 802.11  
+|IEEE standard|Year adopted|Frequency|Max Data Rate (practical max data rate)|Max range|Note|
+|---|---|---|---|---|---|
+|`802.11a`|1999|5 GHz|54 Mbps (25 Mbps)|400 ft||
+|`802.11b`|1999|2.4 GHz|11 Mbps (5 Mbps)|450 ft||
+|`802.11g` (WiFi 4)|2003|2.4 GHz|54 Mbps (27 Mbps)|450 ft|Spatne kompatibilny s `802.11b`|
+|`802.11n`|2009|2.4 / 5 GHz|600 Mbps (74 Mbps)|825 ft|Spatne kompatibilny, MIMO|
+|`802.11ac` (WiFi 5)|2014|5 GHz|1 Gbps (350 Mbps)|1000 ft|Spatne kompatibilny s `802.11b/g/n`, SU MIMO, MU MIMO (CSMA/CA)|
+|`802.11ac` Wave 2|2015|5 GHz|3.5 Gbps|10 m||
+|`802.11ad`|2016|60 GHz|7 Gbps|30 ft||
+|`802.11af`|2014|2.4 / 5 GHz|~26 - ~570 Mbps (depending on channel)|1000 m||
+|`802.11ah`|2016|2.4 / 5 GHz|347 Mbps|1000 m||
+|`802.11ax` (WiFi 6)|2021|2.4 / 5 GHz|10 Gbps (9.6 Gbps)|1000 ft|Spatne kompatibilny s `802.11b/g/n`|
+|...||||||
+
+> 1 ft = ~0.3 m  
+> 1 m = ~3.3 ft
+
+### `802.11ax` (WiFi 6) upgrades
+- MU-MIMO
+    - Multi User Multi Input Multi Output
+    - Aj pre downlink aj pre uplink
+    - Max 8 kanalov *(?)*
+- 1024-QAM
+    - Cim vyssi QAM level, tym viac dat je mozne obsiahnut v signali = vyssia rychlost prenosu 
+    - 10 bits per symbol
+    - O 25% vyssia ako 256-QAM pri `802.11ac` (WiFi 5) - 8 bits per symbol
+- OFDMA
+    - Orthogonal Frequency Division Multiplexing
+    - Rozsirenie OFDM
+         - 1 user = 1 kanal
+    - OFDMA
+        - Viacej users mozu vyuzivat nevyuzite casti kanala
+- BSS coloring
+    - Userov v OFDMA kanali treba odlisit
+    - Individualne zariadenia sa oznackuju, nasledne aj pakety
+- TWT mechanizmus
+    - Target Wakeup Time
+    - Aby sa viacero zariadeni nezobudzalo naraz a nesposobilo kolizie
+
+## Komponenty WLAN
+- Bezdrotovy klient
+    - Koncova stanica  
+    - Jej konektivita je zabezpecena specializovanou bezdrotovou sietovou kartou (NIC)  
+    - Obsahuje radiovy vysielac a prijimac
+    - Existuje v roznych vyhotoveniach s roznymi rozhraniami
+        - USB, interny, PCMCIA
+- Wireless Home Router
+    - Integruje viac zariadeni 
+        - Access Point - bezdrotovy pristup 
+        - Ethernet switch - kablove prepojenie zariadeni
+        - Router (WAN rozhranie) - default GW pre vsetkych klientov
+- Pristupovy bod - Access Point (AP)
+    - Typicky pripojeny metalickym mediom
+    - Prepojenie LAN a WLAN
+    - Klient sa potrebuje asociovat s AP pre pripojenie do siete
+    - Rozne vyhotovenia (vonkajsie/vnutorne)
+    - Rozne kategorie nasadenia
+        - Autonomne AP
+            - Kazde sa spravuje individualne cez CLI alebo GUI
+            - Problem ak je vela APs
+            - Je mozne spravit tzv. Klastrovanie bez podpory kontrolera
+                - Viacej APs, jedna konfiguracia pre vsetky, jednotne riadenie jednotne
+        - Controller-based AP 
+            - Wireless LAN Controller - WLC
+            - Dalsia entita, ktora kontroluje a manazuje jedno alebo viac APs
+            - AP je potom nazyvane LWAP - Lightweight AP
+                - LWAPP - Lightweight Access Point Protocol - komunikacia medzi AP a WLC 
+- Bezdrotove mosty
+    - Most (Bridge)
+        - Zabezpecuje prepojenie 2 separatnych LAN sieti
+        - Point-to-point alebo point-to-multipoint
+        - Casto pouzivaju upraveny komunikacny protokol
+    - Opakovac (Repeater)
+        - Zvacsenie plochy pokrytej signalom
+        - Znizuje sa efektivna prenosova rychlost
+        - Potrebne prekrytie signalu aspon 50% - tzv. catchment area
+    - Anteny
+        - Rozne druhy (vsesmerove, sektorove, smerove, MIMO (viacero anten (8)))
+        - Lisia sa druhom konektora, kablom, ziskovostou, smerovostou, ...
+        - Cisco pouziva RP-TNC konektory
+
+## Sposoby prevadzky WiFi
+### Ad hoc mod 
+Prepojenie peer-to-peer bez AP(nie Bluetooth)  
+Topologia sa oznacuje ako IBSS (Independent Basic Service Set)
+
+### Tethering
+Mobilny smartphone/tablet s pristupom do internetu sa pouzije ako osobny hostspot  
+
+### Mod infrastruktura
+Prepojenie klientov do siete pomocout AP  
+2 topologicke bloky  
+- BSS (Basic Service Set)
+    - Pouziva AP na pripojenie klientov
+    - Iba jedno AP
+    - Klienti v roznych BSS medzi sebou nemozu komunikovat
+- ESS (Extended Service Set)
+    - Viacero BSS prepojenych tzv. Distribucnym systemom (kable, switche)
+    - Viac APs
+
+## Cinnosti WLAN
+### Service Set ID - SSID - Identifikator siete 
+V jednom priestore moze byt dostupnych niekolko BSS alebo ESS  
+Treba jednoznacne identifikovat - Service Set ID (SSID), resp. Extended SSID (ESSID) - slovny nazov bezdrotovej siete - zakladny parametrom WLAN klienta  
+AP moze SSID vysielat v tzv. **Beacon ramcoch**, ale moze byt aj skryte  
+Jeden AP moze navonok prezentovat niekolko SSID - kazde ma samostatnu VLAN  
+AP vyuziva trunking a 802.1Q znackovanie na roztriedenie ramcov medzi SSID/VLAN  
+
+### Base Service Set ID - BSSID
+V jednej ESS sa moze klient asociovat k roznym pristupovym bodom  
+BSSID je identifikator konkretneho AP  
+Ma formu MAC adresy  
+
+### Sposob objavenia AP klientom  
+#### Passive mode 
+AP ohlasuje sluzby posielanim broadcast ramcov nazyvanych *beacons*  
+Ramce obsahuju SSID, podporovane standardy a bezpecnostne nastavenia  
+Hlavnou ulohou beacons je dat vediet klientom o APs v oblasti  
+
+#### Active mode 
+Klient musi vediet meno SSID pretoze beacons sa nevysielaju  
+Klient iniciuje proces poslanim **PROBE** poziadavky (SSID a podporovane standardy klienta) na viacerych kanaloch  
+Tento postup je nevyhnutny ak AP neposiela beacons  
+
+### Komunikacia vo WLAN
+Proces pristupu klienta k WLAN  
+1. Objav AP
+2. Autentifikuj sa voci AP (open, shared key)
+3. Asociuj sa s AP
+
+Stavy klienta
+- Unauthenticated, Unassociated - default stav  
+- Authenticated, Unassociated - klient preukazal identitu, ale nie je trvale prihlaseny k zvolenemu AP  
+- Authenticated, Associated - klient je prihlaseny k AP a ma plnu konektivitu  
+
+Potrebna dohoda na parametroch 
+- SSID
+- Heslo (shared key)
+- Network mode (802.11 standard)
+- Security mode (WEP, WPA, WPA2, ...)
+- Channel settings (frekvencne pasmo)
+
+### CSMA/CD
+Carrier Sence Multiple Access with Collision Avoidance  
+Nemozeme pouzit CSMA/CD - stanica nevie ci sposobila koliziu  
+Mame ale modifikaciu klasickej metody - vyhnutie sa kolizii - CA  
+
+Prijimajuci host posiela ACK kratko po prijati spravy  
+Ak ACK nie je prijate - prenost sa uskutocnuje znovu  
+
+#### Distribuovana koordinacna funkcia (DCF)  
+1. User A pocuva, a zisti, ze nikto neprenasa, prenesie ramec, zaroven da info o dobe trvania prenosu  
+2. User B ma ramec, ale musi pockat kym skonci prenos A + kym uplynie DIFS cas  
+3. B pocka nahodny backoff cas, kym sa pokusi znova preniest frame  
+
+#### RTS/CTS  
+Request to sender
+- Dohladovy ramec, v ktorom stanica informuje prijemcu, ze mu chce poslat data 
+- Informuje o potrebnom case na tento prenos 
+
+Clear to Send  
+- Dohladovy ramec, v ktorom prijemca potvrdzuje prijem ziadosti RTS 
+- Informuje o potrebnom zvysnom case na tento proces 
+
+Vymena instruuje vsetkych v dosahu dodrzat ticho a nekomunikovat
+
+## CAPWAP protokol 
+Umoznuje WLC manazovat viacere APs  
+Zalozeny na LWAPP  
+Pridava bezpecnost s DTLS (Datagram Transport Layer Security)  
+Zapuzdruje a preposiela WLAN prevadzku medzi AP a WLC cez tunel (UDP 5246, UDP 5247)  
+Podporuje aj IPv4 (typ 17) aj IPv6 (typ 136)
+
+### Split MAC architektura 
+Robi vsetky funkcie ktore bezne vykonavaju APs a distribuuje ich medzi funkcne komponenty 
+
+|AP MAC functions|WLC MAC functions|
+|---|---|
+|Beacons and probe responses|Authentification|
+|Packet ack and retransmission|Association and reassociation of roadming clients|
+|Frame queueing and packet prioritization|Frame translation to other protocols|
+|MAC layer data encryption and decryption|Termination of 802.11 traffic on a wired interface|
+
+### DTLS sifrovanie
+Poskytuje bezpecnost medzi AP a WLC  
+By default zabezpecenie kanala zapnute, sifrovanie dat vypnute  
+
+### Flex Connect APs
+Pre konfiguraciu a riadenie APs cez WAN linku  
+
+Existuje v 2 modoch  
+- Connected mod 
+    - WLC je dostupne 
+    - AP ma konektivitu cez CAPWAP tunel  
+    - WLC vykonava vsetky CAPWAP funkcie 
+- Standalone mod 
+    - WLC je nedostupne  
+    - AP stratilo CAPWAP konektivitu s WLC 
+    - AP moze prevziat niektore z funkcii WLC na seba lokalne (prepinanie datovej prevadzky klinetov, autentifikacia klientov)
+
+## Planovanie WLAN nasadenia
+Co treba brat do uvahy 
+- Pocet pouzivatelov
+- Planovana priepustnost
+- Ake rychlosti pouzivatelia ocakavaju
+- Pouzitie neprekryvajucich sa kanalov APs 
+- Nastavenie vysielajuceho vykonu 
+
+Co treba zvazit
+- Napojenie na kabelaz
+- Napajanie
+- Ci je priestor na umiestnenie
+- Umiestnenie AP nad prekazky
+- Umiestnenie tesne pod strop v kazdej oblasti
+- Umiestnit AP tam, kde budu pouzivatelia 
+
+## WLAN hrozby
+- WLAN je otvorena pre vsetkych v dosahu (s prislusnymi povereniami (credentials))
+- Utoky - umyselne, neumyselne, zvonku, z vnutra
+- Osobitna nachylnost na 
+    - Odpocuvanie udajov
+    - Bezdrotovych votrelcov
+    - DoS utoky - pri nespravne nakonfigurovanych zariadeniach
+    - Podvrhnute APs (Rogue APs) - zhromazdovanie udajov o klientoch (MAC, pakety), pristup k sietovym zdrojom, MITM attack - ochrana - monitorovaci software
+    - Nahodne rusenie 
+        - Mikrovlnky, bezdrotove telefony, detske vysielacky, ...
+        - 2.4 GHz je viac nachylne ako 5 GHz
+
+### Managemet Frame DoS Attacs
+- Utok falosnym odpojenim (Spoofed Disconnect Attack)
+    - Utocnik posle sekvenciu prikazov pre diasociaciu (odpojenie) vsetkym bezdrotovym klientom 
+    - Klienti sa znova pokusia pripojit = zahltenie
+- Zaplava CTS ramcami (CTS flood)
+    - Utocnik pokryje celu sirku pasma
+    - Opakovane zaplavuje siet ramcami CTS na stanicu ktora neexistuje 
+    - Vsetci klienti prijimaju CTS a musia cakat kym utocnik neprestane vysielat ramce 
+
+## Zabezpecenie WLAN
+Maskovanie SSID (SSID cloaking) - zakazat posielanie SSID v beacon ramcoch - klientov treba manualne nakonfigurovat  
+
+MAC address filtering - manualne povolit/zakazat pristup na zaklade MAC
+
+### Autentifikacia pouzivatelov 
+- Open system - nic sa nedeje, klient poziada o pristup a dostane ho, idealne pouzit VPN
+- Shared key - heslo - WEP, WPA, WPA2 (`802.11i`), WPA3 (utocnik moze odchytit autentifikacny dialog a dokaze ziskat heslo (riesene pomocou EAP alebo WPA2))
+
+EAP
+- Protokol urceny na prenasanie roznych autentifikacnych dialogov medzi klientom (supplicat) a bodom vyzadujucim autentifikaciu (authenticator) 
+- Metody nad EAP 
+    - LEAP (Lightweight EAP) - Cisco, overenie pomocou mena a hesla
+    - PEAP (Protected EAP) - dvojfazova overovacia schema 
+        1. Pomocou TLS sa vybuduje bezpecne sifrovane spojenie a overi sa autenticita servera (TLS certifikat)
+        2. Volitelnym dalsim sposobom sa overi autenticita klienta
+    - EAP-TLS (EAP - Transport Layer Security)
+        - Vzajomne overenie klienta aj servera 
+        - Vybuduje sa bezpecne spojenie
+        - Vyzaduje si certifikaty aj pre klienta aj pre servera
+    - Vela dalsich metod 
+    - Pre multi-vedor environment je vhodne PEAP alebo EAP-TLS
+
+### Autentifikacia siete
+Tak ako klientov, aj siet treba autentifikovat (Rogue AP)  
+Tu su tiez vhodne metody kde sa server preukazuje certifikatom (PEAP, EAP-TLS, EAP-TTLS,...)  
+
+### Zabezpecenie prenasanych dat 
+Pasivne odpocuvanie nie je mozne detegovat  
+Radiovy signal nie je mozne lahko ohranicit  
+Treba akceptovat ze prevadzka bude odpocuvana a zamerat sa na to, aby odpocuvanim utocnik nic neziskal  
+Vhodne je sifrovanie prenasanych dat  
+`802.11b/g` obsahuje klasicku implementaciu sifrovania obsahu - WEP (Wired Equivalent Privacy)
+
+WEP  
+- Dnes uz velmi slabe
+- Staticky kluc 
+- Kluc je identicky s klucom pre volitelnu autentifikaciu 
+- Symetricka sifra 
+- Standardne 64-bit kluc (40+24), neskor 104 alebo 128-bit
+
+WPA
+- Nahrada za WEP
+- 128 + 48 bit
+- Kluc je priebezne aktualizovany TKIP protokolom (Temporary Key Integrity Protocol) 
+- Kazdy ramec je sifrovany inym klucom (odvodenym od zakladneho kluca)
+
+WPA2
+- Vyuziva sifrovaci algoritmus AES (Advanced Encryption Standard)
+- Namiesto TKIP pouziva CCMP (Counter Cipher Mode with Block Chaining Message Authentication Code Protocol)
+
+### Autentifikacia v organizacii
+Enterprise security mode - vyzaduje AAA server (Authentication, Authorization, Accounting) RADIUS server  
+Potrebne definovat 3 informacie 
+- RADIUS server IP address 
+- UDP ports 
+    - Vacsinou 1812 RADIUS Authentication, 1813 RADIUS Accounting
+- Shared Key
 
