@@ -34,24 +34,26 @@ line vty 0 15
 
 # Cisla portov
 
-| Port | Sluzba        | TCP alebo UPD? |
-| ---- | ------------- | -------------- |
-| 20   | FTP (data)    | TCP            |
-| 21   | FTP (control) | TCP            |
-| 22   | SSH           | TCP            |
-| 23   | Telnet        | TCP            |
-| 53   | DNS           | TCP aj UDP     |
-| 67   | DHCP (client) | UDP            |
-| 68   | DHCP (server) | UDP            |
-| 69   | TFTP          | TCP            |
-| 80   | HTTP          | TCP            |
-| 443  | HTTPS         | TCP            |
-| 520  | RIP           | UDP            |
-| 1812 | RADIUS auth | UDP |
-| 1813 | RADIUS accounting | UDP |
-| 1985 | HSRPv1        | UDP            |
-| 5246 | CAPWAP (source) | UDP          | 
-| 5247 | CAPWAP (destination) | UDP     |
+| Port | Sluzba               | TCP alebo UPD? |
+| ---- | -------------------- | -------------- |
+| 20   | FTP (data)           | TCP            |
+| 21   | FTP (control)        | TCP            |
+| 22   | SSH                  | TCP            |
+| 23   | Telnet               | TCP            |
+| 53   | DNS                  | TCP & UDP      |
+| 67   | DHCP (client)        | UDP            |
+| 68   | DHCP (server)        | UDP            |
+| 69   | TFTP                 | TCP            |
+| 80   | HTTP                 | TCP            |
+| 443  | HTTPS                | TCP            |
+| 520  | RIP                  | UDP            |
+| 546  | DHCPv6 (client)      | UDP            |
+| 547  | DHCPv6 (server)      | UDP            |
+| 1812 | RADIUS auth          | UDP            |
+| 1813 | RADIUS accounting    | UDP            |
+| 1985 | HSRPv1               | UDP            |
+| 5246 | CAPWAP (source)      | UDP            | 
+| 5247 | CAPWAP (destination) | UDP            |
 
 # Troubleshooting commands
 Prikazy ktore len nieco vypisuju  
@@ -90,7 +92,7 @@ ip route 0.0.0.0 0.0.0.0 192.168.1.1
 *"Pojmom \"floating static route\" sa oznacuje staticky zaznam o nejakej sieti, ktory sa do smerovacej tabulky dostane az vtedy, ked iny zaznam o tej istej sieti zo smerovacej tabulku vypadne"*  
 Basically zalozna cesta - ak jeden smerovac/cesta vypadne, bude nahradeny/a inym  
 
-Na vytvorenie zaloznej cesty sa zvysi metrika pri jej vytvarani   
+Na vytvorenie zaloznej cesty sa zvysi **administrative distance** pri jej vytvarani   
 ```
 ip route 0.0.0.0 0.0.0.0 172.16.2.2  
 ip route 0.0.0.0 0.0.0.0 10.10.10.2 5  
@@ -266,13 +268,22 @@ int s0/0/0
 > Note: Same as before, NAZOV je len nazov, napr. RIPt
 
 
-
-
 # VLAN
 Virtual LAN
 
-Access (pristupove) porty - medzi switchom a koncovym zariadenim - neznacuje sa  
-Trunk porty - medzi switchom a switchom *(resp. routerom (?))*  
+VLANs allow administrator to segment networks based on factors such as function, team, or application, without regard for the pshysical location of the users or devices  
+Each VLAN is considered a aseparate logical network  
+Unicast, broadcast and multicast is forwarded and flooded onlyu to end devices within corresponding VLAN  
+
+Benefits
+- Smaller broadcast domains - network is divided into parts  
+- Improved security - only users in the same VLAN can communicate together  
+- Improved IT efficiency - VLANs simplifies network management
+- Reduced cost *(?)*
+- Simpler project and application management
+
+Access (pristupove) porty - medzi switchom a koncovym zariadenim - neznackuje sa  
+Trunk porty - medzi switchom a inym sietovym zariadenim (switch, router)  
 
 ## Trunk Protokoly
 
@@ -392,12 +403,12 @@ Typy
 
 ### Management VLAN
 Pouziva za na management prepinaca  
-Defaultna VLAN 1 by sa mala zmenit na inu
+Defaultna VLAN 1 by sa mala zmenit na inu  
+
 ```
 interface vlan 99
 	ip add 192.168.1.2
 ```
-
 
 ## DTP - Dynamic Trunk Protocol
 Interface moze byt na jednom z nasledovnych rezimov  
@@ -419,7 +430,6 @@ switchport mode access
 # v netacade bolo aj tento prikaz, ale nie som si sure ze co robi
 switchport nonegotiate
 ```
-
 
 Ak su na obidvoch stranach rovnake mody tak nie je problem  
 Situacia `trunk` a `access` = chyba - limited connectivity  
@@ -602,6 +612,38 @@ int vlan 20
 int vlan 30
     ip add 192.168.30.1 255.255.255.0
 ```
+
+## Switch Boot Sequence
+Postup ktory sa deje pri bootovani switcha  
+> Nevedel som kam to dat tak som to bachol sem. V netacade sa spominali switche hned na zaciatku   
+
+1. Power-on self-test (POST)
+    - Program stored in ROM
+    - Checks the CPU subsystem 
+    - Tests CPU, DRAM and portion of flash
+2. Bootloader  
+3. Bootloader performs low-level CPU init
+    - Initializes the CPU registers, which controls where physical memory is mapped, the quantity of memory and it's speed 
+4. Bootloader initializes the flash system on the system board
+5. Bootloader locates and loads IOS image into memory and gives control of the switch to the IOS
+
+```
+S1(config)# boot system flash:/x2960-lanbasek9-mz.150-2.SE/c2960-lanbasek9-mz.150-2.SE.bin
+```
+
+## Switching forwarding methods 
+### Store-and-Forward
+Switch nabufferuje **cely** frame az potom robi nieco dalej  
+Skontroluje FCS, a ked je to v pohode tak posle frame dalej, inak ho dropne  
+
+### Cut-Through Switching
+Nazyvany aj Fast-Forward switching  
+Switch si precita len cielovu MAC adresu (**6 bit**) a hned posiela frame  
+Je rychlejsie, ale mozu sa posielat chybne frames  
+
+#### Fragment free switching  
+Upravena verzia Cut-Through  
+Precita prvych **64 bit**ov (In an Ethernet LAN, collision fragments are detected in the first 64 bytes)  
 
 
 # STP
