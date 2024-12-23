@@ -205,6 +205,23 @@ nmcli d wifi connect <ssid> password <password>  # connects to wifi. replace <ss
 nmcli r wifi off  # disable wifi completely
 ```
 
+### Release/Renew IP address
+```bash
+# you might need to install this package
+sudo apt install isc-dhcp-client
+
+# release and renew
+sudo dhclient -r 
+sudo dhclient
+
+# chatgpt said it was suppposed to be like this, but for me it worked anyway
+sudo dhclient -r wlp2s0
+sudo dhclient wlp2s0
+
+# check with this command
+ip a
+```
+
 ## Local DNS
 Add DNS entry for your PC
 You need to edit `/etc/hosts` file and add like something like this  
@@ -243,6 +260,20 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 Commands that do not deserve full section, but deserves to be there  
 
 `hostnamectl` - find info about OS and more  
+
+Disable sleep on lid close  
+```bash
+# open this file
+sudo nvim /etc/systemd/logind.conf
+
+# write these lines
+HandleLidSwitch=ignore
+HandleLidSwitchDocked=ignore
+# save and quit
+
+# restart this process
+sudo systemctl restart systemd-logind
+```
 
 
 # Cool programs
