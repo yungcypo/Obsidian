@@ -1910,3 +1910,512 @@ sister.print_name()  # Ferka
 brother.print_age()  # 999
 friend.print_surname()  # Janosik
 ```
+
+# Various stuff
+## Modules
+`dir()`  
+```python
+import math
+print(dir(math))  # prints all functions of math module
+```
+
+`platform` module
+```python
+import platform
+
+print(platform.platform())  # Linux-6.12.1-arch1-1-x86_64-with-glibc2.40
+print(platform.machine())  # x86_64
+print(platform.uname())  # uname_result(system='Linux', node='HP-Victus-Endeavour', release='6.12.1-arch1-1', version='#1 SMP PREEMPT_DYNAMIC Fri, 22 Nov 2024 16:04:27 +0000', machine='x86_64')
+print(platform.system())  # Linux
+print(platform.version())  # #1 SMP PREEMPT_DYNAMIC Fri, 22 Nov 2024 16:04:27 +0000
+print(platform.architecture())  # ('64bit', 'ELF')
+# print(platform.processor())  #
+print(platform.python_version())  # 3.12.7
+print(platform.python_implementation())  # CPython
+print(platform.python_build())  # ('main', 'Oct  1 2024 11:15:50')
+# print(platform.python_revision())  #
+print(platform.python_compiler())  # GCC 14.2.1 20240910
+```
+
+## String/List methods
+`ord()` method on character *(ordinal)*  
+returns ascii code of given character  
+```python
+print(ord('a'))  # 97
+print(ord(' '))  # 32
+```
+
+`chr()` mathod is the opposite of `ord()` - returns a symbol by its number in ascii table  
+```python
+print(chr(97))  # 'a'
+print(chr(98))  # 'b'
+print(chr(99))  # 'c'
+```
+
+`center()` method on string  
+```python
+print("|" + "alpha.center(11)" + "|")  # |   alpha   |
+
+print('[' + 'Beta'.center(2) + ']')  # [Beta]
+print('[' + 'Beta'.center(4) + ']')  # [Beta]
+print('[' + 'Beta'.center(6) + ']')  # [ Beta ]
+
+print("|" + "alpha.center(9, "*")" + "|")  # |**alpha**|
+```
+
+`join()` method on string
+```python
+print(",".join(["omicron", "pi", "rho"]))  # omicron,pi,rho
+```
+
+## Useful Exception
+|Name|Decription|
+|-|-|
+|`ArithmeticError`|An abstract exception including all exceptions caused by arithmetic operations like zero division or an argument's invalid domain|
+|`AssertionError`|*\*discussed later\**|
+|`BaseException`|The most general exception|
+|`IndexError`|A concrete exception raised when you try to access a non-existent sequence's element (e.g., a list's element)|
+|`KeyboardInterrupt`|A concrete exception raised when the user uses a keyboard shortcut designed to terminate a program's execution (Ctrl-C in most OSs); if handling this exception doesn't lead to program termination, the program continues its execution|
+|`LookupError`|An abstract exception including all exceptions caused by errors resulting from invalid references to different collections (lists, dictionaries, tuples, etc.)|
+|`MemoryError`|A concrete exception raised when an operation cannot be completed due to a lack of free memory|
+|`OverflowError`|A concrete exception raised when an operation produces a number too big to be successfully stored|
+|`ImportError`|A concrete exception raised when an import operation fails|
+|`KeyError`|A concrete exception raised when you try to access a non-existent element in a collection (e.g., a dictionary's element)|
+
+All the exceptions are like this  
+```
+BaseException
+    +---Exception
+    |    +---TypeError
+    |    +---StopAsyncIteration
+    |    +---StopIteration
+    |    +---ImportError
+    |    |    +---ModuleNotFoundError
+    |    |    +---ZipImportError
+    |    +---OSError
+    |    |    +---ConnectionError
+    |    |    |    +---BrokenPipeError
+    |    |    |    +---ConnectionAbortedError
+    |    |    |    +---ConnectionRefusedError
+    |    |    |    +---ConnectionResetError
+    |    |    +---BlockingIOError
+    |    |    +---ChildProcessError
+    |    |    +---FileExistsError
+    |    |    +---FileNotFoundError
+    |    |    +---IsADirectoryError
+    |    |    +---NotADirectoryError
+    |    |    +---InterruptedError
+    |    |    +---PermissionError
+    |    |    +---ProcessLookupError
+    |    |    +---TimeoutError
+    |    |    +---UnsupportedOperation
+    |    |    +---herror
+    |    |    +---gaierror
+    |    |    +---timeout
+    |    |    +---Error
+    |    |    |    +---SameFileError
+    |    |    +---SpecialFileError
+    |    |    +---ExecError
+    |    |    +---ReadError
+    |    +---EOFError
+    |    +---RuntimeError
+    |    |    +---RecursionError
+    |    |    +---NotImplementedError
+    |    |    +---_DeadlockError
+    |    |    +---BrokenBarrierError
+    |    +---NameError
+    |    |    +---UnboundLocalError
+    |    +---AttributeError
+    |    +---SyntaxError
+    |    |    +---IndentationError
+    |    |    |    +---TabError
+    |    +---LookupError
+    |    |    +---IndexError
+    |    |    +---KeyError
+    |    |    +---CodecRegistryError
+    |    +---ValueError
+    |    |    +---UnicodeError
+    |    |    |    +---UnicodeEncodeError
+    |    |    |    +---UnicodeDecodeError
+    |    |    |    +---UnicodeTranslateError
+    |    |    +---UnsupportedOperation
+    |    +---AssertionError
+    |    +---ArithmeticError
+    |    |    +---FloatingPointError
+    |    |    +---OverflowError
+    |    |    +---ZeroDivisionError
+    |    +---SystemError
+    |    |    +---CodecRegistryError
+    |    +---ReferenceError
+    |    +---BufferError
+    |    +---MemoryError
+    |    +---Warning
+    |    |    +---UserWarning
+    |    |    +---DeprecationWarning
+    |    |    +---PendingDeprecationWarning
+    |    |    +---SyntaxWarning
+    |    |    +---RuntimeWarning
+    |    |    +---FutureWarning
+    |    |    +---ImportWarning
+    |    |    +---UnicodeWarning
+    |    |    +---BytesWarning
+    |    |    +---ResourceWarning
+    |    +---error
+    |    +---Verbose
+    |    +---Error
+    |    +---TokenError
+    |    +---StopTokenizing
+    |    +---Empty
+    |    +---Full
+    |    +---_OptionError
+    |    +---TclError
+    |    +---SubprocessError
+    |    |    +---CalledProcessError
+    |    |    +---TimeoutExpired
+    |    +---Error
+    |    |    +---NoSectionError
+    |    |    +---DuplicateSectionError
+    |    |    +---DuplicateOptionError
+    |    |    +---NoOptionError
+    |    |    +---InterpolationError
+    |    |    |    +---InterpolationMissingOptionError
+    |    |    |    +---InterpolationSyntaxError
+    |    |    |    +---InterpolationDepthError
+    |    |    +---ParsingError
+    |    |    |    +---MissingSectionHeaderError
+    |    +---InvalidConfigType
+    |    +---InvalidConfigSet
+    |    +---InvalidFgBg
+    |    +---InvalidTheme
+    |    +---EndOfBlock
+    |    +---BdbQuit
+    |    +---error
+    |    +---_Stop
+    |    +---PickleError
+    |    |    +---PicklingError
+    |    |    +---UnpicklingError
+    |    +---_GiveupOnSendfile
+    |    +---error
+    |    +---LZMAError
+    |    +---RegistryError
+    |    +---ErrorDuringImport
+    +---GeneratorExit
+    +---SystemExit
+    +---KeyboardInterrupt
+```
+
+### Make your own exceptions
+```python
+class PizzaError(Exception):
+    def __init__(self, pizza, message):
+        Exception.__init__(self, message)
+        self.pizza = pizza
+
+## you can raise your own exception as you would with any other 
+raise PizzaError("margherita", "Pizza is not on the menu")
+```
+
+
+
+## Assert
+```python
+i = int(input("Enter a number: "))
+
+assert i != 0
+print(1/i)
+```
+We assert that `i != 0`  
+- If this condition is true, nothing happends and code continues normally
+- If this condition is false (user enters `0` in this case), we get an `AssertionError`
+
+## Classes
+```python
+class Auto:
+    something = 0  # class variable
+
+    def __init__(self):
+        self.name = "alfa romel"  # instance variable
+        self._number = 123456  # private instance variable
+        self.__another_number = 123456  # *name mandling* instance variable
+
+auticko1 = Auto()
+auticko2 = Auto()
+```
+
+- `class variable` is shared amongst all instances. If you share it in one instance, it will change everywhere  
+- `instance variable` is specific to one instance only. Each instance can have it different  
+
+
+- `private variable` should be only visible for corresponding class, and you should not access it although it can be accessed in come cases  
+- `name mandling variable` similar to private, but you have to specify the class name if you want to access it, like this: `print(auticko1._Auto.__another_number)`
+
+### Some implicit attributes
+Let's say we have simple class like this  
+```python
+class Animal:
+    something = 4
+
+    def __init__(self):
+        self.color = "blue"
+
+    def method(self):
+        pass
+
+wolf = Animal()
+```
+
+```python
+# __dict__
+print(wolf.__dict__)  # {'color': 'blue'}
+print(Animal.__dict__)  # {'__module__': '__main__', 'something': 4, '__init__': <function Animal.__init__ at 0x7e5df201d760>, 'method': <function Animal.method at 0x7e5df201cc20>, '__dict__': <attribute '__dict__' of 'Animal' objects>, '__weakref__': <attribute '__weakref__' of 'Animal' objects>, '__doc__': None}
+```
+
+```python
+# __name__
+print(type(wolf).__name__)  # Animal
+print(Animal.__name__)  # Animal
+```
+
+```python
+# __module__
+print(wolf.__module__)  # __main__
+print(Animal.__module__)  # __main__
+```
+
+```python
+# __bases__
+# shows parent classes
+class SuperAnimal(animal):
+    pass
+
+print(Animal.__bases__)  # (<class 'object'>,)
+print(SuperAnimal.__bases__)  # (<class '__main__.Animal'>,)
+```
+
+### Methods 
+`__str__()` method  
+When you want to `print(instance_name)`, it usually returns something like `<__main__.Star object at 0x784e30330410>`  
+You can change it with this method  
+Something like overloading `>>` operator in C++  
+
+```python
+class Star:
+    def __init__(self, name, galaxy) -> None:
+        self._name = name
+        self._galaxy = galaxy
+
+    def __str__(self):
+        return self._name + " in " + self._galaxy + " galaxy"
+
+sun = Star("Sun", "Milky Way")
+print(sun)  # Sun in Milky Way galaxy 
+```
+
+`__iter__()` and `__next__()`  
+```python
+class Counter:
+    def __init__(self, start, end):
+        self.current = start
+        self.end = end
+
+    def __iter__(self):
+        return self  # The iterator is the object itself
+
+    def __next__(self):
+        if self.current > self.end:
+            raise StopIteration  # End of iteration
+        value = self.current
+        self.current += 1
+        return value
+
+# Usage
+counter = Counter(1, 5)
+for number in counter:
+    print(number)  # Outputs 1, 2, 3, 4, 5
+```
+
+`issubclass(class_one, class_two)` returns `True` if `class_one` is child class of `class_two`  
+`isinstance(object_name, class_name)` returns `True` if `object_name` is instace of `class_name`  
+
+## `yield`
+The yield keyword in Python is used in generators, a type of iterable that generates items one at a time as needed, rather than creating all the items upfront and storing them in memory  
+It's a key feature for writing efficient, memory-friendly iteration  
+
+1. Pauses Function Execution: When yield is encountered, the function's execution is paused, and the value after yield is returned to the caller.
+2. Resumes Execution: The function can resume execution from where it left off when the generator's __next__() method is called again.
+3. Creates a Generator: When a function contains yield, it automatically becomes a generator function, returning a generator object when called.
+
+```python
+def count_up_to(max_value):
+    current = 1
+    while current <= max_value:
+        yield current  # Pause and return the current value
+        current += 1
+
+# Using the generator
+counter = count_up_to(5)
+
+# Consume the generator
+for number in counter:
+    print(number)  # Outputs: 1, 2, 3, 4, 5
+
+# another example
+def fun(n):
+    for i in range(n):
+        yield i
+
+
+for v in fun(5):
+    print(v)  # Outputs: 0, 1, 2, 3, 4
+```
+
+## Inline stuff
+### Conditoins
+```
+print(True if 0 >= 0 else False)
+```
+
+### Generators 
+```python
+the_list = [1 if x % 2 == 0 else 0 for x in range(10)]
+```
+
+### Lambda function
+```python
+lambda square x: x*x
+print(square(5))  # 25
+```
+
+```python
+lambda poly x: 2 * x**2 - 4 * x + 2
+print(poly(16))
+```
+
+```python
+def foo(x, f):
+    return f(x)
+
+print(foo(9, lambda x: x ** 0.5))
+```
+
+#### Lambda with `map()` and `filter()`
+```python
+short_list = ['mython', 'python', 'fell', 'on', 'the', 'floor']
+new_list = list(map(lambda s: s.title(), short_list))
+
+print(new_list)  # Mython, Python, Fell, ...
+```
+
+```python
+short_list = [1, "Python", -1, "Monty"]
+new_list = list(filter(lambda s: isinstance(s, str), short_list))
+
+print(new_list)  # Python, Monty
+```
+
+## `os` module
+```python
+import os
+
+print(os.uname())  # posix.uname_result(sysname='Linux', nodename='HP-Victus-Endeavour', release='6.12.1-arch1-1', version='#1 SMP PREEMPT_DYNAMIC Fri, 22 Nov 2024 16:04:27 +0000', machine='x86_64')
+print(os.name)  # posix
+
+os.mkdir("my_new_directory")
+print(os.listdir())
+
+os.mkdirs("my_new_directory/another_directory")
+os.chdir("my_new_directory")
+print(os.listdir())
+
+os.rmdir("another_directory")
+os.removedirs("my_new_directory/another_directory")
+
+print(os.getcwd)  # pwd in linux
+```
+
+### `os.system()`
+Let's you execute system commands
+```python
+os.system("ls")
+os.system("pwd")
+os.system("echo $SHELL")
+os.system("fastfetch")
+```
+
+## Datetime
+```python
+from datetime import date
+
+my_date = date(2020, 9, 29)
+print("Year:", my_date.year) # Year: 2020
+print("Month:", my_date.month) # Month: 9
+print("Day:", my_date.day) # Day: 29
+```
+
+```python
+from datetime import date
+print("Today:", date.today()) # Displays: Today: 2020-09-29
+```
+
+```python
+from datetime import date
+import time
+```
+
+```python
+from datetime import date
+import time
+
+timestamp = time.time()
+d = date.fromtimestamp(timestamp)
+```
+
+```python
+from datetime import time
+
+t = time(13, 22, 20)
+
+print("Hour:", t.hour) # Hour: 13
+print("Minute:", t.minute) # Minute: 22
+print("Second:", t.second) # Second: 20
+```
+
+```python
+import time
+
+time.sleep(10)
+print("Hello world!") # This text will be displayed after 10 seconds.
+```
+
+```python
+from datetime import datetime
+
+dt = datetime(2020, 9, 29, 13, 51)
+print("Datetime:", dt) # Displays: Datetime: 2020-09-29 13:51:00
+```
+
+```python
+from datetime import date
+
+d = date(2020, 9, 29)
+print(d.strftime('%Y/%m/%d')) # Displays: 2020/09/29
+```
+
+%Y – returns the year with the century as a decimal number;
+%m – returns the month as a zero-padded decimal number;
+%d – returns the day as a zero-padded decimal number;
+%H – returns the hour as a zero-padded decimal number;
+%M – returns the minute as a zero-padded decimal number;
+%S – returns the second as a zero-padded decimal number.
+
+```python
+from datetime import date
+
+d1 = date(2020, 11, 4)
+d2 = date(2019, 11, 4)
+
+d = d1 - d2
+print(d) # Displays: 366 days, 0:00:00.
+print(d * 2) # Displays: 732 days, 0:00:00.
+```
+

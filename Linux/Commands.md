@@ -18,6 +18,17 @@ Shows the file size before and after compressing
 tar -l file.tar.gz
 ```
 
+
+## Extra compression
+Requires additional package(s) but has a lot better compression ratio  
+```shell
+7z a -t7z -m0=lzma2 -mx=9 -md=64m output.7z input
+```
+
+```shell
+zstd -19 --ultra input -o output.zst
+```
+
 # Working with text
 
 ## Cut
