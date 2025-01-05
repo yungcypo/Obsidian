@@ -1966,7 +1966,7 @@ Kanalov je 24
 Neprekryvajuce sa kanaly: 36, 48, 60
 
 ### Channel Reuse
-![](../images/siete_channel_reuse.png)
+![](../others/images/siete_channel_reuse.png)
 
 Oblast je pokryta tak, aby sa jednotlive kanaly neinterferovali *(is that even a word?)*  
 
@@ -2001,7 +2001,7 @@ Ak je dopyt po konkretnom bezdrotovom kanali prilis vysoky, moze dojst k jeho na
     - Prenos kanalmi moze bezat simultanne 
     - Komplexna technika pouzivana vo vysokorychlostnych prenosoch 
     - `802.11a/g/n/ac`
-    - ![OFDM](../images/siete_ofdm.png)
+    - ![OFDM](../others/images/siete_ofdm.png)
 
 ## Standardy IEEE 802.11  
 |IEEE standard|Year adopted|Frequency|Max Data Rate (practical max data rate)|Max range|Note|

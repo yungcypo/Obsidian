@@ -1,11 +1,13 @@
 # School
-Various notes from school
 
-List of all notes 
+## 1st year
 
-[Siete](./Siete.md) a [Siete Commands](./SieteCommands.md) su spolocne poznamky k predmetom PIKS, PS1, PS2, PS3  
+♨ [INF1 & INF2](../others/java/) + [some repositories](https://github.com/cyprich?tab=repositories&q=school&type=&language=java)
 
-2. Year
-    - Winter semester
-        - [Digitalne meny a blockchain](./DMB.md)
-        - [Python v Sietovych Aplikaciach](./PSA.md)
+## 2nd year
+
+🌐 [PS1](./PS1.md) + [Netacad CCNA2 otazky](./CCNA2.md)  
+🌐 [PS1 - commands](./PS1_commands.md)  
+₿ [Digitalne meny a blockchain](./DMB.md) + [Otazky na skusku](./DMB_skuska.md)  
+🐍 [Python v Sietovych Aplikaciach](./PSA.md) + [repository](https://github.com/cyprich/PSA)  
+🖥️ [INF3](../others/cpp/)

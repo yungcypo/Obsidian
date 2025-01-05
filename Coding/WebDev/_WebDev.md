@@ -1,2 +1,5 @@
 # Web Development
-There are lot of things to know about Web Development, but most important are [HTML](./HTML.md), [CSS](./CSS.md) and [JavaScript](./JavaScript.md) 
+
+🦴 [HTML](./HTML.md) or [Old HTML tutorial](./HTML Tutorial.txt)  
+🧍 [CSS](./CSS.md) or [Old CSS tutorial](./CSS Tutorial.txt)  
+🤸 [JavaScript](./JavaScript.md) or [Old JavaScript tutorial](./JS Tutorial.txt)
