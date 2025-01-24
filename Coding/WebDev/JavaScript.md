@@ -2,7 +2,7 @@
 
 JavaScript (also known as JS, _has nothing to do with Java_) is a programming language used mainly in Web Development alongside HTML and CSS
 JavaScript is a huge concept, only a bit of it will be discussed here  
-Also check out [React](./React.md), which is a JavaScript library
+Also check out [React](./React.md), which is a JavaScript library  
 Also check out [TypeScript](./TypeScript.md), which is a programming language that extends JavaScript
 
 # Basic stuff

@@ -4,5 +4,5 @@
 🐍 [Python](./Python.md)  
 ♨ [Java](./Java.md)  
 🔵 [Lua](./Lua.md)  
-🛢 [SQL](./SQL.md)
+🛢 [SQL](./SQL.md)  
 🌐 [Web Development](./WebDev/_WebDev.md)
