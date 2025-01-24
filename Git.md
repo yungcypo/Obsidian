@@ -32,8 +32,19 @@ Adds all png files
 ### git add .
 Adds all files
 
+### git add -p \<file>
+Allows you to `git add` more precisely, just some lines for example  
+It will show you a chunk of your code and you can do following:
+- `y` - yes - add this chunk
+- `n` - no - do not add this chunk
+- `s` - split - split chunk into smaller pieces
+- `e` - edit - manually edit and pick lines
+
 ## git restore --staged \<file>
 Removes added files
+
+## git rm --cached \<file>
+Removes files that already have been on git, but keeps them on device
 
 ## git commit
 Makes commit  
@@ -140,3 +151,23 @@ To avoid typing your password or token every time you push to a Git repository, 
 # Change remote URL
 I changed my GitHub username, so I had to do this for every repo  
 `git remote set-url origin git@github.com:cyprich/Obsidian.git`  
+
+# Add second URL
+Once I had project on my GitHub and school GitLab, here's how I did it  
+```
+# only change email locally on this repo
+git config user.email "school.email@school.com"  
+
+# actually adding new repo
+git remote add gitlab https://osmijanko.fri.uniza.sk/cyprich6/filamenty
+
+# check with
+git remote -v
+
+# pushing to repo
+git push origin master
+git push gitlab master
+
+# push to both repos automatically
+git config push.default mathing
+```
