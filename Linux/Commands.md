@@ -308,6 +308,8 @@ Commands that do not deserve full section, but deserves to be there
 
 `hostnamectl` - find info about OS and more
 
+`lspci`
+
 Disable sleep on lid close
 
 ```bash
