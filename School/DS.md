@@ -2,20 +2,21 @@
 
 ## Basics
 
-DDL  
-DML  
-DAS/DCL  
-DIS/TCL  
+DML - Select, Update, Delete, Insert  
+DDL (Data Definition Language) - Create, Alter, Drop - automaticky robi commit  
+DCL  
+TCL (Transaction Control Language, niekedy aj DAS) - Commit, Rollback
 
 ### Datove typy
+
 - `VARCHAR(5)` - ako keby string s variabilnou dlzkou (max 5 znakov)
 - `VARCHAR2(5)` - novsia verzia `VARCHAR`
--  `CHAR(5)` - ako keby string s pevne danou dlzkou 5
+- `CHAR(5)` - ako keby string s pevne danou dlzkou 5
 
 - `NUMBER(x, y)` - ciselna hodnota
-	- `x` - maximalny pocet znakov ktore bude mat cislo
-	- `y` - pocet znakov za desatinnou ciarkou
-	- `NUMBER(10, 0) = NUMBER(10) = INTEGER(10)`
+  - `x` - maximalny pocet znakov ktore bude mat cislo
+  - `y` - pocet znakov za desatinnou ciarkou
+  - `NUMBER(10, 0) = NUMBER(10) = INTEGER(10)`
 - `SMALLINT`, `FLOAT`, `DOUBLE`
 
 - `DATE` - datum
@@ -25,6 +26,7 @@ DIS/TCL
 - Oracle ma iba `DATE`, ktore je akokeby `DATETIME`
 
 Formaty datumov
+
 - `YYYY` / `YY` / `RRRR` / `RR`
 - `MM`
 - `DD`
@@ -33,7 +35,7 @@ Formaty datumov
 - `SS`
 - ...
 
-### *neviem ako sa to vola*
+### _neviem ako sa to vola_
 
 |       |                     |                                                                                                                    |
 | ----- | ------------------- | ------------------------------------------------------------------------------------------------------------------ |
@@ -43,6 +45,7 @@ Formaty datumov
 | `PFK` | Primary Foreign Key | Primary + Foreign                                                                                                  |
 
 ## `SELECT`
+
 ```sql
 SELECT * FROM studenti  -- vypise vsetko o vsetkych zaznamoch z tabulky studenti
 
@@ -59,6 +62,7 @@ SELECT meno, rocnik+1 AS novy_rocnik FROM studenti
 ```
 
 Praca s `Null`
+
 ```sql
 -- NEMOZEME SPRAVIT TOTO
 SELECT * FROM students WHERE ulica!=null
@@ -67,10 +71,10 @@ SELECT * FROM students WHERE ulica!=null
 SELECT * FROM students WHERE ulica IS NOT null
 ```
 
-
 Zliepanie viac tabuliek dokopy - `JOIN`
+
 ```sql
-SELECT * 
+SELECT *
 FROM osobne_udaje
 JOIN student
 USING (rodne_cislo)
@@ -84,12 +88,14 @@ ON (osobne_udaje.cislo = student.cislo)
 ```
 
 Popis tabulky - `description`
+
 ```sql
 DESCRIBE osobne_udaje
 DESC osobne_udaje
 ```
 
 `Like` - pouzitie akoze wildcards spolu so znakmi `%` a `_`
+
 ```sql
 -- Znak % specifikuje lubovolny pocet znakov
 SELECT *
@@ -103,6 +109,7 @@ WHERE meno LIKE "_a%"  -- vsetci co maju na druhom mieste "a"
 ```
 
 `Dual` - specialna tabulka s jednym zaznamom (dummy)
+
 ```sql
 -- Ak by sme spustili nasledovny prikaz, vratilo by nam to tolko odpovedi kolko je zaznamov v tabulke
 SELECT 1+1 FROM studenti
@@ -113,6 +120,7 @@ SELECT 1+1 FROM dual
 ```
 
 Datumy
+
 ```sql
 SELECT to_date('05-01-2025', 'DD-MM-YYYY') FROM dual -- formatovanie datumu
 
@@ -121,3 +129,214 @@ SELECT to_char(sysdate, 'DD.MM.YY') FROM dual  -- dnesny datum
 SELECT sysdate+1 FROM dual  -- dnesny datum + 1 den
 SELECT add_months(sysdate, 2)  -- za 2 mesiace
 ```
+
+Nejake selectiky
+
+```sql
+select meno,priezvisko
+    from os_udaje join student(using rod_cislo)
+    where rocnik=2;
+
+select meno,priezvisko
+    from os_udaje
+    where rod_cislo IN (select rod_cislo from student where rocnik=2);
+```
+
+```sql
+select meno,priezvisko
+    from os_udaje
+    where rod_cislo not in (select rod_cislo from student);
+
+select meno,priezvisko
+    from os_udaje
+    where rod_cislo in (select rod_cislo from student where rocnik is null);
+    -- cez IN sa neda spravit, vnoreny select nikdy nic nevrati lebo rocnik je NN
+
+select meno,priezvisko
+    from os_udaje o
+    where NOT EXISTS
+    (select 'x' from student s where s.rod_cislo=o.rod_cislo);
+    -- univerzalnejsie riesenie - mozeme dat viac podmienok
+```
+
+Toto bude dolezite pri INSERT, DELETE a UPDATE
+
+## INSERT
+
+Vztahuje sa iba na jednu tabulku
+
+```sql
+INSERT INTO os_udaje
+    values('560123/1234', 'Michal', 'Kvet', 'Univerzitna', '01026', 'Zilina')
+
+INSERT INTO os_udaje
+    values('560123/1235', 'Michal', 'Kvet', null, null, null)
+
+INSERT INTO os_udaje(meno, priezvisko, rod_cislo)
+    values('Michal', 'Kvet', '560123/1236')
+```
+
+Ulozim vysledok selectu do tabulky
+
+```sql
+select *
+    from priklad_db2.os_udaje  -- z inej db, tabulka pouzivatela "priklad_db2"
+
+insert into os_udaje(rod_cislo, meno, priezvisko)
+    select rod_cislo, meno, priezvisko
+        from priklad_db2.os_udaje;
+        where priklad_db2.rod_cislo not in
+            (select rod_cislo from os_udaje)
+
+insert into os_udaje(rod_cislo, meno, priezvisko)
+    select rod_cislo, meno, priezvisko
+        from priklad_db2.os_udaje p;
+        where p.rod_cislo not in
+            (select rod_cislo from os_udaje)
+```
+
+VALUES vlozi jeden riadkok, presne definujem co idem vlozit  
+Pomocou SELECT mozem vlozit lubovolny pocet udajov
+
+```sql
+desc student
+insert into student
+    values(500123412, 100, 0, '311234/1234', 1, '5ZI011', 'S', null, sysdate)
+    -- error - narusene referencen obmedzenie - v druhej tabulke neexistuje uvedene rodne cislo
+```
+
+## UPDATE
+
+Vzdy modifikuje jednu tabulku
+
+```sql
+update student
+    set rocnik=3
+    where os_cislo = 123456;
+
+update student
+    set rocnik=3,st_skupina=5'5ZI031'
+    where os_cislo = 123456
+```
+
+Vylucim vsetkych petrov zo studia
+
+```sql
+update student
+    set ukoncenie=sysdate
+    where rod_cislo in
+        (select rod_cislo from os_udaje
+            where meno='Peter')
+
+-- nepouzivat JOIN
+
+update student
+    set ukoncenie=sysdate
+    where EXISTS
+        (select 'x' from os_udaje
+            where meno='Peter' AND os_udaje.rod_cislo=student.rod_cislo)
+```
+
+```sql
+update student
+    set stav='x'
+    where exists
+        (select 'x' from zap_predmety join predmet using (cis_premdetu)
+        where nazov='Zaklady databazovych Systemy')
+```
+
+## DELETE
+
+Vzdy pracujem s jednou tabulkou  
+Ziadny JOIN  
+Ak su nejake FK na polozku ktoru chcem vymazat tak to neprejde - ak student existuje v zapisanych predmetoch, studenta nemozem vymazat
+
+```sql
+delete -- nepisu sa ziadne atributy - vymazavam cely riadok
+    from zap_predmety
+    where os_cislo=501313
+
+delete from student
+    where os_cislo=501313
+```
+
+Chcem vymazat predmet DBS
+
+```sql
+delete from predmety where nazov='DBS'
+-- toto nemozem spravit lebo predmet je este v inych tabulkach
+
+delete from zap_predmety
+    where cislo_predmetu in
+        (select cis_premdetu from predmet
+            where nazov='DBS')
+delete from st_program
+    where cislo_predmetu in
+        (select cis_premdetu from predmet
+            where nazov='DBS')
+delete from predmet_bod
+    where cislo_predmetu in
+        (select cis_premdetu from predmet
+            where nazov='DBS')
+delete from predmet where nazov='DBS'
+```
+
+Chcem vymazat studijny odbor
+
+```sql
+delete from st_program p
+    where EXISTS
+        (select 'x' from st_odbory o
+        where popis_odboru='Manazment' -- iba takto sa vymaze vsetko!!!
+        and p.st_odbor = o.st_odbor
+        and p.st_zameranie = o.st_zameranie) -- treba toto doplnit!
+delete from zap_predmety zp
+    where EXISTS
+        (select 'x' from st_odbory o join student using(st_odbor, st_zameranie)
+        where popis_odboru='Manazment'
+        and student.os_cislo = zp.os_cislo
+delete from student s
+    where EXISTS
+        (select 'x' from st_odbory o
+        where popis_odboru='Manazment' -- iba takto sa vymaze vsetko!!!
+        and s.st_odbor = o.st_odbor
+        and s.st_zameranie = o.st_zameranie) -- treba toto doplnit!
+
+delete from st_odbory where popis_odboru='Manazment'
+```
+
+---
+
+Chcem zmenit rodne cislo studentovi (`801234/1234` -> `8801234/1234`)
+
+```sql
+insert into os_udaje(rod_cislo, meno, priezvisko, ulica, psc, obec)
+    select '880123/1234', meno, priezvisko, ulica, psc, obec
+        from os_udaje
+            where rod_cislo = '801234/1234'
+
+update student
+    set rod_cislo='881234/1234'
+    where rod_cislo='801234/1234'
+
+delete
+```
+
+## TCL
+
+Chcem aby presla operacia bud cela, alebo vobec  
+Napr. bankove transakcie
+
+- `COMMIT` - potvrdit zmeny
+- `ROLLBACK` - zahodit vsetky zmeny
+
+Ak raz spravim commit, uz mi ziadny rollback nepomoze  
+Rollback sa vracia ku poslednemu commitu (resp. na zaciatok?)
+
+Vlastnost **atomicita** - bud transakcia prebehne cela alebo vobec - **A**  
+Vlastnost **konzistencia** - vsetky obmedzenia (PK, NN, ) su zachovane - **C**  
+Vlastnost **izolovanost** - ked mame 2 sessions - ak spravim zmeny v jednej session, v druhej to budem vidiet iba ak dam commit - **I**  
+Vlastnost **durabilita** - **D**
+
+= **ACID**
+
