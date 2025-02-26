@@ -18,4 +18,5 @@
 🖥️ [INF3](../others/cpp/) + [repository](https://github.com/cyprich/INF3)  
 🖥️ [C# a .NET](./CSharp.md) + [repository](https://github.com/cyprich/sisarp)  
 🖥️ [AUS](./AUS.md) + [repository](https://github.com/cyprich/AUS)  
-🖥️ [VVS](./VVS.md)
+🖥️ [VVS](./VVS.md)  
+💾 [DS](./DS.md)
