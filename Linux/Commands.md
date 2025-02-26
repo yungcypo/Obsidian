@@ -331,6 +331,14 @@ sudo apt install stress
 stress --cpu 8 --io 4 --vm 4 --vm-bytes 1024M --timeout 10s
 ```
 
+## Fingerprint
+
+You can log in into your device with fingerprint  
+First of all, make sure you have physical fingerprint sensor  
+Make sure you have installed `fprintd` package (`yay -S fprintd`)  
+To scan finger, use the command `fprintd-enroll`  
+Follow instructions on screen and you should be ready to go
+
 # Cool programs
 
 Mostly useless programs, just for fun
