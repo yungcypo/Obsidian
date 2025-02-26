@@ -16,6 +16,6 @@
 ₿ [Digitalne meny a blockchain](./DMB.md) + [Otazky na skusku](./DMB_skuska.md)  
 🐍 [Python v Sietovych Aplikaciach](./PSA.md) + [repository](https://github.com/cyprich/PSA)  
 🖥️ [INF3](../others/cpp/) + [repository](https://github.com/cyprich/INF3)  
-🖥️ [C# a .NET](./C#.md) + [repository](https://github.com/cyprich/sisarp)  
+🖥️ [C# a .NET](./CSharp.md) + [repository](https://github.com/cyprich/sisarp)  
 🖥️ [AUS](./AUS.md) + [repository](https://github.com/cyprich/AUS)  
 🖥️ [VVS](./VVS.md)
