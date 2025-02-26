@@ -440,3 +440,8 @@ Shows bonsai tree
 
 Nice-looking screensaver  
 `yay -S pipes.sh`
+
+## asciiquarium
+
+Ascii aquarium
+`yay -S asciiquarium`
