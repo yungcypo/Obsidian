@@ -14,9 +14,7 @@ Samotny programovaci jazyk je fess podobny Jave
 - `.NET SDK` - Software Development Kit - obsahuje vsetko potrebne na vyvoj - kompilator aj nastroj na spustenie
 - `.NET Libraries`
 
-## Basics
-
-### Installation
+## Installation
 
 Na buildovanie a spustenie programu treba nainstalovat _.NET SDK_
 
@@ -78,7 +76,13 @@ dotnet build
 
 `int` je alias na `System.Int32`, `long` na `System.Int64` atd atd (slajd v prezentacii)
 
-Ak mam vacsie cislo ako `ulong` ($2^{64}$) mozem pouzit big integer?
+Ak mam vacsie cislo ako `ulong` ($2^{64}$) mozem pouzit `BigInteger` - teoreticka velkost bez obmedzenia
+
+```cs
+BigInteger n = BigInteger.Pow(long.MaxValue, 3);
+BigInteger n2 = BigInteger.Parse("99999999999999999999999999999999999999999");
+// System.Numerics.BigInteger
+```
 
 ### Premenne
 
@@ -86,11 +90,15 @@ Ak mam vacsie cislo ako `ulong` ($2^{64}$) mozem pouzit big integer?
 int a = 5;
 var b = 6;  // typ sa automaticky odvodi
 
-Student abc = new('meno', 'priezvisko');  // automaticky zavola konstruktor?
+Student abc = new('meno', 'priezvisko');  // automaticky zavola konstruktor triedy Student
 
-string s1 = "Hello world";
-var s2 = new string("Hello world");
-string s3 = new("Hello world");
+string s1 = new String("Hello world");
+string s2 = "Hello world";
+var s3 = new string("Hello world");
+string s4 = new("Hello world");
+
+StringBuilder sb1 = new StringBuilder("sisarp");
+StringBuilder sb2 = new("sisarp");
 ```
 
 Pouzitie vyhradeneho slova ako nazov premennej
@@ -220,4 +228,3 @@ public class Person2
     }
 }
 ```
-
