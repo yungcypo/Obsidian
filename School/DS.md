@@ -35,16 +35,15 @@ Formaty datumov
 - `SS`
 - ...
 
-### _neviem ako sa to vola_
+| Skratka | Meaning                   | Popis                                                                                                                                 |
+| ------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `NN`    | Not Null                  | Hodnota musi byt zadana, nemoze byt Null                                                                                              |
+| `PK`    | Primary Key               | Primarny, unikatny kluc v tabulke, je `NN`, **je najviac jeden** (moze byt kompozitny - skladat sa z viacerych atributov?), minimalny |
+| `FK`    | Foreign Key               | Odkazuje na primarny kluc z inej tabulky, moze byt aj Null                                                                            |
+| `PFK`   | Primary Foreign Key       | Primary + Foreign                                                                                                                     |
+| `KPK`   | Kandidat primarneho kluca | Nieco, co teoreticky moze byt tiez primarny kluc                                                                                      |
 
-|       |                     |                                                                                                                    |
-| ----- | ------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `NN`  | Not Null            | Hodnota musi byt zadana, nemoze byt Null                                                                           |
-| `PK`  | Primary Key         | Primarny, unikatny kluc v tabulke, je `NN`, je iba jeden (moze byt kompozitny - skladat sa z viacerych atributov?) |
-| `FK`  | Foreign Key         | Odkazuje na primarny kluc z inej tabulky, moze byt aj Null                                                         |
-| `PFK` | Primary Foreign Key | Primary + Foreign                                                                                                  |
-
-## `SELECT`
+## SELECT
 
 ```sql
 SELECT * FROM studenti  -- vypise vsetko o vsetkych zaznamoch z tabulky studenti
@@ -319,7 +318,7 @@ update student
     set rod_cislo='881234/1234'
     where rod_cislo='801234/1234'
 
-delete
+delete -- vymazem povodneho studenta
 ```
 
 ## TCL
@@ -340,3 +339,86 @@ Vlastnost **durabilita** - **D**
 
 = **ACID**
 
+## Datove Modelovanie
+
+- Struktura dat - ake tabulky chcem vytvorit,
+- Manipulacia dat (DML (insert, update, delete, select)) - mozno nebudem chciet DELETE, alebo UPDATE alebo co ja viem co z nejakeho dovodu
+- Integritne obmedzenia - musim obmedzit datovy typ na nejaku hodnotu - PSC nemoze byt `ABCDE`, rodne cislo nemoze byt `000000_0000`
+
+### ERA Model
+
+ER = Entity Relation - konceptualny model
+
+Entita - je objekt realneho sveta, schopny nezavislej existencie, jednoznacne odlisitelny od ostatnych objektov  
+Vztah - vazba medzi 2+ entitami  
+Popisny typ - dvojica mnoziny hodnot a mnoziny operacii (napr. rocnik = cislo, mozem ho zmenit)  
+Atribut - funkcia priradujuca entitam alebo vztahom hodnotu  
+Typ entity - mnozina vlastnoti entity (osoba, ma 6 atributov (rodne cislo, meno, priezvisko, ...) )  
+Typ vztahu - mnozina vlastnoti vztahu  
+Instancia entity - samotna realizacia entity - samotny zaznam ktory ma svoje hodnoty  
+Instancia vztahu - podobne ako instancia entity  
+Identifikacny kluc - KPK, jeho hodnota sluzi na indentifikaciu
+
+Typy atributov
+
+- Atomnicke - neda sa delit na mensie zlozky (Rodne cislo - sklada sa sice z casti ale jednotlive casti maju rovnocenny vyznam)
+- Neatomnicke - skupinove (strukturovane), viachodnotove
+
+Superkluc - unikatny, ale nemusi byt minimalny
+
+Definovanie kompozitneho PK
+
+```sql
+create table Tab(
+    a integer primary key,
+    b integer primary key  -- toto nemozem spravit - definujem 2 PK
+)
+
+create table Tab2(
+    a integer,
+    b integer,
+    primary_key(a, b)  -- takto sa to robi
+)
+```
+
+Definovanie FK
+
+```sql
+alter table Tab2 add foreign key (id) references Tab (id)
+```
+
+### Typ, Kardinalita, Clenstvo
+
+**Typ vztahu**
+
+Identifikacny vztah - prislusny FK sa stane castou PK
+Neidentifikacny vztah -prislusny FK sa **ne**stane castou PK
+
+**Kardinalita** - integritne obmedzenie, ktore vyjadruje (jedna osoba moze byt n-krat studentom)
+
+- 1:1 - napr. jeden ujo moze byt starosta jedneho mesta
+- 1:n - napr. v jednom dome moze byt viac ludi, ale jeden clovek moze byt iba v jednom dome
+- m:n - napr. student a predmet - jeden student moze mat viac predmetov, jeden predmet moze mat viac studentov - v tomto pripade musi vzniknut nova tabulka - zap_predmety
+
+**Clenstvo** - povinne vs. nepovinne - ci FK moze nabudat null alebo nie
+
+V grafe
+
+- Plna ciara = identifikacny vztah
+- Prerusovana ciara = neidentifikacny vztah
+- Ak je kardinalita 1:n, tak tam kde je `n` su "metlicky"
+- Nepovinne clenstvo = kruzok
+
+### Slabe entitne typy
+
+Aby som definoval \_ tak potrebujem \_ z inej tabulky
+
+### Rekurzivny vztah
+
+Vzdy neindetifikacny
+
+### ISA hierarchia
+
+#### Generalizacia
+
+#### Specializacia
