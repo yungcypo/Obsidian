@@ -70,11 +70,60 @@ int g0/1
     ipv6 eigrp 1
 ```
 
+Redistribucia IPv6 default route
+
+```
+ipv route ::/0 OUT_INTERFACE NEXT_HOP_IP  # odporuca sa next hop IP
+ipv router eigrp 1
+    redistribute static
+    redistribute static metric BW DEL REL LOAD MTU
+```
+
 Manualna Sumarizacia
 
 ```
+router eigrp AS
+    no auto-summary
+
 int g0/0
-    ...
+    ip summary-address eigrp AS SIET MASKA
+    ipv summary-address eigrp AS IPV6_ADDRESS [ADMIN_DISTANCE]
+```
+
+Autentifikacia (iba MD5)
+
+```
+key chain MENO
+    key CISLO
+        key-string HESLO
+    key INE_CISLO
+        key-string INE_HESLO
+
+int g0/0
+    ip authentication mode eigrp AS md5
+    ip authentication key-chain eigrp AS MENO
+
+do show key chain
+```
+
+Zmena casovacov
+
+```
+ip hello-interval eigrp AS_NUMBER HELLO_INTERVAL
+ip hold-time eigrp AS_NUMBER HOLD_TIME
+
+ipv hello-interval eigrp AS_NUMBER HELLO_INTERVAL
+ipv hold-time eigrp AS_NUMBER HOLD_TIME
+```
+
+Load balancing
+
+```
+router eigrp 100
+    variance 2
+    maximum-paths 3  # LB nad max 3 cestami
+ip hello-interval eigrp AS_NUMBER HELLO_INTERVAL
+ip hold-time eigrp AS_NUMBER HOLD_TIME
 ```
 
 ## OSPF
